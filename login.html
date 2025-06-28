@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة التبرع بالدم - تسجيل</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <div class="button-box">
+        <button onclick="showLogin()">تسجيل الدخول</button>
+        <button onclick="showRegister()">إنشاء حساب</button>
+        <div id="btn-indicator"></div>
+      </div>
+
+      <!-- تسجيل الدخول -->
+      <form id="loginForm" class="form active">
+        <h2 class="form-title">تسجيل الدخول</h2>
+        <input name="email" type="email" placeholder="البريد الإلكتروني" required />
+        <input name="password" type="password" placeholder="كلمة المرور" required />
+        <button type="submit">دخول</button>
+      </form>
+
+      <!-- إنشاء حساب -->
+      <form id="registerForm" class="form">
+        <h2 class="form-title">إنشاء حساب</h2>
+
+        <select id="accountType" onchange="toggleAccountFields()" required>
+          <option value="">اختر نوع الحساب</option>
+          <option value="donor">متبرع</option>
+          <option value="hospital">مستشفى / بنك دم</option>
+        </select>
+
+        <!-- مشترك -->
+        <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
+        <input name="email" type="email" placeholder="البريد الإلكتروني" required />
+        <input name="password" type="password" placeholder="كلمة المرور" required />
+        <input name="phone" type="text" placeholder="رقم الهاتف" required />
+        <input name="city" type="text" placeholder="المدينة" required />
+
+        <!-- خاص بالمتبرع -->
+        <div id="donorFields" class="hidden">
+          <select name="blood_type" required>
+            <option value="">فصيلة الدم</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+          <input name="last_donation_date" type="date" placeholder="آخر تاريخ تبرع" />
+          <input name="diseases" type="text" placeholder="أمراض مزمنة (إن وجد)" />
+        </div>
+
+        <!-- خاص بالمستشفى -->
+        <div id="hospitalFields" class="hidden">
+          <input name="hospital_name" type="text" placeholder="اسم المستشفى / بنك الدم" />
+          <input name="license_number" type="text" placeholder="رقم الترخيص" />
+          <input name="contact_person" type="text" placeholder="اسم المسؤول الطبي" />
+        </div>
+
+        <button type="submit">تسجيل</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

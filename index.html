@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>منصة التبرع بالدم - الرئيسية</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+<header class="header">
+  <div class="container header-container">
+    <div class="logo">🩸 حياة</div>
+
+    <!-- زر القائمة في الموبايل -->
+    <button class="menu-toggle" onclick="openMenu()">☰</button>
+
+    <!-- القائمة الأفقية (كمبيوتر) -->
+    <nav class="main-nav">
+      <a href="#">الرئيسية</a>
+      <a href="#">عن المنصة</a>
+      <a href="#">تواصل معنا</a>
+      <a href="login.html" class="auth-link">تسجيل الدخول</a>
+    </nav>
+  </div>
+
+  <!-- القائمة الجانبية (موبايل) -->
+  <div id="sideMenu" class="side-menu">
+    <button class="close-btn" onclick="closeMenu()">✖</button>
+    <nav>
+      <a href="#">الرئيسية</a>
+      <a href="#">عن المنصة</a>
+      <a href="#">تواصل معنا</a>
+      <a href="login.html" class="auth-link">تسجيل الدخول</a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- القسم الرئيسي -->
+  <section class="hero">
+    <div class="container">
+      <h1>أنقذ حياة اليوم بقطرة دم</h1>
+      <p>منصتك للتبرع بالدم وربط المحتاجين بالمتبرعين في أقرب وقت.</p>
+      <div class="hero-buttons">
+        <a href="login.html" class="btn">سجّل كمتبرع</a>
+        <a href="login.html" class="btn btn-outline">طلب دم عاجل</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- لماذا التبرع معنا -->
+  <section class="features">
+    <div class="container">
+      <h2>لماذا منصة حياة؟</h2>
+      <div class="features-grid">
+        <div class="feature-box">
+          <h3>سهولة الاستخدام</h3>
+          <p>واجهة بسيطة لتسجيل المتبرعين وطلب الدم.</p>
+        </div>
+        <div class="feature-box">
+          <h3>السرعة والفعالية</h3>
+          <p>ربط مباشر بين المتبرعين والمستشفيات حسب الموقع الجغرافي.</p>
+        </div>
+        <div class="feature-box">
+          <h3>دعم حقيقي للحالات</h3>
+          <p>مساعدة مئات الحالات الحرجة في الوقت المناسب.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- إحصائيات -->
+  <section class="stats">
+    <div class="container">
+      <h2>أثرنا حتى الآن</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <h3>+1500</h3>
+          <p>متبرع نشط</p>
+        </div>
+        <div class="stat-box">
+          <h3>+300</h3>
+          <p>مستشفى مشارك</p>
+        </div>
+        <div class="stat-box">
+          <h3>+5000</h3>
+          <p>وحدة دم تم توفيرها</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- دعوة للتسجيل -->
+  <section class="cta">
+    <div class="container">
+      <h2>مستعد تنقذ حياة؟</h2>
+      <a href="login.html" class="btn">ابدأ الآن</a>
+    </div>
+  </section>
+
+  <!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
