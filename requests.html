@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>طلبات التبرع - Haya</title>
+  <link rel="stylesheet" href="requests.css" />
+</head>
+<body>
+
+  <!-- الهيدر -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- محتوى الصفحة -->
+  <main class="requests-container">
+    <h2>طلبات التبرع الحالية</h2>
+    <ul class="request-list">
+      <li class="request-item">
+        <div>
+          <strong>فصيلة الدم:</strong> O-
+          <br />
+          <strong>المستشفى:</strong> مستشفى الملك فهد - الدمام
+          <br />
+          <strong>المدينة:</strong> الدمام
+        </div>
+        <button onclick="donateNow('O-', 'مستشفى الملك فهد - الدمام')">تبرع الآن</button>
+      </li>
+
+      <li class="request-item">
+        <div>
+          <strong>فصيلة الدم:</strong> A+
+          <br />
+          <strong>المستشفى:</strong> بنك الدم المركزي - الرياض
+          <br />
+          <strong>المدينة:</strong> الرياض
+        </div>
+        <button onclick="donateNow('A+', 'بنك الدم المركزي - الرياض')">تبرع الآن</button>
+      </li>
+
+      <li class="request-item">
+        <div>
+          <strong>فصيلة الدم:</strong> B-
+          <br />
+          <strong>المستشفى:</strong> مستشفى التعاون - جدة
+          <br />
+          <strong>المدينة:</strong> جدة
+        </div>
+        <button onclick="donateNow('B-', 'مستشفى التعاون - جدة')">تبرع الآن</button>
+      </li>
+    </ul>
+
+    <div id="message" class="message"></div>
+  </main>
+
+   <!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="requests.js"></script>
+
+</body>
+</html>

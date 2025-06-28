@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الإشعارات - Haya</title>
+  <link rel="stylesheet" href="notifications.css" />
+</head>
+<body>
+
+  <!-- الهيدر -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- محتوى الصفحة -->
+  <main class="notifications-container">
+    <h2>الإشعارات</h2>
+
+    <ul class="notifications-list">
+      <li class="notification-item">
+        <strong>طلب دم جديد:</strong> فصيلة A+ مطلوبة في مستشفى السلام - الرياض.
+        <span class="date">قبل 2 ساعة</span>
+      </li>
+      <li class="notification-item">
+        <strong>شكراً لتبرعك:</strong> تم استلام دمك في بنك الدم المركزي.
+        <span class="date">أمس</span>
+      </li>
+      <li class="notification-item">
+        <strong>تحديث الطلب:</strong> مستشفى التعاون - جدة بحاجة لفصيلة O- بشكل عاجل.
+        <span class="date">قبل 3 أيام</span>
+      </li>
+    </ul>
+  </main>
+  
+<!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="notifications.js"></script>
+
+</body>
+</html>

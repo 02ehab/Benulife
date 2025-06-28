@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تبرع الآن - Haya</title>
+  <link rel="stylesheet" href="donate.css" />
+</head>
+<body>
+
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="donate-container">
+    <h2>نموذج طلب التبرع بالدم</h2>
+
+    <form id="donationForm">
+      <label for="fullName">الاسم الكامل:</label>
+      <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required />
+
+      <label for="phone">رقم الجوال:</label>
+      <input type="tel" id="phone" placeholder="مثال: 0555555555" pattern="[0-9]{10,15}" required />
+
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" placeholder="example@mail.com" required />
+
+      <label for="bloodType">فصيلة الدم:</label>
+      <select id="bloodType" required>
+        <option value="" disabled selected>اختر فصيلة الدم</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+      </select>
+
+      <label for="city">المدينة:</label>
+      <input type="text" id="city" placeholder="مثال: الرياض" required />
+
+      <label>هل سبق لك التبرع بالدم؟</label>
+      <div class="radio-group">
+        <label><input type="radio" name="donatedBefore" value="نعم" required /> نعم</label>
+        <label><input type="radio" name="donatedBefore" value="لا" /> لا</label>
+      </div>
+
+      <label for="donationDate">موعد التبرع المفضل:</label>
+      <input type="date" id="donationDate" />
+
+      <label for="notes">ملاحظات إضافية:</label>
+      <textarea id="notes" rows="4" placeholder="اكتب أي ملاحظات أو استفسارات"></textarea>
+
+      <button type="submit">إرسال الطلب</button>
+    </form>
+
+    <div id="successMessage" class="success-message" style="display:none;">
+      تم إرسال طلب التبرع بنجاح. شكرًا لك!
+    </div>
+  </main>
+  <!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="donate.js"></script>
+
+</body>
+</html>

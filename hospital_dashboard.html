@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة تحكم المستشفى - Haya</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <header>
+    <h1>لوحة تحكم المستشفى</h1>
+    <button id="logoutBtn">تسجيل خروج</button>
+  </header>
+
+  <main>
+    <section>
+      <h2>الطلبات الجديدة</h2>
+      <ul id="newRequestsList">
+        <!-- هنا تظهر الطلبات الجديدة -->
+      </ul>
+    </section>
+
+    <section>
+      <h2>حالة الطلبات</h2>
+      <ul id="requestsStatusList">
+        <!-- هنا تظهر الطلبات مع حالتها -->
+      </ul>
+    </section>
+
+    <section>
+      <h2>تأكيد استلام الدم</h2>
+      <ul id="confirmReceiptList">
+        <!-- هنا تقدر تأكد استلام أو ترفض الطلب -->
+      </ul>
+    </section>
+  </main>
+  <!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="hospital_dashboard.js"></script>
+
+</body>
+</html>
