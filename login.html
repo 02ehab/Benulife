@@ -21,17 +21,19 @@
         <input name="email" type="email" placeholder="البريد الإلكتروني" required />
         <input name="password" type="password" placeholder="كلمة المرور" required />
         <button type="submit">دخول</button>
+                <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
+
       </form>
 
       <!-- إنشاء حساب -->
       <form id="registerForm" class="form">
         <h2 class="form-title">إنشاء حساب</h2>
 
-        <select id="accountType" onchange="toggleAccountFields()" required>
-          <option value="">اختر نوع الحساب</option>
-          <option value="donor">متبرع</option>
-          <option value="hospital">مستشفى / بنك دم</option>
-        </select>
+        <select id="accountType" name="accountType" onchange="toggleAccountFields()" required>
+  <option value="">اختر نوع الحساب</option>
+  <option value="donor">متبرع</option>
+  <option value="hospital">مستشفى / بنك دم</option>
+</select>
 
         <!-- مشترك -->
         <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
@@ -65,6 +67,8 @@
         </div>
 
         <button type="submit">تسجيل</button>
+        <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
+
       </form>
     </div>
   </div>
