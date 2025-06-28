@@ -1,7 +1,7 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  background: linear-gradient(to right, #40e0d0, #5f5f5f);
+  background: linear-gradient(to right, #21B26F, #d90429);
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -45,7 +45,7 @@ body {
   right: 0;
   width: 50%;
   height: 100%;
-  background: #40e0d0;
+  background: linear-gradient(to right, #21B26F, #d90429);
   border-radius: 30px;
   transition: 0.4s ease;
   z-index: 0;
@@ -105,4 +105,23 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.back-home {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  color: #d90429;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.back-home:hover {
+  color: #21B26F;
+}
+
+.hidden {
+  display: none;
 }
