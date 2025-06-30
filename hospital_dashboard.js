@@ -7,56 +7,43 @@ window.closeMenu = function () {
 }
  
 // مثال بيانات طلبات مؤقتة
-    const requests = [
-      { id: 1, patient: "محمد علي", bloodType: "O+", status: "جديد" },
-      { id: 2, patient: "سعاد محمد", bloodType: "A-", status: "قيد التوصيل" },
-      { id: 3, patient: "علي حسن", bloodType: "B+", status: "تم الاستلام" },
-    ];
 
-    function renderRequests() {
-      const newList = document.getElementById("newRequestsList");
-      const statusList = document.getElementById("requestsStatusList");
-      const confirmList = document.getElementById("confirmReceiptList");
+// زر فتح نافذة الطلب
+document.addEventListener("DOMContentLoaded", () => {
+  const openFormBtn = document.getElementById("openFormBtn");
+  const requestPopup = document.getElementById("requestPopup");
+  const closePopupBtn = document.getElementById("closePopupBtn");
+  const toggleRequestsBtn = document.getElementById("toggleRequestsBtn");
+  const requestsSection = document.getElementById("requestsSection");
 
-      newList.innerHTML = "";
-      statusList.innerHTML = "";
-      confirmList.innerHTML = "";
+  if (openFormBtn && requestPopup) {
+    openFormBtn.addEventListener("click", () => {
+      requestPopup.classList.remove("hidden");
+    });
+  }
 
-      requests.forEach(req => {
-        if (req.status === "جديد") {
-          const li = document.createElement("li");
-          li.textContent = `${req.patient} - فصيلة دم ${req.bloodType}`;
-          // زر قبول الطلب
-          const acceptBtn = document.createElement("button");
-          acceptBtn.textContent = "قبول";
-          acceptBtn.onclick = () => {
-            req.status = "قيد التوصيل";
-            renderRequests();
-          };
-          li.appendChild(acceptBtn);
-          newList.appendChild(li);
-        } 
+  if (closePopupBtn) {
+    closePopupBtn.addEventListener("click", () => {
+      requestPopup.classList.add("hidden");
+    });
+  }
 
-        if (req.status !== "جديد") {
-          const li = document.createElement("li");
-          li.textContent = `${req.patient} - ${req.status}`;
-          statusList.appendChild(li);
-        }
+  if (toggleRequestsBtn && requestsSection) {
+    toggleRequestsBtn.addEventListener("click", () => {
+      requestsSection.classList.toggle("hidden");
+    });
+  }
 
-        if (req.status === "قيد التوصيل") {
-          const li = document.createElement("li");
-          li.textContent = `${req.patient} - فصيلة دم ${req.bloodType}`;
-          const confirmBtn = document.createElement("button");
-          confirmBtn.textContent = "تأكيد استلام";
-          confirmBtn.onclick = () => {
-            req.status = "تم الاستلام";
-            renderRequests();
-          };
-          li.appendChild(confirmBtn);
-          confirmList.appendChild(li);
-        }
-      });
-    }
+  const requestForm = document.getElementById("requestForm");
+  if (requestForm) {
+    requestForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("✅ تم إرسال طلب التبرع بنجاح!");
+      requestPopup.classList.add("hidden");
+      requestForm.reset();
+    });
+  }
+});
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.clear();
