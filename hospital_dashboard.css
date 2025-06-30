@@ -115,120 +115,143 @@ body {
 }
 
 /*صفحة الطلبات*/
-/* أساسي */
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background-color: #f5f7fa;
-  color: #333;
-  direction: rtl;
-}
-
-header {
-  background-color: #d90429;
-  color: white;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-
-header h1 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-#logoutBtn {
-  background-color: #fff;
-  color: #d90429;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#logoutBtn:hover {
-  background-color: #f8d7da;
-}
-
-main {
-  max-width: 900px;
+.dashboard-container {
+  max-width: 800px;
   margin: 30px auto;
-  padding: 0 20px;
-}
-
-section {
-  background-color: white;
-  padding: 20px 25px;
-  margin-bottom: 25px;
+  padding: 20px;
+  background: #fff;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-section h2 {
-  margin-top: 0;
+h2 {
+  margin-bottom: 20px;
   color: #d90429;
-  font-weight: bold;
-  margin-bottom: 15px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul li {
-  background-color: #f9fafb;
-  padding: 12px 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-ul li button {
+.open-form-btn,
+.toggle-requests-btn {
   background-color: #d90429;
   color: white;
   border: none;
-  padding: 7px 14px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+  transition: background 0.3s;
 }
 
-ul li button:hover {
+.open-form-btn:hover,
+.toggle-requests-btn:hover {
   background-color: #a3001b;
 }
 
-/* استجابة الشاشات الصغيرة */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
 
-@media (max-width: 600px) {
-  main {
-    padding: 0 10px;
-  }
-  ul li {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  ul li button {
-    align-self: flex-end;
-  }
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.popup-content h2 {
+  margin-bottom: 15px;
+  color: #d90429;
+}
+
+.popup-content .close-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+form button[type="submit"] {
+  background-color: #d90429;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+form button[type="submit"]:hover {
+  background-color: #a3001b;
+}
+
+.hidden {
+  display: none;
+}
+
+.requests-section {
+  margin-top: 40px;
+}
+
+.request-card {
+  background: #f1f1f1;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border-right: 4px solid #d90429;
+}
+
+.request-card p {
+  margin: 5px 0;
 }
 
 /* الفوتر */
 .footer {
-  background: #333;
-  color: #fff;
-  padding: 20px 0;
+  background-color: #fff;
   text-align: center;
+  padding: 20px;
+  color: #777;
+  font-size: 14px;
+  border-top: 1px solid #eee;
+  margin-top: 40px;
 }
+/* أساس التنسيق */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  flex: 1;
+  padding: 20px; /* أو حسب الحاجة */
+}
+
+
