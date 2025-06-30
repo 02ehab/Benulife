@@ -2,38 +2,77 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>لوحة تحكم المستشفى - Haya</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة تحكم</title>
+  <link rel="stylesheet" href="hospital_dashboard.css" />
 </head>
 <body>
-  <header>
-    <h1>لوحة تحكم المستشفى</h1>
-    <button id="logoutBtn">تسجيل خروج</button>
+
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="donate.html">تبرع الآن</a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <h2>الطلبات الجديدة</h2>
-      <ul id="newRequestsList">
-        <!-- هنا تظهر الطلبات الجديدة -->
-      </ul>
-    </section>
+  <div class="wrapper">
 
-    <section>
-      <h2>حالة الطلبات</h2>
-      <ul id="requestsStatusList">
-        <!-- هنا تظهر الطلبات مع حالتها -->
-      </ul>
-    </section>
+  <div class="dashboard-container">
+    <h2>لوحة التحكم</h2>
 
-    <section>
-      <h2>تأكيد استلام الدم</h2>
-      <ul id="confirmReceiptList">
-        <!-- هنا تقدر تأكد استلام أو ترفض الطلب -->
-      </ul>
+    <button id="openFormBtn" class="open-form-btn">➕ تسجيل طلب تبرع جديد</button>
+    <button id="toggleRequestsBtn" class="toggle-requests-btn">📋 عرض الطلبات الجديدة</button>
+
+    <!-- الطلبات الجديدة -->
+    <section id="requestsSection" class="requests-section hidden">
+      <div class="request-card">
+        <p><strong>المريض:</strong> أحمد علي</p>
+        <p><strong>فصيلة الدم:</strong> A+</p>
+        <p><strong>المستشفى:</strong> مدينة الملك عبدالعزيز الطبية</p>
+        <p><strong>الحالة:</strong> في انتظار موافقتك</p>
+        <button>✅ قبول</button>
+        <button>❌ رفض</button>
+      </div>
     </section>
-  </main>
+  </div>
+
+  <!-- نافذة تسجيل الطلب -->
+  <div id="requestPopup" class="popup-overlay hidden">
+    <div class="popup-content">
+      <button id="closePopupBtn" class="close-btn">✖</button>
+      <h2>تسجيل طلب تبرع جديد</h2>
+      <form id="requestForm">
+        <input type="text" placeholder="اسم المريض" required>
+        <input type="text" placeholder="فصيلة الدم المطلوبة" required>
+        <input type="text" placeholder="اسم المستشفى / بنك الدم" required>
+        <input type="text" placeholder="المدينة" required>
+        <input type="text" placeholder="رقم للتواصل" required>
+        <textarea placeholder="تفاصيل إضافية (اختياري)"></textarea>
+        <button type="submit">إرسال الطلب</button>
+      </form>
+    </div>
+  </div>
+  </div>
   <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
