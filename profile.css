@@ -205,10 +205,41 @@ h2, h3 {
   background-color: #a3001b;
 }
 
-/* الفوتر */
+.dashboard-btn {
+  display: none;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 15px 0;
+  display: inline-block;
+}
+
+.dashboard-btn:hover {
+  background-color: #0056b3;
+}
+
+/* أساس التنسيق */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  flex: 1;
+  padding: 20px; /* أو حسب الحاجة */
+}
+
+/* تنسيق الفوتر */
 .footer {
-  background: #333;
-  color: #fff;
-  padding: 20px 0;
+  background-color: #333;
+  color: white;
   text-align: center;
+  padding: 15px 0;
+  font-size: 14px;
 }
