@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>منصة التبرع بالدم - الرئيسية</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="chatbot.css" />
 </head>
 <body>
 
@@ -126,6 +127,7 @@
   </div>
 </section>
 
+<div id="chatbot-container">
 <!-- أيقونة الشات -->
  <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
 
@@ -147,7 +149,7 @@
     <button onclick="sendChatMessage()">إرسال</button>
   </div>
 
-
+</div>
   <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
@@ -156,6 +158,16 @@
   </footer>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
   <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+  <script>
+    // جلب محتوى chatbot.html وتحميله داخل div#chatbot-container
+    fetch('chatbot.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('chatbot-container').innerHTML = html;
+      })
+      .catch(err => console.warn('فشل تحميل الشات بوت:', err));
+  </script>
 
 </body>
 </html>
