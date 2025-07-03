@@ -104,33 +104,3 @@ if (contactForm) {
     }, 300); // تأخير بسيط شكلي
   });
 }
-
-//شات بوت
-function toggleChatbox() {
-      const popup = document.getElementById("chatPopup");
-      popup.classList.toggle("hidden");
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById("chatInput");
-      const message = input.value.trim();
-      if (!message) return;
-
-      const chatBox = document.getElementById("chatMessages");
-
-      // رسالة المستخدم
-      const userMsg = document.createElement("p");
-      userMsg.textContent = "🧑‍💬 " + message;
-      chatBox.appendChild(userMsg);
-
-      // رسالة البوت (رد تلقائي بسيط)
-      const botMsg = document.createElement("p");
-      botMsg.textContent = "🤖 شكرًا، سأحاول مساعدتك الآن...";
-      chatBox.appendChild(botMsg);
-
-      // تمرير المحتوى لأسفل
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      // مسح حقل الإدخال
-      input.value = "";
-    }
