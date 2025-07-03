@@ -141,23 +141,31 @@ label {
   margin-top: 15px;
   font-weight: bold;
 }
-
-input, select, textarea, button {
+.form-container input,
+.form-container select,
+.form-container textarea,
+.form-container button {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 15px;
+  box-sizing: border-box; /* لتجنب مشاكل الحجم في الموبايل */
 }
 
-button {
+.form-container button {
   background-color: #B22222;
   color: white;
   margin-top: 20px;
   cursor: pointer;
   transition: 0.3s;
 }
+
+.form-container button:hover {
+  background-color: #8b1a1a; /* تأثير عند التمرير */
+}
+
 
 button:hover {
   background-color: #8b1a1a;
