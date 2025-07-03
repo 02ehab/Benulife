@@ -97,14 +97,57 @@
 </div>
 </section>
 
+  <section class="cta-contact-wrapper">
   <!-- دعوة للتسجيل -->
-  <section class="cta">
-    <div class="container">
-      <h2>مستعد تنقذ حياة؟</h2>
-      <a href="login.html" class="btn">ابدأ الآن</a>
+  <div class="cta-box">
+    <h2>مستعد تنقذ حياة؟</h2>
+    <a href="login.html" class="btn">ابدأ الآن</a>
+  </div>
+
+  <!-- تواصل معنا -->
+  <div class="contact-box">
+    <h2>تواصل معنا</h2>
+    <p>نحن هنا للإجابة على استفساراتك أو مساعدتك في أي وقت.</p>
+
+    <form id="contactForm">
+      <label for="name">الاسم</label>
+      <input type="text" id="name" required>
+
+      <label for="email">البريد الإلكتروني</label>
+      <input type="email" id="email" required>
+
+      <label for="message">رسالتك</label>
+      <textarea id="message" rows="5" required></textarea>
+
+      <button type="submit">إرسال</button>
+    </form>
+
+    <p id="contactSuccess" class="hidden">✅ تم إرسال رسالتك بنجاح، شكرًا لتواصلك معنا!</p>
+  </div>
+</section>
+
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+  <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
     </div>
-  </section>
-</div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+
+
   <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
