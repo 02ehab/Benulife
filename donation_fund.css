@@ -125,16 +125,6 @@ body {
   align-items: center;
 }
 
-.main-nav a {
-  text-decoration: none;
-  margin: 0 10px;
-  color: #333;
-  font-weight: 500;
-}
-
-.main-nav a.active {
-  color: #d90429;
-}
 
 .donate-container {
   max-width: 700px;
@@ -204,9 +194,25 @@ form button:hover {
   font-size: 16px;
 }
 
+/* أساس التنسيق */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  flex: 1;
+  padding: 20px; /* أو حسب الحاجة */
+}
+
+/* تنسيق الفوتر */
 .footer {
-  background: #333;
-  color: #fff;
-  padding: 20px 0;
+  background-color: #333;
+  color: white;
   text-align: center;
+  padding: 15px 0;
+  font-size: 14px;
 }
