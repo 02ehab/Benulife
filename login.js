@@ -7,7 +7,6 @@ function toggleAccountFields() {
   if (accountType === "donor") {
     donorFields.classList.remove("hidden");
     hospitalFields.classList.add("hidden");
-    // اجعل الحقول المطلوبة للمتبرع مطلوبة
     donorFields.querySelectorAll("select, input").forEach(input => input.required = true);
     hospitalFields.querySelectorAll("input").forEach(input => input.required = false);
   } else if (accountType === "hospital") {
@@ -36,51 +35,64 @@ function showRegister() {
   document.getElementById("btn-indicator").style.right = "50%";
 }
 
-// عند تحميل الصفحة، اربط الأحداث
 document.addEventListener("DOMContentLoaded", () => {
-  // عرض الحقول الافتراضي
   toggleAccountFields();
 
-  // فورم التسجيل
+  // التسجيل
   const registerForm = document.getElementById("registerForm");
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const formData = new FormData(registerForm);
-    const accountType = formData.get("accountType") || formData.get("accountType");
-    if (!formData.get("accountType")) {
-      alert("يرجى اختيار نوع الحساب");
+    const phone = formData.get("phone");
+    const accountType = formData.get("accountType");
+
+    if (!phone || !accountType) {
+      alert("يرجى إدخال رقم الموبايل واختيار نوع الحساب");
       return;
     }
 
-    // مثال: تخزين بيانات المستخدم في localStorage (غير آمن، فقط للتجربة)
     const userData = {};
     for (let [key, value] of formData.entries()) {
       userData[key] = value;
     }
-    localStorage.setItem("userData", JSON.stringify(userData));
+
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    // تأكد من عدم وجود مستخدم بنفس الرقم
+    if (users.some(u => u.phone === phone)) {
+      alert("هذا الرقم مسجل مسبقًا. قم بتسجيل الدخول.");
+      return;
+    }
+
+    users.push(userData);
+    localStorage.setItem("users", JSON.stringify(users));
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userType", formData.get("accountType"));
+    localStorage.setItem("loggedInPhone", phone);
+    localStorage.setItem("userType", accountType);
 
     alert("تم التسجيل بنجاح!");
     window.location.href = "index.html";
   });
 
-  // فورم تسجيل الدخول
+  // تسجيل الدخول برقم الجوال فقط
   const loginForm = document.getElementById("loginForm");
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const formData = new FormData(loginForm);
-    // استرجع البيانات المخزنة (تجريبي)
-    const savedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
-    if (formData.get("email") === savedUserData.email && formData.get("password") === savedUserData.password) {
+    const phone = loginForm.querySelector("#loginPhone").value.trim();
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const user = users.find(u => u.phone === phone);
+
+    if (user) {
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userType", savedUserData.accountType || "donor");
+      localStorage.setItem("loggedInPhone", user.phone);
+      localStorage.setItem("userType", user.accountType || "donor");
       alert("تم تسجيل الدخول بنجاح!");
       window.location.href = "index.html";
     } else {
-      alert("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      alert("رقم الموبايل غير مسجل، يرجى إنشاء حساب أولًا.");
     }
   });
 });
