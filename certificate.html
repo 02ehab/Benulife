@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تبرع الآن - Haya</title>
+  <link rel="stylesheet" href="certificate.css" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <a href="requests.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrapper">
+
+   <div class="certificate-container" id="certificate">
+    <h1>شهادة شكر وتقدير</h1>
+    <p>تتقدم منصة <strong>حياه </strong> بجزيل الشكر والعرفان إلى:</p>
+    <h2 id="donorName">[اسم المتبرع]</h2>
+    <p>وذلك لتبرعه الكريم بالدم والمساهمة في إنقاذ حياة الآخرين.</p>
+    <p class="date">التاريخ: <span id="currentDate"></span></p>
+    <div class="signature">منصة حياة ❤️</div>
+  </div>
+
+  <button onclick="downloadPDF()">📥 تحميل الشهادة PDF</button>
+ </div>
+    
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+  
+  </main>
+
+  <!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="certificate.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+</body>
+</html>
