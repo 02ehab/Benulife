@@ -89,3 +89,44 @@
         }
       });
     }
+    //وسام المتبرع الذهبي
+    document.addEventListener("DOMContentLoaded", () => {
+  const userType = localStorage.getItem("userType");
+  const dashboard = document.getElementById("dashboard");
+  const donorProfile = document.getElementById("donorProfile");
+
+  if (userType === "hospital") {
+    dashboard.style.display = "block";
+    donorProfile.style.display = "none";
+
+    // وسام المستشفى
+    const badgeDiv = document.getElementById("badge");
+    const badgeText = document.getElementById("badgeText");
+    const requestsHandled = 5; // عدد الطلبات المستلمة الناجحة كمثال
+
+    if (requestsHandled >= 5) {
+      badgeDiv.style.display = "block";
+      badgeText.textContent = "🏥 وسام العطاء المجتمعي";
+    }
+
+    renderRequestsDashboard();
+  } else {
+    dashboard.style.display = "none";
+    donorProfile.style.display = "block";
+
+    // وسام المتبرع
+    const donationCount = 5; // عدد التبرعات
+    const points = donationCount * 50;
+
+    const pointsSpan = document.getElementById("points");
+    const badgeDiv = document.getElementById("badge");
+    const badgeText = document.getElementById("badgeText");
+
+    pointsSpan.textContent = points;
+
+    if (points >= 200) {
+      badgeDiv.style.display = "block";
+      badgeText.textContent = "🥇 وسام المتبرع الذهبي";
+    }
+  }
+});
