@@ -16,7 +16,7 @@
       <button class="menu-toggle" onclick="openMenu()">☰</button>
       <nav class="main-nav">
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -27,7 +27,7 @@
       <button class="close-btn" onclick="closeMenu()">✖</button>
       <nav>
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -159,15 +159,7 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
   <script src="script.js"></script>
   <script src="chatbot.js"></script>
-  <script>
-    // جلب محتوى chatbot.html وتحميله داخل div#chatbot-container
-    fetch('chatbot.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('chatbot-container').innerHTML = html;
-      })
-      .catch(err => console.warn('فشل تحميل الشات بوت:', err));
-  </script>
+  
 
 </body>
 </html>
