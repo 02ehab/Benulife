@@ -221,6 +221,29 @@ h2, h3 {
   background-color: #0056b3;
 }
 
+/* وسام المتبرع الذهبي*/
+.points-section {
+  background: #fff4e6;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.points-section p {
+  font-size: 18px;
+  color: #d77a00;
+}
+
+.badge {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #e0a800;
+  display: none;
+}
+
+
 /* أساس التنسيق */
 html, body {
   height: 100%;
