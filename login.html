@@ -18,13 +18,14 @@
       <!-- تسجيل الدخول -->
       <form id="loginForm" class="form active">
         <h2 class="form-title">تسجيل الدخول</h2>
-        <input name="email" type="email" placeholder="البريد الإلكتروني" required />
-        <input name="password" type="password" placeholder="كلمة المرور" required />
+        <label for="phone">رقم الموبايل</label>
+        <input type="tel" id="loginPhone" name="loginPhone" required pattern="[0-9]{10,15}">
         <button type="submit">دخول</button>
         <a href="reset_passowrd.html" class="forgot-password">نسيت كلمة المرور؟</a>
          <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
 
       </form>
+      <p id="loginError" style="color: red; display: none;">⚠️ الرقم غير مسجل</p>
 
       <!-- إنشاء حساب -->
       <form id="registerForm" class="form">
@@ -38,8 +39,7 @@
 
         <!-- مشترك -->
         <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
-        <input name="email" type="email" placeholder="البريد الإلكتروني" required />
-        <input name="password" type="password" placeholder="كلمة المرور" required />
+        <input name="email" type="email" placeholder=" البريد الالكتروني (اختياري)"  />
         <input name="phone" type="text" placeholder="رقم الهاتف" required />
         <input name="city" type="text" placeholder="المدينة" required />
 
