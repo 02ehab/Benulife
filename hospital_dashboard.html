@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>لوحة تحكم</title>
   <link rel="stylesheet" href="hospital_dashboard.css" />
+   <link rel="stylesheet" href="chatbot.css" />
 </head>
 <body>
 
@@ -15,7 +16,7 @@
       <button class="menu-toggle" onclick="openMenu()">☰</button>
       <nav class="main-nav">
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -26,7 +27,7 @@
       <button class="close-btn" onclick="closeMenu()">✖</button>
       <nav>
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -36,6 +37,15 @@
   </header>
 
   <div class="wrapper">
+
+<div class="points-section">
+  <h3>نقاطي</h3>
+  <p>لديك <span id="points">0</span> نقطة</p>
+
+  <div id="badge" class="badge">
+    <span id="badgeText"></span>
+  </div>
+</div>
 
   <div class="dashboard-container">
     <h2>لوحة التحكم</h2>
@@ -73,6 +83,28 @@
     </div>
   </div>
   </div>
+
+  <div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
   <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
@@ -80,6 +112,7 @@
     </div>
   </footer>
   <script src="hospital_dashboard.js"></script>
+   <script src="chatbot.js"></script>
 
 </body>
 </html>
