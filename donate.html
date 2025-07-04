@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تبرع الآن - Haya</title>
   <link rel="stylesheet" href="donate.css" />
+  <link rel="stylesheet" href="chatbot.css" />
 </head>
 <body>
 
@@ -15,7 +16,7 @@
       <button class="menu-toggle" onclick="openMenu()">☰</button>
       <nav class="main-nav">
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -26,7 +27,7 @@
       <button class="close-btn" onclick="closeMenu()">✖</button>
       <nav>
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -34,6 +35,8 @@
       </nav>
     </div>
   </header>
+
+  <div class="wrapper">
 
   <main class="donate-container">
     <h2>نموذج طلب التبرع بالدم</h2>
@@ -43,7 +46,7 @@
       <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required />
 
       <label for="phone">رقم الجوال:</label>
-      <input type="tel" id="phone" placeholder="مثال: 0555555555" pattern="[0-9]{10,15}" required />
+      <input type="tel" id="phone" placeholder="01024455315" pattern="[0-9]{10,15}" required />
 
       <label for="email">البريد الإلكتروني:</label>
       <input type="email" id="email" placeholder="example@mail.com" required />
@@ -82,14 +85,40 @@
     <div id="successMessage" class="success-message" style="display:none;">
       تم إرسال طلب التبرع بنجاح. شكرًا لك!
     </div>
+    </div>
+    
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+  
   </main>
   <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
       <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
     </div>
+
   </footer>
   <script src="donate.js"></script>
+  <script src="chatbot.js"></script>
 
 </body>
 </html>
