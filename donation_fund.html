@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>تبرع مالي - حياة</title>
   <link rel="stylesheet" href="donation_fund.css" />
+   <link rel="stylesheet" href="chatbot.css" />
 </head>
 <body>
 
@@ -15,7 +16,7 @@
       <button class="menu-toggle" onclick="openMenu()">☰</button>
       <nav class="main-nav">
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -26,7 +27,7 @@
       <button class="close-btn" onclick="closeMenu()">✖</button>
       <nav>
         <a href="index.html">الرئيسية</a>
-        <a href="donate.html">تبرع الآن</a>
+        <a href="about.html">من نحن </a>
         <a href="requests.html">الطلبات</a>
         <a href="notifications.html">الإشعارات</a>
         <a href="donation_fund.html" class="active">تبرع مالي</a>
@@ -34,7 +35,7 @@
       </nav>
     </div>
   </header>
-
+  <div class="wrapper">
   <!-- المحتوى -->
   <main class="donate-container">
     <section class="intro">
@@ -46,10 +47,10 @@
     <section class="donation-form">
       <h2>أدخل مبلغ التبرع</h2>
       <form id="moneyDonationForm">
-        <input type="number" name="amount" placeholder="المبلغ (ريال سعودي)" required min="1" />
-        <input type="text" name="name" placeholder="الاسم (اختياري)" />
-        <input type="email" name="email" placeholder="البريد الإلكتروني (اختياري)" />
-        <textarea name="message" placeholder="رسالة دعمك (اختياري)"></textarea>
+        <input type="number" name="amount" placeholder="المبلغ" required min="1" />
+        <input type="text" name="name" placeholder="الاسم " />
+        <input type="email" name="email" placeholder="البريد الإلكتروني " />
+        <textarea name="message" placeholder="رسالة دعمك "></textarea>
         <button type="submit">تبرع الآن</button>
       </form>
     </section>
@@ -63,11 +64,36 @@
       </ul>
     </section>
   </main>
+</div>
 
+
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+  
   <footer class="footer">
     جميع الحقوق محفوظة © 2025 حياة
   </footer>
 
   <script src="donation_fund.js"></script>
+  <script src="chatbot.js"></script>
 </body>
 </html>
