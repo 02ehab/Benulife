@@ -186,12 +186,18 @@ body {
   color: #d90429;
 }
 
-/*map*/
+
+/* تصميم الخريطة */
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   width: 100%;
-  height: 500px;
-  border-radius: 10px;
-  margin: 20px 0;
 }
 .container h2 {
   text-align: center;
