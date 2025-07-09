@@ -104,3 +104,19 @@ if (contactForm) {
     }, 300); // تأخير بسيط شكلي
   });
 }
+
+// توكن Mapbox الخاص بك
+mapboxgl.accessToken = 'pk.eyJ1IjoiZWhhYjEwIiwiYSI6ImNtY3ZsaXZucDBidzUyaXM4cWluZjcxMzYifQ.EUIFT090mttpMoVNzUrYhg';
+
+// إنشاء الخريطة
+const map = new mapboxgl.Map({
+  container: 'map', // ID العنصر اللي هتظهر فيه الخريطة
+  style: 'mapbox://styles/mapbox/streets-v12', // نوع الخريطة
+  center: [31.2357, 30.0444], // خط الطول والعرض (هنا: القاهرة)
+  zoom: 10
+});
+
+// إضافة Marker على الخريطة
+const marker = new mapboxgl.Marker()
+  .setLngLat([31.2357, 30.0444])
+  .addTo(map);
