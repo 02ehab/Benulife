@@ -6,6 +6,7 @@
   <title>منصة التبرع بالدم - الرئيسية</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="chatbot.css" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.16.1/mapbox-gl.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -94,7 +95,7 @@
 
 <section class="container">
   <h2>أقرب الحالات المحتاجة للتبرع</h2>
-  <div id="map"></div>
+  <div id="map"></div
 </div>
 </section>
 
@@ -156,7 +157,22 @@
       <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
     </div>
   </footer>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.16.1/mapbox-gl.js"></script>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZWhhYjEwIiwiYSI6ImNtY3ZsaXZucDBidzUyaXM4cWluZjcxMzYifQ.EUIFT090mttpMoVNzUrYhg';
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: [31.2357, 30.0444], // القاهرة
+    zoom: 10
+  });
+
+  // لو عايز تضيف Marker على الخريطة:
+  const marker = new mapboxgl.Marker()
+    .setLngLat([31.2357, 30.0444])
+    .addTo(map);
+</script>
   <script src="script.js"></script>
   <script src="chatbot.js"></script>
   
