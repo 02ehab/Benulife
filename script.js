@@ -6,61 +6,67 @@ window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
-// توكن Mapbox الخاص بك
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWhhYjEwIiwiYSI6ImNtY3ZsaXZucDBidzUyaXM4cWluZjcxMzYifQ.EUIFT090mttpMoVNzUrYhg';
 
-// محاولة تحديد موقع المستخدم
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const userCoords = [position.coords.longitude, position.coords.latitude];
-      initMap(userCoords);
-    },
-    () => {
-      // لو المستخدم رفض أو فيه مشكلة
-      initMap([46.6753, 24.7136]); // الرياض
-    }
-  );
-} else {
-  initMap([46.6753, 24.7136]); // المتصفح لا يدعم geolocation
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/streets-v11',
+  center: [39.8579, 21.3891],
+  zoom: 12
+});
+map.addControl(new mapboxgl.NavigationControl());
+
+new mapboxgl.Marker()
+  .setLngLat([39.8579, 21.3891])
+  .setPopup(new mapboxgl.Popup().setHTML("<strong>موقع التبرع</strong>"))
+  .addTo(map);
+
+function getDistance(lat1, lng1, lat2, lng2) {
+  const toRad = (x) => (x * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
-// إنشاء الخريطة
-function initMap(centerCoords) {
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v12',
-    center: centerCoords,
-    zoom: 12
+function findNearbyHospitals(userLat, userLng) {
+  const nearby = hospitals.filter(hospital => {
+    const distance = getDistance(userLat, userLng, hospital.lat, hospital.lng);
+    return distance <= 10;
   });
 
-  // Marker على موقع المستخدم
-  new mapboxgl.Marker({ color: '#4285f4' })
-    .setLngLat(centerCoords)
-    .setPopup(new mapboxgl.Popup().setText('موقعك الحالي'))
-    .addTo(map);
+  if (nearby.length === 0) {
+    alert("لا توجد مستشفيات قريبة في حدود 10 كم");
+  } else {
+    console.log("أقرب المستشفيات:", nearby);
+    showHospitalsOnMap(nearby);
+  }
+}
 
-  // بيانات لحالات تبرع قريبة
-  const cases = [
-    {
-      coords: [centerCoords[0] + 0.01, centerCoords[1] + 0.01],
-      title: "مستشفى قريب - A+",
-      info: "مريض بحاجة عاجلة لدم A+"
-    },
-    {
-      coords: [centerCoords[0] - 0.015, centerCoords[1] - 0.01],
-      title: "بنك دم - O-",
-      info: "نقص حاد في O- بالمستودع"
-    }
-  ];
-
-  cases.forEach(c => {
-    const marker = new mapboxgl.Marker({ color: 'red' })
-      .setLngLat(c.coords)
-      .setPopup(new mapboxgl.Popup().setHTML(`<strong>${c.title}</strong><br>${c.info}`))
+function showHospitalsOnMap(hospitals) {
+  hospitals.forEach(h => {
+    new mapboxgl.Marker()
+      .setLngLat([h.lng, h.lat])
+      .setPopup(new mapboxgl.Popup().setHTML(`<strong>${h.name}</strong>`))
       .addTo(map);
   });
-}}
+}
+
+// مثال لتفعيل البحث تلقائيًا
+navigator.geolocation.getCurrentPosition(position => {
+  const { latitude, longitude } = position.coords;
+  findNearbyHospitals(latitude, longitude);
+
+  new mapboxgl.Marker({ color: "blue" })
+    .setLngLat([longitude, latitude])
+    .setPopup(new mapboxgl.Popup().setHTML("📍 موقعك الحالي"))
+    .addTo(map);
+});
+
 
 //تواصل
 const contactForm = document.getElementById("contactForm");
@@ -80,4 +86,3 @@ if (contactForm) {
     }, 300); // تأخير بسيط شكلي
   });
 }
-
