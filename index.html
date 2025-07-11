@@ -33,6 +33,9 @@
   <link rel="stylesheet" href="chatbot.css" />
   <!-- Mapbox CSS -->
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
 
 
 </head>
@@ -99,6 +102,19 @@
       </div>
     </div>
   </section>
+<section class="slider-section">
+  <h2 class="section-title">الطلبات العاجلة</h2>
+
+  <div class="slider-wrapper">
+    <button id="leftBtn" class="slider-btn">‹</button>
+
+    <div id="emergencySlider" class="slider-track">
+      <!-- الطلبات من localStorage ستُعرض هنا -->
+    </div>
+
+    <button id="rightBtn" class="slider-btn">›</button>
+  </div>
+</section>
 
   <!-- إحصائيات -->
   <section class="stats">
@@ -190,6 +206,9 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
   <script src="script.js"></script>
   <script src="chatbot.js"></script>
+  <!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
   
 
 </body>
