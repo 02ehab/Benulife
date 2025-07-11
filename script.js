@@ -1,11 +1,12 @@
+// فتح وإغلاق القائمة الجانبية
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
 }
-
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
+// إعداد خريطة Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWhhYjEwIiwiYSI6ImNtY3ZsaXZucDBidzUyaXM4cWluZjcxMzYifQ.EUIFT090mttpMoVNzUrYhg';
 
 const map = new mapboxgl.Map({
@@ -16,11 +17,13 @@ const map = new mapboxgl.Map({
 });
 map.addControl(new mapboxgl.NavigationControl());
 
+// نقطة مركزية
 new mapboxgl.Marker()
   .setLngLat([39.8579, 21.3891])
   .setPopup(new mapboxgl.Popup().setHTML("<strong>موقع التبرع</strong>"))
   .addTo(map);
 
+// حساب المسافة
 function getDistance(lat1, lng1, lat2, lng2) {
   const toRad = (x) => (x * Math.PI) / 180;
   const R = 6371;
@@ -34,15 +37,14 @@ function getDistance(lat1, lng1, lat2, lng2) {
 }
 
 function findNearbyHospitals(userLat, userLng) {
-  const nearby = hospitals.filter(hospital => {
-    const distance = getDistance(userLat, userLng, hospital.lat, hospital.lng);
+  const nearby = hospitals.filter(h => {
+    const distance = getDistance(userLat, userLng, h.lat, h.lng);
     return distance <= 10;
   });
 
-  if (nearby.length === 0) {
+  if (!nearby.length) {
     alert("لا توجد مستشفيات قريبة في حدود 10 كم");
   } else {
-    console.log("أقرب المستشفيات:", nearby);
     showHospitalsOnMap(nearby);
   }
 }
@@ -56,33 +58,66 @@ function showHospitalsOnMap(hospitals) {
   });
 }
 
-// مثال لتفعيل البحث تلقائيًا
+// إظهار موقع المستخدم
 navigator.geolocation.getCurrentPosition(position => {
   const { latitude, longitude } = position.coords;
   findNearbyHospitals(latitude, longitude);
-
   new mapboxgl.Marker({ color: "blue" })
     .setLngLat([longitude, latitude])
     .setPopup(new mapboxgl.Popup().setHTML("📍 موقعك الحالي"))
     .addTo(map);
 });
 
-
-//تواصل
+// فورم التواصل
 const contactForm = document.getElementById("contactForm");
 const contactSuccess = document.getElementById("contactSuccess");
 
 if (contactForm) {
   contactForm.addEventListener("submit", function (e) {
     e.preventDefault();
-
-    // إخفاء الرسالة مؤقتاً لو ظاهرة
     contactSuccess.classList.add("hidden");
-
-    // عرض الرسالة بعد الإرسال
     setTimeout(() => {
       contactSuccess.classList.remove("hidden");
       contactForm.reset();
-    }, 300); // تأخير بسيط شكلي
+    }, 300);
   });
 }
+
+// ✅ السلايدر للطلبات العاجلة
+document.addEventListener("DOMContentLoaded", () => {
+  const slider = document.getElementById("emergencySlider");
+  const requests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
+
+  if (!slider) return;
+
+  if (!requests.length) {
+    slider.innerHTML = "<p>لا توجد طلبات حالياً</p>";
+    return;
+  }
+
+  requests.forEach(req => {
+    const card = document.createElement("div");
+    card.className = "request-card";
+    card.innerHTML = `
+      <div class="blood-type">${req.bloodType}</div>
+      <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
+      <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
+      <div class="timer">⏳ ${req.timeLeftText}</div>
+      <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
+    `;
+    slider.appendChild(card);
+  });
+
+  const scrollAmount = 300;
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  if (leftBtn && rightBtn) {
+    leftBtn.onclick = () => {
+      slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    };
+    rightBtn.onclick = () => {
+      slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    };
+  }
+});
