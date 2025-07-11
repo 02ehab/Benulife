@@ -1,98 +1,43 @@
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
 }
-
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
- // بيانات وهمية (تستبدل لاحقًا ببيانات حقيقية من localStorage أو قاعدة بيانات)
-const requests = [
-  {
-    bloodType: "O+",
-    fullName: "أحمد عبد الله",
-    city: "الرياض",
-    hoursLeft: 6
-  },
-  {
-    bloodType: "A-",
-    fullName: "سارة علي",
-    city: "جدة",
-    hoursLeft: 3
-  },
-  {
-    bloodType: "AB+",
-    fullName: "محمد سالم",
-    city: "مكة",
-    hoursLeft: 1
-  },
-  {
-    bloodType: "AB+",
-    fullName: "محمد سالم",
-    city: "مكة",
-    hoursLeft: 1
-  },
-  {
-    bloodType: "AB+",
-    fullName: "محمد سالم",
-    city: "مكة",
-    hoursLeft: 1
-  },
-  {
-    bloodType: "AB+",
-    fullName: "محمد سالم",
-    city: "مكة",
-    hoursLeft: 1
-  }
-  
-  
-  
-  
-];
+// جلب الطلبات من localStorage أو مصفوفة فارغة
+let allRequests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
 
-// عرض الطلبات
+// العناصر
 const container = document.getElementById("requestsContainer");
+const bloodFilter = document.getElementById("bloodFilter");
+const cityFilter = document.getElementById("cityFilter");
 
-requests.forEach(req => {
-  const card = document.createElement("div");
-  card.className = "request-card";
-
-  card.innerHTML = `
-    <div class="blood-type">${req.bloodType}</div>
-    <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
-    <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
-    <div class="timer">⏳ ${req.hoursLeft} ساعة متبقية</div>
-    <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
-  `;
-
-  container.appendChild(card);
-});
-
-
-// رسم الكروت
+// عرض الطلبات في الصفحة
 function renderRequests(requests) {
-  const container = document.getElementById("requestsContainer");
   container.innerHTML = "";
-
+  if (requests.length === 0) {
+    container.innerHTML = "<p>لا توجد طلبات متاحة حالياً.</p>";
+    return;
+  }
   requests.forEach(req => {
     const card = document.createElement("div");
     card.className = "request-card";
     card.innerHTML = `
-      <div class="request-info"><strong>الاسم:</strong> ${req.name}</div>
+      <div class="blood-type">${req.bloodType}</div>
+      <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
       <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
-      <p class="blood-type">فصيلة الدم المطلوبة: <span>${req.bloodType}</span></p>
-      <div class="timer">⏳ ${req.timeLeft}</div>
-      <button>ساعد الآن</button>
+      <div class="timer">⏳ ${req.timeLeftText}</div>
+      <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
     `;
     container.appendChild(card);
   });
 }
 
-
-// التصفية
+// فلترة الطلبات حسب الفصيلة والمدينة
 function filterRequests() {
-  const blood = document.getElementById("bloodFilter").value;
-  const city = document.getElementById("cityFilter").value.trim();
+  const blood = bloodFilter.value;
+  const city = cityFilter.value.trim();
 
   const filtered = allRequests.filter(req => {
     const matchBlood = blood ? req.bloodType === blood : true;
@@ -103,16 +48,9 @@ function filterRequests() {
   renderRequests(filtered);
 }
 
-// ربط الأحداث
-document.getElementById("bloodFilter").addEventListener("change", filterRequests);
-document.getElementById("cityFilter").addEventListener("input", filterRequests);
+// ربط الفلاتر بالأحداث
+bloodFilter.addEventListener("change", filterRequests);
+cityFilter.addEventListener("input", filterRequests);
 
-// أول عرض
+// عرض أولي
 renderRequests(allRequests);
-
-//عرض في  الصفحة الرئيسية
-function saveEmergencyRequest(data) {
-  const existing = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
-  existing.push(data);
-  localStorage.setItem("emergencyRequests", JSON.stringify(existing));
-}
