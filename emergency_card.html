@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>طلب دم مستعجل - Hayah</title>
+  <link rel="stylesheet" href="emergency_card.css">
+   <link rel="stylesheet" href="chatbot.css">
+</head>
+
+<body>
+  
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياة</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <a href="emergency_card.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <a href="emergency_card.html">الطلبات</a>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    
+   <main class="container">
+    <h2 class="page-title">الطلبات العاجلة</h2>
+    <!-- فلتر البحث -->
+<div class="filter-bar">
+  <select id="bloodFilter">
+    <option value="">كل الفصائل</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+  </select>
+
+  <input type="text" id="cityFilter" placeholder="ابحث بالمدينة">
+</div>
+
+    <div id="requestsContainer" class="requests-grid"></div>
+
+  </main>
+ </div>
+
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+  
+  <script src="emergency_card.js"></script>
+  <script src="chatbot.js"></script>
+  
+<footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  
+</body>
+</html>
