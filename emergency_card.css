@@ -114,15 +114,6 @@ body {
   }
 }
 
-
-/* الحاوية العامة */
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 50px auto;
-  animation: fadeIn 0.8s ease-in-out;
-}
-
 /* عنوان الصفحة */
 .page-title {
   color: #B22222;
