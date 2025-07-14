@@ -1,197 +1,194 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <!-- تعريف الصفحة لمحركات البحث -->
-<meta name="description" content="منصة حياه - تبرع بالدم بسهولة وسرعة، ساعد في إنقاذ الأرواح في منطقتك.">
-
-<!-- الكلمات المفتاحية (اختيارية لكن مفيدة لبعض المحركات) -->
-<meta name="keywords" content="حياه, تبرع بالدم, إنقاذ الأرواح, منصة حياه, التبرع بالدم في السعودية">
-
-<!-- اسم الكاتب أو الجهة المسؤولة -->
-<meta name="author" content="Hayah Platform">
-
-<!-- اللغة -->
+  <!-- اللغة واتجاه النص -->
+<meta charset="UTF-8">
 <meta http-equiv="Content-Language" content="ar">
-
-<!-- ضبط عرض الصفحة للجوال -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:title" content="منصة حياه للتبرع بالدم">
-<meta property="og:description" content="ساهم في إنقاذ الأرواح من خلال التبرع بالدم عبر منصة حياه.">
-<meta property="og:image" content="https://02ehab.github.io/Hayah/assets/og-image.jpg"> <!-- غيّر للرابط الفعلي -->
-<meta property="og:url" content="https://02ehab.github.io/Hayah/">
+
+<!-- وصف الصفحة (Description) -->
+<meta name="description" content="Kemstay هو موقع سكني يساعدك في العثور على شقق مفروشة وهوستيلات للطلاب والمغتربين في مصر بسهولة.">
+
+<!-- الكلمات المفتاحية (Keywords) -->
+<meta name="keywords" content="شقق مفروشة, سكن طلابي, هوستيل, القاهرة, مصر, ايجار شقة, kemstay, سكن مغتربين, وحدات سكنية">
+
+<!-- اسم الموقع أو المؤسسة -->
+<meta name="author" content="Kemstay Team">
+
+<!-- التحكم في عناكب البحث -->
+<meta name="robots" content="index, follow">
+
+<!-- عنوان يظهر في المشاركة الاجتماعية -->
+<meta property="og:title" content="Kemstay | سكن طلابي وشقق مفروشة في مصر">
+<meta property="og:description" content="استأجر شقتك المفروشة أو مكانك في هوستيل بسهولة مع Kemstay.">
+<meta property="og:image" content="https://02ehab.github.io/images/og-cover.jpg">
+<meta property="og:url" content="https://02ehab.github.io">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_AR">
+
+<!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="منصة حياه للتبرع بالدم">
-<meta name="twitter:description" content="ساعد في إنقاذ الأرواح عن طريق التبرع بالدم من خلال منصة حياه.">
-<meta name="twitter:image" content="https://02ehab.github.io/Hayah/assets/og-image.jpg"> <!-- نفس صورة og -->
+<meta name="twitter:title" content="Kemstay | أفضل موقع للسكن الطلابي في مصر">
+<meta name="twitter:description" content="ابحث عن شقة مفروشة أو سكن في هوستيل بسهولة وسرعة.">
+<meta name="twitter:image" content="https://02ehab.github.io/images/twitter-card.jpg">
 
-<title>منصة حياه | تبرع بالدم وساهم في إنقاذ الأرواح</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="chatbot.css" />
-  <!-- Mapbox CSS -->
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <title>Kemstay | منصة السكن للمغتربين</title>
 
 </head>
 <body>
 
   <!-- Header -->
-<header class="header">
-    <div class="container header-container">
-      <div class="logo">🩸 حياه</div>
-      <button class="menu-toggle" onclick="openMenu()">☰</button>
-      <nav class="main-nav">
-        <a href="index.html">الرئيسية</a>
-        <a href="about.html">من نحن </a>
-        <span id="requestsLinkDesktop"></span>
-        <a href="notifications.html">الإشعارات</a>
-        <a href="donation_fund.html" class="active">تبرع مالي</a>
-        <a href="profile.html" class="auth-link">ملفي</a>
-      </nav>
-    </div>
-    <div id="sideMenu" class="side-menu">
-      <button class="close-btn" onclick="closeMenu()">✖</button>
-      <nav>
-        <a href="index.html">الرئيسية</a>
-        <a href="about.html">من نحن </a>
-        <span id="requestsLinkMobile"></span>
-        <a href="notifications.html">الإشعارات</a>
-        <a href="donation_fund.html" class="active">تبرع مالي</a>
-        <a href="profile.html">ملفي</a>
-      </nav>
-    </div>
+  <header>
+
+     <div class="logo">Kemstay</div>
+  <button class="menu-toggle" onclick="openMenu()">☰</button>
+
+  <!-- القائمة الأفقية (للكمبيوتر) -->
+  <nav class="main-nav">
+    <a href="index.html">الرئيسية</a>
+    <a href="apartments.html">الشقق</a>
+      <a href="hostels.html">هوستيل</a>
+    <a href="notifications.html">الاشعارات</a>
+    <a href="chat.html">الدردشة </a>
+    <a href="login.html" class="auth-link">تسجيل الدخول</a>
+  </nav>
+
+  <!-- القائمة الجانبية (للموبايل) -->
+  <div id="sideMenu" class="side-menu">
+    <button class="close-btn" onclick="closeMenu()">✖</button>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="apartments.html">الشقق</a>
+      <a href="hostels.html">هوستيل</a>
+      <a href="notifications.html">الاشعارات</a>
+    <a href="chat.html">الدردشة </a>
+    <a href="login.html" class="auth-link">تسجيل الدخول</a>
+    </nav>
+  </div>
+
   </header>
-  <div class="wrapper">
 
-
-<!-- القسم الرئيسي -->
-  <section class="hero">
-    <div class="container">
-      <h1>بسم الله نبدأ سعادة جديدة</h1>
-      <p>ساهم في إنقاذ الأرواح من خلال التبرع بالدم عبر منصة حياه</p>
-      <div class="hero-buttons">
-        <a href="login.html" class="btn">سجّل كمتبرع</a>
-        <a href="emergency.html" class="btn btn-outline">طلب دم عاجل</a>
-         <a href="donate.html" class="btn btn-outline">طلب  التبرع بالدم</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- لماذا التبرع معنا -->
-  <section class="section how-it-works-section">
-  <h2 class="section-title">كيف تعمل المنصة؟</h2>
-  <div class="steps-container">
-    <div class="step">
-      <span class="step-number">1</span>
-      <p>يقوم المستخدم بإنشاء حساب كمتبرع أو مستشفى.</p>
-    </div>
-    <div class="step">
-      <span class="step-number">2</span>
-      <p>يتم تقديم أو طلب التبرع بالدم بسهولة.</p>
-    </div>
-    <div class="step">
-      <span class="step-number">3</span>
-      <p>تقوم المنصة بربط المتبرعين مع أقرب الجهات المحتاجة.</p>
-    </div>
+  <!-- Search Bar -->
+  
+  <!-- HTML -->
+<div class="search-bar-airbnb">
+  <div class="search-item">
+    <label>المكان</label>
+    <input type="text" placeholder="أين تريد الإقامة؟" />
   </div>
-</section>
 
-<!-- الاهداف   -->
-  <section class="section goals-section">
-  <h2 class="section-title">أهداف المنصة</h2>
-  <ul class="goals-list">
-    <li>تسهيل الوصول إلى المتبرعين في أسرع وقت.</li>
-    <li>دعم المستشفيات وبنوك الدم في الحالات الطارئة.</li>
-    <li>نشر ثقافة التبرع بالدم بين أفراد المجتمع.</li>
-  </ul>
-</section>
-
-<!-- شروط التبرع   -->
-
-<section class="section donation-conditions-section">
-  <h2 class="section-title">شروط التبرع بالدم</h2>
-  <ul class="conditions-list">
-    <li>أن يكون عمر المتبرع بين 18 و60 عامًا.</li>
-    <li>أن يكون الوزن أكثر من 50 كجم.</li>
-    <li>أن لا يكون المتبرع مصابًا بأمراض معدية.</li>
-    <li>أن يكون قد مر على آخر تبرع 3 أشهر على الأقل.</li>
-    <li>أن يكون المتبرع في صحة جيدة يوم التبرع.</li>
-  </ul>
-</section>
-
-<section class="slider-section">
-  <h2 class="section-title">الطلبات العاجلة</h2>
-
-  <div class="slider-wrapper">
-    <button id="leftBtn" class="slider-btn">‹</button>
-
-    <div id="emergencySlider" class="slider-track">
-      <!-- الطلبات من localStorage ستُعرض هنا -->
-    </div>
-
-    <button id="rightBtn" class="slider-btn">›</button>
+  <div class="search-item">
+    <label>تسجيل الوصول</label>
+    <input type="date" />
   </div>
-</section>
 
-  <!-- إحصائيات -->
-  <section class="stats">
-    <div class="container">
-      <h2>أثرنا حتى الآن</h2>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <h3>+1500</h3>
-          <p>متبرع نشط</p>
-        </div>
-        <div class="stat-box">
-          <h3>+300</h3>
-          <p>مستشفى مشارك</p>
-        </div>
-        <div class="stat-box">
-          <h3>+5000</h3>
-          <p>وحدة دم تم توفيرها</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="search-item">
+    <label>تسجيل المغادرة</label>
+    <input type="date" />
+  </div>
 
-<section class="container">
-  <h2>أقرب الحالات المحتاجة للتبرع</h2>
-  <div id="map"></div>
+  <div class="search-item">
+    <label>الضيوف</label>
+    <input type="number" min="1" value="1" />
+  </div>
+
+  <button class="search-btn" onclick="alert('جاري تنفيذ البحث...')">
+    🔍 
+  </button>
 </div>
+
+<!-- Units -->
+<h2 class="section-title">الشقق</h2>
+<section class="listing-section">
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="apartments.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="apartments_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="apartments_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="apartments_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
 </section>
 
-  <section class="cta-contact-wrapper">
-  <!-- دعوة للتسجيل -->
-  <div class="cta-box">
-    <h2>مستعد تنقذ حياه؟</h2>
-    <a href="login.html" class="btn">ابدأ الآن</a>
+<!-- Hostels -->
+<h2 class="section-title">الفنادق</h2>
+<section class="listing-section">
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="hostels_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
   </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="hostels_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="hostels_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+  <div class="listing-card">
+    <img src="home.jpg" alt="Room Image">
+    <div class="listing-details">
+      <h3>غرفة مفروشة في مدينة نصر</h3>
+      <p>2500 جنيه / شهريًا</p>
+      <a href="hostels_details.html" class="details-btn">عرض التفاصيل</a>
+    </div>
+  </div>
+</section>
 
-  <!-- تواصل معنا -->
-  <div class="contact-box">
-    <h2>تواصل معنا</h2>
-    <p>نحن هنا للإجابة على استفساراتك أو مساعدتك في أي وقت.</p>
-
-    <form id="contactForm">
-      <label for="name">الاسم</label>
-      <input type="text" id="name" required>
-
-      <label for="email">البريد الإلكتروني</label>
-      <input type="email" id="email" required>
-
-      <label for="message">رسالتك</label>
-      <textarea id="message" rows="5" required></textarea>
-
-      <button type="submit">إرسال</button>
-    </form>
-
-<div id="map" style="width: 100%; height: 400px; border-radius: 10px;"></div>
+<section class="services-section">
+  <h2 class="services-title">الخدمات</h2>
+  <div class="services-grid">
+    <div class="service-item">
+      <img src="services.svg" alt="حجز" class="service-icon" />
+      <p class="service-name">حجز وحدات</p>
+    </div>
+    <div class="service-item">
+      <img src="services.svg" alt="إدارة" class="service-icon" />
+      <p class="service-name">إدارة العقار</p>
+    </div>
+    <div class="service-item">
+      <img src="services.svg" alt="دعم" class="service-icon" />
+      <p class="service-name">دعم فني</p>
+    </div>
+    <!-- أضف خدمات إضافية هنا -->
   </div>
 </section>
 
@@ -202,7 +199,7 @@
   <!-- نافذة الشات -->
   <div id="chatPopup" class="chatbot-popup hidden">
     <div class="chatbot-header">
-      <span>مساعد حياه 🤖</span>
+      <span>Kemstay  🤖</span>
       <button onclick="toggleChatbox()">✖</button>
     </div>
     <div class="chatbot-messages" id="chatMessages">
@@ -217,22 +214,12 @@
     <button onclick="sendChatMessage()">إرسال</button>
   </div>
 
-</div>
-  <!-- الفوتر -->
+  <!-- Footer -->
   <footer class="footer">
-    <div class="container">
-      <p>© 2025 منصة حياه - جميع الحقوق محفوظة</p>
-    </div>
+    <p>&copy; 2025 Kemstay. جميع الحقوق محفوظة.</p>
   </footer>
-
-<!-- Mapbox JS -->
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
-  <script src="script.js"></script>
-  <script src="chatbot.js"></script>
-  <!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
-  
+<script src="script.js"></script>
+<script src="chatbot.js"></script>
 
 </body>
 </html>
