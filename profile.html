@@ -35,75 +35,45 @@
       </nav>
     </div>
   </header>
-
   <div class="wrapper">
- <div class="points-section">
-  <h3>نقاطي</h3>
-  <p>لديك <span id="points">0</span> نقطة</p>
-
-  <div id="badge" class="badge">
-    <span id="badgeText"></span>
-  </div>
-</div>
-
-</div>
-
-  <!-- محتوى الصفحة -->
-  <main class="profile-container">
-
-    <!-- ملف المتبرع العادي -->
-    <div id="donorProfile" style="display:none;">
-      <div class="profile-header">
-        <h2>الملف الشخصي</h2>
-        <button id="logoutBtn" class="logout-btn">تسجيل خروج</button>
+ <main class="profile-main">
+  <div class="profile-card-modern">
+    <div class="profile-header">
+      <div class="blood-type-badge">A+</div>
+      <div class="dropdown">
+        <button class="dropdown-btn">▼</button>
+        <div class="dropdown-content">
+          <a href="edit_profile.html">تعديل الملف الشخصي</a>
+          <a href="#" id="logoutBtn">تسجيل خروج</a>
+        </div>
       </div>
-      <div class="user-info">
-        <p><strong>الاسم:</strong> إيهاب عبد اللاه</p>
-        <p><strong>فصيلة الدم:</strong> O+</p>
-        <p><strong>المدينة:</strong> الرياض</p>
-        <p><strong>رقم التواصل:</strong> 0555555555</p>
-      </div>
-
-      <h3>سجل التبرعات</h3>
-      <ul class="donation-history">
-        <li>📅 5 يونيو 2025 - مستشفى الملك فهد - الدمام</li>
-        <li>📅 10 مارس 2025 - بنك الدم المركزي - الرياض</li>
-      </ul>
     </div>
 
-    <!-- لوحة تحكم المؤسسة -->
-    <div id="dashboard" style="display:none;">
-      <div class="profile-header">
-        <h2>لوحة تحكم </h2>
-        <button id="logoutBtn2" class="logout-btn">تسجيل خروج</button>
+    <div class="profile-body">
+      <div class="avatar">
+        <img src="profile.webp" alt="صورة المستخدم">
       </div>
+      <div class="user-details">
+        <h2 id="userName">اسم المستخدم</h2>
+<p><span class="label">العضوية:</span> <span id="membershipId">123456</span></p>
+<p><span class="label">المدينة:</span> <span id="userCity">المدينة</span></p>
+<p><span class="label">عدد مرات التبرع:</span> 5 مرات</p>
 
-      <a href="hospital_dashboard.html" id="dashboardBtn" class="dashboard-btn">🔧 الانتقال إلى لوحة التحكم</a>
-
-      <section>
-        <h3>الطلبات الجديدة</h3>
-        <ul id="newRequestsList">
-          <!-- الطلبات الجديدة تظهر هنا -->
-        </ul>
-      </section>
-
-      <section>
-        <h3>حالة الطلبات</h3>
-        <ul id="requestsStatusList">
-          <!-- حالة الطلبات -->
-        </ul>
-      </section>
-
-      <section>
-        <h3>تأكيد استلام الدم</h3>
-        <ul id="confirmReceiptList">
-          <!-- تأكيد الاستلام -->
-        </ul>
-      </section>
+      </div>
     </div>
 
-  </main>
+    <!-- قسم النقاط داخل نفس الكارت -->
+    <div class="points-section">
+      <h3>نقاطي: <span id="points">0</span></h3>
+      <div class="badge"><span id="badgeText">المبتدئ</span></div>
+    </div>
   </div>
+</main>
+
+</div>
+
+<!--  الشات -->
+
   <div id="chatbot-container">
 <!-- أيقونة الشات -->
  <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
