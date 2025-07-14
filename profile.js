@@ -130,6 +130,7 @@
     }
   }
 });
+
 // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
   const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
@@ -156,4 +157,39 @@ document.addEventListener("DOMContentLoaded", () => {
       placeholder.outerHTML = linkHTML;
     }
   });
+});
+
+// قائمة منسدلة
+document.addEventListener("DOMContentLoaded", () => {
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdown = document.querySelector(".dropdown");
+
+  dropdownBtn.addEventListener("click", () => {
+    dropdown.classList.toggle("show");
+  });
+
+  // إغلاق القائمة عند الضغط في أي مكان خارجها
+  window.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove("show");
+    }
+  });
+
+  // زر تسجيل الخروج
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    // هنا ضع كود تسجيل الخروج
+    alert("تم تسجيل الخروج");
+    // مثال: localStorage.clear(); window.location.href = "login.html";
+  });
+});
+
+//تعديل البيانات
+document.addEventListener("DOMContentLoaded", () => {
+  const userData = JSON.parse(localStorage.getItem("userProfile")) || {};
+
+  document.getElementById("userName").textContent = userData.name || "اسم المستخدم";
+  document.getElementById("userCity").textContent = userData.city || "غير محددة";
+  document.querySelector(".blood-type-badge").textContent = userData.bloodType || "N/A";
 });
