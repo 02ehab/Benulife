@@ -52,3 +52,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+//تحويل الي صفحة التتبع
+document.getElementById("donationForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const data = {
+    fullName: document.getElementById("fullName").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    bloodType: document.getElementById("bloodType").value,
+    city: document.getElementById("city").value,
+    donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || "",
+    donationDate: document.getElementById("donationDate").value,
+    notes: document.getElementById("notes").value,
+    time: new Date().toLocaleString()
+  };
+
+  const existing = JSON.parse(localStorage.getItem("donationRequests") || "[]");
+  existing.push(data);
+  localStorage.setItem("donationRequests", JSON.stringify(existing));
+
+  // إظهار رسالة النجاح (اختياري)
+  document.getElementById("successMessage").classList.remove("hidden");
+
+  this.reset();
+
+  // تحويل المستخدم إلى صفحة التتبع بعد 1 ثانية (يمكن التعديل)
+  setTimeout(() => {
+    window.location.href = "track_order.html";  // غير اسم الصفحة حسب ملفك
+  }, 1000);
+});
