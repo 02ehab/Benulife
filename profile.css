@@ -8,7 +8,7 @@
 body {
   line-height: 1.6;
   direction: rtl;
-  background-color: #f9f9f9;
+  background-color: #f0efef;
   margin: 0;
 }
 
@@ -116,110 +116,152 @@ body {
   }
 }
 
-main.profile-container {
-  max-width: 600px;
-  margin: 40px auto;
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+/* تنسيق الصفحة الشخصية */
+.profile-main {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
-h2, h3 {
-  color: #d90429;
-}
-
-.user-info p {
-  margin: 10px 0;
-  font-size: 16px;
-}
-
-.donation-history {
-  list-style: none;
-  padding: 0;
-}
-
-.donation-history li {
-  background: #f0f0f0;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
+.profile-card-modern {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  overflow: visible; /* يسمح بعرض القائمة خارج حدود الكارت */
+  direction: rtl;
+  position: relative; /* ضروري للقائمة المنسدلة */
 }
 
 .profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.profile-header h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-  color: #d90429;
-}
-
-.logout-btn {
-  background-color: #d90429;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #a3001b;
-}
-
-/* تنسيق طلبات الداشبورد */
-#newRequestsList li,
-#requestsStatusList li,
-#confirmReceiptList li {
-  background: #f0f0f0;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  background: #B22222;
+  color: #fff;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#newRequestsList li button,
-#confirmReceiptList li button {
-  background-color: #d90429;
-  border: none;
-  color: white;
-  padding: 7px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-#newRequestsList li button:hover,
-#confirmReceiptList li button:hover {
-  background-color: #a3001b;
-}
-
-.dashboard-btn {
-  display: none;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 15px 0;
+/* Dropdown Container */
+.dropdown {
+  position: relative;
   display: inline-block;
 }
 
-.dashboard-btn:hover {
-  background-color: #0056b3;
+/* زر القائمة */
+.dropdown-btn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
+
+/* محتوى القائمة المنسدلة (مخفي افتراضيًا) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  z-index: 9999; /* يضمن الظهور فوق كل العناصر */
+}
+
+/* روابط القائمة */
+.dropdown-content a {
+  color: #333;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-content a:last-child {
+  border-bottom: none;
+}
+
+/* تغير الخلفية عند المرور */
+.dropdown-content a:hover {
+  background-color: #f3f3f3;
+}
+
+/* اظهار القائمة عند الضغط على الزر */
+.dropdown.show .dropdown-content {
+  display: block;
+}
+
+
+.profile-body {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 16px;
+}
+
+.avatar img {
+  width: 160px;
+  height: 240px;
+  border-radius: 12px;
+  border: 2px solid #B22222;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  margin-top: 18px;
+}
+
+
+
+.user-details {
+  flex: 1;
+}
+
+.user-details h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #333;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.user-details p {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.points-section {
+  background: #f3f3f3;
+  padding: 16px;
+  text-align: center;
+}
+
+.points-section h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.badge {
+  background: gold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
 
 /* وسام المتبرع الذهبي*/
 .points-section {
@@ -230,9 +272,15 @@ h2, h3 {
   text-align: center;
 }
 
+
+.points-section h3 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
 .points-section p {
   font-size: 18px;
-  color: #d77a00;
+  margin-bottom: 10px;
 }
 
 .badge {
