@@ -82,3 +82,20 @@ document.getElementById("donationForm").addEventListener("submit", function(e) {
     window.location.href = "track_order.html";  // غير اسم الصفحة حسب ملفك
   }, 1000);
 });
+//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
+ document.addEventListener("DOMContentLoaded", function () {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    const authButtons = document.getElementById("authButtons");
+    const sideAuthButtons = document.getElementById("sideAuthButtons");
+
+    const profileLink = document.getElementById("profileLink");
+    const profileLinkMobile = document.getElementById("profileLinkMobile");
+
+    if (isLoggedIn) {
+      if (authButtons) authButtons.style.display = "none";
+      if (sideAuthButtons) sideAuthButtons.style.display = "none";
+      if (profileLink) profileLink.style.display = "inline-block";
+      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+    }
+  });
