@@ -2,13 +2,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 body {
   line-height: 1.6;
   direction: rtl;
+  background-color: #ddd;
 }
+
 
 /* الحاوية العامة */
 .container {
@@ -18,36 +20,94 @@ body {
 }
 
 /* الهيدر */
-.header {
-  background: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #e2e2e0;
+}
+
+.modern-header {
+  background-color: #f5f3ef;
+  border-radius: 0 0 20px 20px;
+  padding: 16px 0;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .header-container {
+  background-color: #f5f3ef;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 24px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #d90429;
+  color: #1a1a1a;
+  margin-top: 10px;
 }
 
 .main-nav {
   display: flex;
-  gap: 20px;
+  gap: 28px;
 }
 
 .main-nav a {
   text-decoration: none;
-  color: #333;
+  color: #1a1a1a;
   font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+  margin-top: 10px;
+}
+
+.main-nav a:hover {
+  color: #ff5520;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-signin {
+  padding: 8px 20px;
+  background-color: #fff;
+  color: #1a1a1a;
+  border-radius: 30px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-signup {
+  padding: 8px 20px;
+  background-color: #ff5520;
+  color: #fff;
+  border-radius: 30px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  transition: background-color 0.3s;
+ margin-top: 10px;
+}
+
+.btn-signup:hover {
+  background-color: #e8491b;
+}
+
+.btn-signin:hover {
+  background-color: #f0f0f0;
 }
 
 /* زر القائمة للموبايل */
@@ -55,26 +115,26 @@ body {
   display: none;
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 24px;
   cursor: pointer;
+  color: #1a1a1a;
+  margin-top: 10px;
 }
 
-/* القائمة الجانبية */
 .side-menu {
   display: none;
   position: fixed;
   top: 0;
   right: 0;
-  width: 70%;
+  width: 75%;
   max-width: 300px;
   height: 100%;
-  background-color: #fff;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-  padding: 2rem 1rem;
-  z-index: 999;
+  background-color: #f5f3ef;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  padding: 2rem 1.5rem;
+  z-index: 2000;
   flex-direction: column;
   gap: 1rem;
-  transition: right 0.3s ease;
 }
 
 .side-menu nav {
@@ -85,27 +145,36 @@ body {
 
 .side-menu a {
   text-decoration: none;
-  color: #333;
+  color: #1a1a1a;
+  font-size: 1rem;
   font-weight: 500;
-  font-size: 1.1rem;
+}
+
+.side-menu .btn-signup,
+.side-menu .btn-signin {
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .side-menu .close-btn {
+  align-self: flex-end;
   background: none;
   border: none;
   font-size: 1.5rem;
-  align-self: flex-end;
   cursor: pointer;
   margin-bottom: 1rem;
+  color: #1a1a1a;
 }
 
 .side-menu.open {
   display: flex;
 }
 
-/* استجابة للموبايل */
+/* ميديا كويري للموبايل */
 @media (max-width: 768px) {
-  .main-nav {
+  .main-nav,
+  .auth-buttons {
     display: none;
   }
 
@@ -114,9 +183,10 @@ body {
   }
 }
 
+
 /* القسم الرئيسي */
 .hero {
-  background: linear-gradient(to right, #21B26F, #d90429);
+  background: linear-gradient(to right, #21B26F, #e8491b);
   color: white;
   padding: 80px 0;
   text-align: center;
@@ -183,7 +253,7 @@ body {
 
 .stat-box h3 {
   font-size: 32px;
-  color: #d90429;
+  color: #e8491b;
 }
 
 /*map*/
@@ -202,7 +272,7 @@ body {
 .container h2 {
   text-align: center;
   font-size: 24px;
-  color: #d90429;
+  color: #e8491b;
   margin-bottom: 20px;
   font-weight: bold;
 }
@@ -252,7 +322,7 @@ body {
 
 /* كارت ابدأ الآن */
 .cta-box {
-  background: #d90429;
+  background: #e8491b;
   color: white;
   text-align: center;
 }
@@ -264,7 +334,7 @@ body {
 
 .cta-box .btn {
   background: #fff;
-  color: #d90429;
+  color: #e8491b;
   padding: 12px 20px;
   border-radius: 8px;
   text-decoration: none;
@@ -275,7 +345,7 @@ body {
 
 /* كارت تواصل معنا */
 .contact-box h2 {
-  color: #B22222;
+  color: #e8491b;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -302,7 +372,7 @@ body {
 }
 
 .contact-box button {
-  background-color: #B22222;
+  background-color: #e8491b;
   color: white;
   border: none;
   padding: 12px;
@@ -335,7 +405,7 @@ body {
 
 .section-title {
   font-size: 24px;
-  color: #B22222;
+  color: #e8491b;
   margin-bottom: 20px;
 }
 
@@ -371,7 +441,7 @@ body {
 .blood-type {
   font-size: 24px;
   font-weight: bold;
-  color: #B22222;
+  color: #e8491b;
   margin-bottom: 10px;
 }
 
@@ -383,7 +453,7 @@ body {
 
 .timer {
   font-weight: bold;
-  color: #d90429;
+  color: #e8491b;
   margin-top: 10px;
 }
 
@@ -391,7 +461,7 @@ body {
   margin-top: 15px;
   width: 100%;
   padding: 10px;
-  background: #B22222;
+  background: #e8491b;
   color: white;
   border: none;
   border-radius: 8px;
@@ -400,7 +470,7 @@ body {
 }
 
 .slider-btn {
-  background: #B22222;
+  background: #e8491b;
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -451,7 +521,7 @@ body {
 
 .section-title {
   text-align: center;
-  color: #b22222;
+  color: #e8491b;
   font-size: 26px;
   margin-bottom: 20px;
 }
@@ -469,7 +539,7 @@ body {
   background: #fff;
   padding: 12px 20px;
   margin-bottom: 10px;
-  border-left: 5px solid #b22222;
+  border-left: 5px solid #e8491b;
   border-radius: 6px;
   font-size: 18px;
 }
@@ -494,7 +564,7 @@ body {
 }
 
 .step-number {
-  background: #b22222;
+  background: #e8491b;
   color: #fff;
   border-radius: 50%;
   width: 36px;
