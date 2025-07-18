@@ -140,7 +140,6 @@ body {
 .side-menu nav {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .side-menu a {
