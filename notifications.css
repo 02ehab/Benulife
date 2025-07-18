@@ -140,6 +140,7 @@ body {
 .side-menu nav {
   display: flex;
   flex-direction: column;
+
 }
 
 .side-menu a {
@@ -182,16 +183,12 @@ body {
   }
 }
 
+
 /*صفحة الاشعارات*/
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background-color: #f9f9f9;
-}
 
 main.notifications-container {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 50px auto;
   background: #fff;
   padding: 25px 30px;
   border-radius: 10px;
@@ -271,24 +268,38 @@ h2 {
 }
 
 /* أساس التنسيق */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 15px 0;
+  font-size: 14px;
+  text-align: center;
 }
-
 .wrapper {
   flex: 1;
   padding: 20px; /* أو حسب الحاجة */
 }
 
-/* تنسيق الفوتر */
-.footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  font-size: 14px;
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
 }
