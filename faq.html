@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الإشعارات - Haya</title>
+  <link rel="stylesheet" href="faq.css" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- الهيدر -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياه</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkDesktop"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkMobile"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrapper">
+    <h1>الأسئلة الشائعة</h1>
+    <div class="faq-container">
+      <div class="faq-item">
+        <button class="faq-question">كيف يمكنني التبرع بالدم؟</button>
+        <div class="faq-answer">
+          <p>يمكنك التبرع بالدم عن طريق زيارة أقرب مركز تبرع دم أو من خلال حملات التبرع التي تنظمها المنصة.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">ما هي شروط التبرع بالدم؟</button>
+        <div class="faq-answer">
+          <p>يجب أن يكون المتبرع في صحة جيدة، عمره بين 18 و65 سنة، ووزنه أكثر من 50 كجم.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">كم مرة يمكنني التبرع بالدم؟</button>
+        <div class="faq-answer">
+          <p>يمكنك التبرع بالدم كل 3 أشهر للرجال وكل 4 أشهر للنساء.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">هل التبرع بالدم آمن؟</button>
+        <div class="faq-answer">
+          <p>نعم، التبرع بالدم آمن ويتم تحت إشراف طبي وباستخدام أدوات معقمة.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+<!-- الفوتر -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+  <script src="faq.js"></script>
+  <script src="chatbot.js"></script>
+
+</body>
+</html>
