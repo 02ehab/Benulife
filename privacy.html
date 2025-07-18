@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>الإشعارات - Haya</title>
-  <link rel="stylesheet" href="notifications.css" />
+  <link rel="stylesheet" href="privacy.css" />
   <link rel="stylesheet" href="chatbot.css" />
 </head>
 <body>
@@ -37,27 +37,18 @@
   </header>
   <div class="wrapper">
 
-  <!-- محتوى الصفحة -->
-   <div class="wrapper">
-  <main class="notifications-container">
-    <h2>الإشعارات</h2>
-
-    <ul class="notifications-list">
-      <li class="notification-item">
-        <strong>طلب دم جديد:</strong> فصيلة A+ مطلوبة في مستشفى السلام - الرياض.
-        <span class="date">قبل 2 ساعة</span>
-      </li>
-      <li class="notification-item">
-        <strong>شكراً لتبرعك:</strong> تم استلام دمك في بنك الدم المركزي.
-        <span class="date">أمس</span>
-      </li>
-      <li class="notification-item">
-        <strong>تحديث الطلب:</strong> مستشفى التعاون - جدة بحاجة لفصيلة O- بشكل عاجل.
-        <span class="date">قبل 3 أيام</span>
-      </li>
-    </ul>
-  </main>
+  <section class="policy-section">
+  <div class="container">
+    <h2>📜 سياسة منصة حياة</h2>
+    <p>
+      منصة "حياة" تلتزم بحماية خصوصية المستخدمين وضمان سرية البيانات. يُحظر استخدام المنصة لأغراض تجارية أو احتيالية. يتم التعامل مع معلومات المتبرعين والطلبات الطبية بأقصى درجات الأمان. يُمنع إرسال طلبات وهمية أو استخدام بيانات غير صحيحة. تحتفظ المنصة بحق حذف أي حساب يخالف هذه الشروط.
+    </p>
+    <p>
+      باستخدامك المنصة، فإنك توافق على سياسة الاستخدام هذه، وقد يتم تحديثها من وقت لآخر حسب الحاجة.
+    </p>
   </div>
+</section>
+
   </div>
   
 <div id="chatbot-container">
@@ -81,13 +72,14 @@
     />
     <button onclick="sendChatMessage()">إرسال</button>
   </div>
+  
 <!-- الفوتر -->
   <footer class="footer">
     <div class="container">
       <p>© 2025 منصة حياة - جميع الحقوق محفوظة</p>
     </div>
   </footer>
-  <script src="notifications.js"></script>
+  <script src="privacy.js"></script>
   <script src="chatbot.js"></script>
 
 </body>
