@@ -6,18 +6,6 @@ window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("donationForm");
-      const successMessage = document.getElementById("successMessage");
-
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // هنا يمكنك إرسال البيانات إلى سيرفر أو تخزينها
-        successMessage.style.display = "block";
-        form.reset();
-      });
-    });
 
     // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
