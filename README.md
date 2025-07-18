@@ -27,7 +27,10 @@
 3. ابدأ التبرع أو إدارة الطلبات من الملف الشخصي.
 
  
-
+background:cf041f
+botton: e23166
+Hover:df5fa2
+Title:000000
  تواصل معنا
 
 - البريد الإلكتروني: info@hayahblood.org
