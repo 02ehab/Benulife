@@ -6,13 +6,6 @@ window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
-function openMenu() {
-      document.getElementById("sideMenu").classList.add("open");
-    }
-    function closeMenu() {
-      document.getElementById("sideMenu").classList.remove("open");
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("donationForm");
       const successMessage = document.getElementById("successMessage");
@@ -25,7 +18,8 @@ function openMenu() {
         form.reset();
       });
     });
-// تغيير صفحة الطلبات علي نوع المستخدم
+
+    // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
   const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
 
@@ -52,20 +46,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
-
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-    if (isLoggedIn) {
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
-    }
-  });
