@@ -70,7 +70,7 @@ body {
 }
 
 .main-nav a:hover {
-  color: #ff5520;
+  color: #df5fa2;
 }
 
 .auth-buttons {
@@ -103,11 +103,11 @@ body {
 }
 
 .btn-signup:hover {
-  background-color: #e8491b;
+  background-color: #df5fa2;
 }
 
 .btn-signin:hover {
-  background-color: #f0f0f0;
+  background-color: #df5fa2;
 }
 
 /* زر القائمة للموبايل */
@@ -183,9 +183,10 @@ body {
   }
 }
 
+
 /* القسم الرئيسي */
 .hero {
-  background-color: #e8491b;
+  background-color: #cf041f;
   color: white;
   padding: 80px 0;
   text-align: center;
@@ -236,6 +237,190 @@ body {
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
+
+/*سليدر عرض الكروت*/
+.slider-section {
+  width: 100%;
+  padding: 40px 0;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 24px;
+  color: #cf041f;
+  margin-bottom: 20px;
+}
+
+.slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 10px;
+  width: 100%;
+}
+
+/* كارت الطلب */
+.request-card {
+  min-width: 260px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.blood-type {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cf041f;
+  margin-bottom: 10px;
+}
+
+.request-info {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.timer {
+  font-weight: bold;
+  color: #000000;
+  margin-top: 10px;
+}
+
+.request-card button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #e23166;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.slider-btn {
+  background: #cf041f;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+#leftBtn {
+  left: 10px;
+}
+
+#rightBtn {
+  right: 10px;
+}
+
+.slider-btn:hover {
+  background: #df5fa2;
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  .request-card {
+    min-width: 220px;
+    padding: 15px;
+  }
+
+  .slider-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+}
+
+/* سيكشن الاهدلف وشورط التبرع*/
+.section {
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  margin-bottom: 30px;
+  border-radius: 10px;
+    margin-top: 30px;
+
+}
+
+.section-title {
+  text-align: center;
+  color: #cf041f;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.goals-list,
+.conditions-list {
+  max-width: 800px;
+  margin: auto;
+  list-style: none;
+  padding: 0;
+}
+
+.goals-list li,
+.conditions-list li {
+  background: #fff;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-left: 5px solid #cf041f;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.steps-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.step {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  flex: 1 1 250px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.step-number {
+  background: #cf041f;
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  line-height: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
 /* إحصائيات */
 .stats {
   padding: 60px 0;
@@ -254,8 +439,9 @@ body {
 
 .stat-box h3 {
   font-size: 32px;
-  color: #e8491b;
+  color: #cf041f;
 }
+
 
 /*map*/
 #map {
@@ -272,15 +458,7 @@ body {
     height: 250px; /* تخفيض الارتفاع في الموبايل */
   }
 }
-.container h2 {
-  text-align: center;
-  font-size: 24px;
-  color: #e8491b;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-
+/* قسم اتصل بنا */
 .cta-contact-wrapper {
   display: flex;
   justify-content: space-between;
@@ -325,7 +503,7 @@ body {
 
 /* كارت ابدأ الآن */
 .cta-box {
-  background: #e8491b;
+  background: #cf041f;
   color: white;
   text-align: center;
 }
@@ -337,7 +515,7 @@ body {
 
 .cta-box .btn {
   background: #fff;
-  color: #e8491b;
+  color: #e23166;
   padding: 12px 20px;
   border-radius: 8px;
   text-decoration: none;
@@ -348,7 +526,7 @@ body {
 
 /* كارت تواصل معنا */
 .contact-box h2 {
-  color: #e8491b;
+  color: #cf041f;
   margin-bottom: 20px;
   text-align: center;
   margin-top: 40px;
@@ -377,7 +555,7 @@ body {
 }
 
 .contact-box button {
-  background-color: #e8491b;
+  background-color: #e23166;
   color: white;
   border: none;
   padding: 12px;
@@ -388,7 +566,7 @@ body {
 }
 
 .contact-box button:hover {
-  background-color: #8b1a1a;
+  background-color: #df5fa2;
 }
 
 #contactSuccess {
@@ -400,208 +578,39 @@ body {
   display: none;
 }
 
-/*سليدر عرض الكروت*/
-.slider-section {
-  width: 100%;
-  padding: 40px 0;
-  background-color: #f9f9f9;
-  text-align: center;
-}
-
-.section-title {
-  font-size: 24px;
-  color: #e8491b;
-  margin-bottom: 20px;
-}
-
-.slider-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.slider-track {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 20px 10px;
-  width: 100%;
-}
-
-/* كارت الطلب */
-.request-card {
-  min-width: 260px;
-  background: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.blood-type {
-  font-size: 24px;
-  font-weight: bold;
-  color: #e8491b;
-  margin-bottom: 10px;
-}
-
-.request-info {
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #333;
-}
-
-.timer {
-  font-weight: bold;
-  color: #e8491b;
-  margin-top: 10px;
-}
-
-.request-card button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px;
-  background: #e8491b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.slider-btn {
-  background: #e8491b;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 22px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-#leftBtn {
-  left: 10px;
-}
-
-#rightBtn {
-  right: 10px;
-}
-
-.slider-btn:hover {
-  background: #8b1a1a;
-}
-
-/* موبايل */
-@media (max-width: 600px) {
-  .request-card {
-    min-width: 220px;
-    padding: 15px;
-  }
-
-  .slider-btn {
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-  }
-}
-
-/* سيكشن الاهدلف وشورط التبرع*/
-.section {
-  padding: 40px 20px;
-  background-color: #f9f9f9;
-  margin-bottom: 30px;
-  border-radius: 10px;
-    margin-top: 30px;
-
-}
-
-.section-title {
-  text-align: center;
-  color: #e8491b;
-  font-size: 26px;
-  margin-bottom: 20px;
-}
-
-.goals-list,
-.conditions-list {
-  max-width: 800px;
-  margin: auto;
-  list-style: none;
-  padding: 0;
-}
-
-.goals-list li,
-.conditions-list li {
-  background: #fff;
-  padding: 12px 20px;
-  margin-bottom: 10px;
-  border-left: 5px solid #e8491b;
-  border-radius: 6px;
-  font-size: 18px;
-}
-
-.steps-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  max-width: 1000px;
-  margin: auto;
-}
-
-.step {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 20px;
-  flex: 1 1 250px;
-  border-radius: 8px;
-  text-align: center;
-  position: relative;
-}
-
-.step-number {
-  background: #e8491b;
-  color: #fff;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: inline-block;
-  line-height: 36px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-
 /* أساس التنسيق */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 15px 0;
+  font-size: 14px;
+  text-align: center;
 }
-
 .wrapper {
   flex: 1;
   padding: 20px; /* أو حسب الحاجة */
 }
 
-/* تنسيق الفوتر */
-.footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  font-size: 14px;
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #df5fa2;
 }
