@@ -6,26 +6,30 @@ window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
-function openMenu() {
-      document.getElementById("sideMenu").classList.add("open");
-    }
-    function closeMenu() {
-      document.getElementById("sideMenu").classList.remove("open");
-    }
+document.getElementById("donationForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("donationForm");
-      const successMessage = document.getElementById("successMessage");
+  const data = {
+    fullName: document.getElementById("fullName").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    bloodType: document.getElementById("bloodType").value,
+    city: document.getElementById("city").value,
+    donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || "",
+    donationDate: document.getElementById("donationDate").value,
+    notes: document.getElementById("notes").value,
+    time: new Date().toLocaleString()
+  };
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
+  const existing = JSON.parse(localStorage.getItem("donationRequests") || "[]");
+  existing.push(data);
+  localStorage.setItem("donationRequests", JSON.stringify(existing));
 
-        // هنا يمكنك إرسال البيانات إلى سيرفر أو تخزينها
-        successMessage.style.display = "block";
-        form.reset();
-      });
-    });
-// تغيير صفحة الطلبات علي نوع المستخدم
+  document.getElementById("successMessage").classList.remove("hidden");
+  this.reset();
+});
+
+ // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
   const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
 
@@ -52,6 +56,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
+ document.addEventListener("DOMContentLoaded", function () {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    const authButtons = document.getElementById("authButtons");
+    const sideAuthButtons = document.getElementById("sideAuthButtons");
+
+    const profileLink = document.getElementById("profileLink");
+    const profileLinkMobile = document.getElementById("profileLinkMobile");
+
+    if (isLoggedIn) {
+      if (authButtons) authButtons.style.display = "none";
+      if (sideAuthButtons) sideAuthButtons.style.display = "none";
+      if (profileLink) profileLink.style.display = "inline-block";
+      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+    }
+  });
+
+
 //تحويل الي صفحة التتبع
 document.getElementById("donationForm").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -82,20 +107,3 @@ document.getElementById("donationForm").addEventListener("submit", function(e) {
     window.location.href = "track_order.html";  // غير اسم الصفحة حسب ملفك
   }, 1000);
 });
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
-
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-    if (isLoggedIn) {
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
-    }
-  });
