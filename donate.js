@@ -1,36 +1,15 @@
+import { supabase } from './supabase.js';
+
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
-}
+};
 
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
-}
+};
 
-document.getElementById("donationForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const data = {
-    fullName: document.getElementById("fullName").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    bloodType: document.getElementById("bloodType").value,
-    city: document.getElementById("city").value,
-    donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || "",
-    donationDate: document.getElementById("donationDate").value,
-    notes: document.getElementById("notes").value,
-    time: new Date().toLocaleString()
-  };
-
-  const existing = JSON.parse(localStorage.getItem("donationRequests") || "[]");
-  existing.push(data);
-  localStorage.setItem("donationRequests", JSON.stringify(existing));
-
-  document.getElementById("successMessage").classList.remove("hidden");
-  this.reset();
-});
-
- // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
+  // تغيير صفحة الطلبات حسب نوع المستخدم
   const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
 
   const linkText = (userType === "hospital" || userType === "bloodbank")
@@ -55,55 +34,65 @@ document.addEventListener("DOMContentLoaded", () => {
       placeholder.outerHTML = linkHTML;
     }
   });
-});
 
+  // إظهار ملفي وإخفاء تسجيل الدخول إذا كان المستخدم مسجل دخول
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
 
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
 
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
+  if (isLoggedIn) {
+    if (authButtons) authButtons.style.display = "none";
+    if (sideAuthButtons) sideAuthButtons.style.display = "none";
+    if (profileLink) profileLink.style.display = "inline-block";
+    if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+  }
 
-    if (isLoggedIn) {
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
-    }
-  });
+  // التعامل مع إرسال النموذج وحفظ البيانات في Supabase
+  const donationForm = document.getElementById("donationForm");
+  if (donationForm) {
+    donationForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
+      const data = {
+        fullName: document.getElementById("fullName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        bloodType: document.getElementById("bloodType").value,
+        city: document.getElementById("city").value.trim(),
+        donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || null,
+        donationDate: document.getElementById("donationDate").value || null,
+        notes: document.getElementById("notes").value.trim() || null,
+        created_at: new Date().toISOString()
+      };
 
-//تحويل الي صفحة التتبع
-document.getElementById("donationForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+      // تحقق من الحقول المطلوبة
+      if (!data.fullName || !data.phone || !data.email || !data.bloodType || !data.city) {
+        alert("يرجى ملء جميع الحقول المطلوبة");
+        return;
+      }
 
-  const data = {
-    fullName: document.getElementById("fullName").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    bloodType: document.getElementById("bloodType").value,
-    city: document.getElementById("city").value,
-    donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || "",
-    donationDate: document.getElementById("donationDate").value,
-    notes: document.getElementById("notes").value,
-    time: new Date().toLocaleString()
-  };
+      // إرسال البيانات إلى Supabase
+      const { error } = await supabase
+        .from("donate")
+        .insert([data]);
 
-  const existing = JSON.parse(localStorage.getItem("donationRequests") || "[]");
-  existing.push(data);
-  localStorage.setItem("donationRequests", JSON.stringify(existing));
+      if (error) {
+        alert("حدث خطأ أثناء إرسال الطلب: " + error.message);
+      } else {
+        const successMessage = document.getElementById("successMessage");
+        if (successMessage) successMessage.style.display = "block";
+        this.reset();
 
-  // إظهار رسالة النجاح (اختياري)
-  document.getElementById("successMessage").classList.remove("hidden");
-
-  this.reset();
-
-  // تحويل المستخدم إلى صفحة التتبع بعد 1 ثانية (يمكن التعديل)
-  setTimeout(() => {
-    window.location.href = "track_order.html";  // غير اسم الصفحة حسب ملفك
-  }, 1000);
+        setTimeout(() => {
+          window.location.href = "track_order.html";  // عدّل حسب اسم صفحة التتبع عندك
+        }, 1500);
+      }
+    });
+  } else {
+    console.warn("عنصر النموذج donationForm غير موجود في الصفحة.");
+  }
 });
