@@ -10,16 +10,20 @@
   <div class="container">
     <div class="form-box">
       <div class="button-box">
-        <button onclick="showLogin()">تسجيل الدخول</button>
-        <button onclick="showRegister()">إنشاء حساب</button>
+        <button id="btn-login">تسجيل الدخول</button>
+        <button id="btn-register">إنشاء حساب</button>
+
         <div id="btn-indicator"></div>
       </div>
 
       <!-- تسجيل الدخول -->
       <form id="loginForm" class="form active">
         <h2 class="form-title">تسجيل الدخول</h2>
-        <label for="phone">رقم الموبايل</label>
-        <input type="tel" id="loginPhone" name="loginPhone" required pattern="[0-9]{10,15}">
+        <label for="loginEmail">البريد الإلكتروني</label>
+<input type="email" id="loginEmail" name="loginEmail" required>
+<label for="loginPassword">كلمة المرور</label>
+<input type="password" id="loginPassword" name="loginPassword" required>
+
         <button type="submit">دخول</button>
         <a href="reset_passowrd.html" class="forgot-password">نسيت كلمة المرور؟</a>
          <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
@@ -40,7 +44,7 @@
         <!-- مشترك -->
         <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
         <input name="email" type="email" placeholder=" البريد الالكتروني (اختياري)"  />
-        <input name="phone" type="text" placeholder="رقم الهاتف" required />
+        <input name="phone" type="text" placeholder="  رقم الموبايل الخاص بالمسئول" required />
         <input name="city" type="text" placeholder="المدينة" required />
 
         <!-- خاص بالمتبرع -->
@@ -74,6 +78,7 @@
     </div>
   </div>
 
-  <script src="login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="login.js"></script>
 </body>
 </html>
