@@ -1,28 +1,20 @@
-// عرض الحقول حسب نوع الحساب المختار
+import { supabase } from './supabase.js';
+
 function toggleAccountFields() {
   const accountType = document.getElementById("accountType").value;
-  const donorFields = document.getElementById("donorFields");
-  const hospitalFields = document.getElementById("hospitalFields");
-
-  if (accountType === "donor") {
-    donorFields.classList.remove("hidden");
-    hospitalFields.classList.add("hidden");
-    donorFields.querySelectorAll("select, input").forEach(input => input.required = true);
-    hospitalFields.querySelectorAll("input").forEach(input => input.required = false);
-  } else if (accountType === "hospital") {
-    hospitalFields.classList.remove("hidden");
-    donorFields.classList.add("hidden");
-    hospitalFields.querySelectorAll("input").forEach(input => input.required = true);
-    donorFields.querySelectorAll("select, input").forEach(input => input.required = false);
-  } else {
-    donorFields.classList.add("hidden");
-    hospitalFields.classList.add("hidden");
-    donorFields.querySelectorAll("select, input").forEach(input => input.required = false);
-    hospitalFields.querySelectorAll("input").forEach(input => input.required = false);
-  }
+  document.getElementById("donorFields").classList.toggle("hidden", accountType !== "donor");
+  document.getElementById("hospitalFields").classList.toggle("hidden", accountType !== "hospital");
 }
 
-// التبديل بين فورم تسجيل الدخول وإنشاء حساب
+document.addEventListener("DOMContentLoaded", () => {
+  const accountTypeSelect = document.getElementById("accountType");
+  accountTypeSelect.addEventListener("change", toggleAccountFields);
+
+  // تشغيلها مرة أول ما تفتح الصفحة
+  toggleAccountFields();
+});
+
+// دوال التنقل بين النماذج
 function showLogin() {
   document.getElementById("loginForm").classList.add("active");
   document.getElementById("registerForm").classList.remove("active");
@@ -38,61 +30,72 @@ function showRegister() {
 document.addEventListener("DOMContentLoaded", () => {
   toggleAccountFields();
 
-  // التسجيل
-  const registerForm = document.getElementById("registerForm");
-  registerForm.addEventListener("submit", (e) => {
+  // ربط أزرار التنقل
+  document.getElementById("btn-login").addEventListener("click", showLogin);
+  document.getElementById("btn-register").addEventListener("click", showRegister);
+
+  // إنشاء حساب
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(registerForm);
-    const phone = formData.get("phone");
-    const accountType = formData.get("accountType");
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
 
-    if (!phone || !accountType) {
-      alert("يرجى إدخال رقم الموبايل واختيار نوع الحساب");
+    if (!data.email || !data.password) {
+      alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
       return;
     }
 
-    const userData = {};
-    for (let [key, value] of formData.entries()) {
-      userData[key] = value;
-    }
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password
+    });
 
-    let users = JSON.parse(localStorage.getItem("users") || "[]");
-
-    // تأكد من عدم وجود مستخدم بنفس الرقم
-    if (users.some(u => u.phone === phone)) {
-      alert("هذا الرقم مسجل مسبقًا. قم بتسجيل الدخول.");
+    if (authError) {
+      alert("خطأ في إنشاء الحساب: " + authError.message);
       return;
     }
 
-    users.push(userData);
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("loggedInPhone", phone);
-    localStorage.setItem("userType", accountType);
+    const userId = authData.user.id;
 
-    alert("تم التسجيل بنجاح!");
-    window.location.href = "index.html";
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert([{
+        id: userId,
+        account_type: data.accountType,
+        name: data.name,
+        phone: data.phone,
+        city: data.city,
+        blood_type: data.blood_type || null,
+        last_donation_date: data.last_donation_date || null,
+        diseases: data.diseases || null,
+        hospital_name: data.hospital_name || null,
+        license_number: data.license_number || null,
+        contact_person: data.contact_person || null
+      }]);
+
+    if (profileError) {
+      alert("تم إنشاء الحساب ولكن حدث خطأ في حفظ البيانات: " + profileError.message);
+    } else {
+      alert("تم التسجيل بنجاح! تحقق من بريدك الإلكتروني لتفعيل الحساب.");
+      window.location.href = "index.html";
+    }
   });
 
-  // تسجيل الدخول برقم الجوال فقط
-  const loginForm = document.getElementById("loginForm");
-  loginForm.addEventListener("submit", (e) => {
+  // تسجيل الدخول
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const phone = loginForm.querySelector("#loginPhone").value.trim();
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
 
-    const user = users.find(u => u.phone === phone);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (user) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("loggedInPhone", user.phone);
-      localStorage.setItem("userType", user.accountType || "donor");
+    if (error) {
+      alert("خطأ في تسجيل الدخول: " + error.message);
+    } else {
       alert("تم تسجيل الدخول بنجاح!");
       window.location.href = "index.html";
-    } else {
-      alert("رقم الموبايل غير مسجل، يرجى إنشاء حساب أولًا.");
     }
   });
 });
