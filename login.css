@@ -9,6 +9,7 @@ body {
 }
 
 .container {
+  margin-top: 40px; /* مسافة فوق عشان ميتلزقش */
   width: 100%;
   max-width: 450px;
   background: #fff;
@@ -125,3 +126,4 @@ body {
 .hidden {
   display: none;
 }
+
