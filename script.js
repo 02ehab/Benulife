@@ -1,3 +1,5 @@
+import { supabase } from './supabase.js';
+
 // فتح وإغلاق القائمة الجانبية
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
@@ -83,7 +85,7 @@ if (contactForm) {
   });
 }
 
-// ✅ السلايدر للطلبات العاجلة
+// السلايدر للطلبات العاجلة
 document.addEventListener("DOMContentLoaded", () => {
   const slider = document.getElementById("emergencySlider");
   const requests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
@@ -122,27 +124,51 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+// 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض الملف الشخصي
+document.addEventListener("DOMContentLoaded", async () => {
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
+  if (session) {
+    const userId = session.user.id;
+    const { data: profile, error } = await supabase
+      .from('login')
+      .select('*')
+      .eq('id', userId)
+      .single();
 
-    if (isLoggedIn) {
+    if (profile) {
       if (authButtons) authButtons.style.display = "none";
       if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+      if (profileLink) {
+        profileLink.style.display = "inline-block";
+        profileLink.textContent = profile.name;
+      }
+      if (profileLinkMobile) {
+        profileLinkMobile.style.display = "inline-block";
+        profileLinkMobile.textContent = profile.name;
+      }
+      if (logoutBtn) logoutBtn.style.display = "inline-block";
     }
-  });
+  }
+
+  // زر تسجيل الخروج
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "index.html";
+    });
+  }
+});
 
 // تغيير صفحة الطلبات علي نوع المستخدم
 document.addEventListener("DOMContentLoaded", () => {
-  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
+  const userType = localStorage.getItem("userType");
 
   const linkText = (userType === "hospital" || userType === "bloodbank")
     ? "طلبات المتبرعين"
@@ -154,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
 
-  // تعويض أماكن الروابط
   const placeholders = [
     document.getElementById("requestsLinkPlaceholder"),
     document.getElementById("requestsLinkDesktop"),
