@@ -1,3 +1,6 @@
+import { supabase } from './supabase.js';
+
+// فتح وإغلاق القائمة الجانبية
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
 };
@@ -29,6 +32,7 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
+// الحصول على موقع المستخدم
 let userLat = null;
 let userLng = null;
 if ("geolocation" in navigator) {
@@ -38,83 +42,40 @@ if ("geolocation" in navigator) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+// عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("bloodRequestForm");
 
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+  // 🔹 التحقق من تسجيل الدخول وعرض "ملفي"
+  const { data: { session } } = await supabase.auth.getSession();
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
 
-      const requestData = {
-        fullName: document.getElementById("fullName").value,
-        phone: document.getElementById("phone").value,
-        bloodType: document.getElementById("bloodType").value,
-        city: document.getElementById("city").value,
-        hospital: document.getElementById("hospital").value,
-        urgency: document.getElementById("urgency").value,
-        notes: document.getElementById("notes").value,
-        timeLeftText: getTimeLeftText(document.getElementById("urgency").value),
-        location: userLat && userLng ? { lat: userLat, lng: userLng } : null,
-        createdAt: new Date().toISOString()
-      };
-
-      const existingRequests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
-      existingRequests.push(requestData);
-      localStorage.setItem("emergencyRequests", JSON.stringify(existingRequests));
-
-      document.getElementById("successMessage").classList.remove("hidden");
-      form.reset();
-
-      const userType = localStorage.getItem("userType");
-      // تنبيهات حسب نوع المستخدم
-      if (requestData.location && userLat && userLng) {
-        const distance = getDistanceFromLatLonInKm(
-          userLat,
-          userLng,
-          requestData.location.lat,
-          requestData.location.lng
-        );
-        if (distance < 10 && (userType === "hospital" || userType === "bloodbank")) {
-          alert(`🚑 يوجد طلب تبرع قريب (${Math.round(distance)} كم) - فصيلة ${requestData.bloodType}`);
-        }
-      }
-
-      if (requestData.urgency <= 2 && userType === "donor") {
-        alert("🔴 طلب تبرع عاجل جدًا متاح الآن. يرجى المساعدة إذا كنت قريبًا.");
-      }
-    });
+  if (session) {
+    if (authButtons) authButtons.style.display = "none";
+    if (sideAuthButtons) sideAuthButtons.style.display = "none";
+    if (profileLink) {
+      profileLink.style.display = "inline-block";
+      profileLink.textContent = "ملفي";
+    }
+    if (profileLinkMobile) {
+      profileLinkMobile.style.display = "inline-block";
+      profileLinkMobile.textContent = "ملفي";
+    }
   }
 
-  // فلترة الطلبات حسب الفصيلة والمدينة
-  const bloodFilter = document.getElementById("bloodFilter");
-  const cityFilter = document.getElementById("cityFilter");
-
-  if (bloodFilter && cityFilter) {
-    bloodFilter.addEventListener("change", filterRequests);
-    cityFilter.addEventListener("input", filterRequests);
-  }
-
-  function filterRequests() {
-    const blood = bloodFilter.value;
-    const city = cityFilter.value.trim();
-    const filtered = allRequests.filter(req => {
-      const matchBlood = blood ? req.bloodType === blood : true;
-      const matchCity = city ? req.city.includes(city) : true;
-      return matchBlood && matchCity;
-    });
-    renderRequests(filtered);
-  }
-
-  // تغيير روابط القائمة حسب نوع المستخدم
-  const userType = localStorage.getItem("userType");
+  // 🔹 تغيير روابط الطلبات حسب نوع المستخدم
+  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
   const linkText = (userType === "hospital" || userType === "bloodbank")
     ? "طلبات المتبرعين"
     : "الطلبات العاجلة";
   const linkHref = (userType === "hospital" || userType === "bloodbank")
     ? "donate_card.html"
     : "emergency_card.html";
-
   const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
+
   const placeholders = [
     document.getElementById("requestsLinkPlaceholder"),
     document.getElementById("requestsLinkDesktop"),
@@ -124,17 +85,66 @@ document.addEventListener("DOMContentLoaded", function () {
     if (placeholder) placeholder.outerHTML = linkHTML;
   });
 
-  // عرض رابط "ملفي" حسب حالة الدخول
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  if (isLoggedIn) {
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
+  // التعامل مع الفورم
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    if (authButtons) authButtons.style.display = "none";
-    if (sideAuthButtons) sideAuthButtons.style.display = "none";
-    if (profileLink) profileLink.style.display = "inline-block";
-    if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+      const requestData = {
+        fullName: document.getElementById("fullName").value,
+        phone: document.getElementById("phone").value,
+        bloodType: document.getElementById("bloodType").value,
+        city: document.getElementById("city").value,
+        hospital: document.getElementById("hospital").value,
+        urgency: parseInt(document.getElementById("urgency").value),
+        notes: document.getElementById("notes").value,
+        lat: userLat,
+        lng: userLng,
+        createdAt: new Date().toISOString(),
+        timeLeftText: getTimeLeftText(parseInt(document.getElementById("urgency").value))
+      };
+
+      // حفظ الطلب في Supabase
+      const { data, error } = await supabase
+        .from("emergency_requests")
+        .insert([{
+          full_name: requestData.fullName,
+          phone: requestData.phone,
+          blood_type: requestData.bloodType,
+          city: requestData.city,
+          hospital: requestData.hospital,
+          urgency: requestData.urgency,
+          notes: requestData.notes,
+          lat: requestData.lat,
+          lng: requestData.lng,
+          created_at: requestData.createdAt
+        }]);
+
+      if (error) {
+        console.error("❌ خطأ في حفظ الطلب:", error);
+        alert("حصل خطأ أثناء إرسال الطلب.");
+      } else {
+        console.log("✅ تم الحفظ:", data);
+        document.getElementById("successMessage").classList.remove("hidden");
+        form.reset();
+
+        // تنبيهات حسب قرب المستخدم ونوع الحساب
+        if (requestData.lat && requestData.lng) {
+          const distance = getDistanceFromLatLonInKm(
+            userLat,
+            userLng,
+            requestData.lat,
+            requestData.lng
+          );
+          if (distance < 10 && (userType === "hospital" || userType === "bloodbank")) {
+            alert(`🚑 يوجد طلب تبرع قريب (${Math.round(distance)} كم) - فصيلة ${requestData.bloodType}`);
+          }
+        }
+
+        if (requestData.urgency <= 2 && userType === "donor") {
+          alert("🔴 طلب تبرع عاجل جدًا متاح الآن. يرجى المساعدة إذا كنت قريبًا.");
+        }
+      }
+    });
   }
 });
