@@ -1,114 +1,155 @@
-// profile.js
 import { supabase } from './supabase.js';
 
-// فتح/إغلاق القائمة الجانبية
-window.openMenu = function () {
-  document.getElementById("sideMenu").classList.add("open");
-};
+// تبديل الحقول حسب نوع الحساب
+function toggleAccountFields() {
+  const accountType = document.getElementById("accountType").value;
+  const donorFields = document.getElementById("donorFields");
+  const hospitalFields = document.getElementById("hospitalFields");
 
-window.closeMenu = function () {
-  document.getElementById("sideMenu").classList.remove("open");
-};
+  donorFields.classList.toggle("hidden", accountType !== "donor");
+  hospitalFields.classList.toggle("hidden", accountType !== "hospital");
 
-// تسجيل الخروج
-async function logout() {
-  await supabase.auth.signOut();
-  window.location.href = "login.html";
+  const bloodTypeSelect = donorFields.querySelector('[name="blood_type"]');
+  bloodTypeSelect.required = accountType === "donor";
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const logoutBtn = document.getElementById("logoutBtn");
-  const logoutBtn2 = document.getElementById("logoutBtn2");
+document.addEventListener("DOMContentLoaded", () => {
+  toggleAccountFields();
 
-  if (logoutBtn) logoutBtn.addEventListener("click", logout);
-  if (logoutBtn2) logoutBtn2.addEventListener("click", logout);
+  document.getElementById("accountType").addEventListener("change", toggleAccountFields);
 
-  // الحصول على الجلسة الحالية
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    // المستخدم غير مسجل دخول → رجعه لصفحة تسجيل الدخول
-    window.location.href = "login.html";
-    return;
-  }
-
-  const userId = session.user.id;
-
-  // إخفاء أزرار تسجيل الدخول / إنشاء حساب في حالة تسجيل الدخول
-  const authButtons = document.getElementById("authButtons");
-  const sideAuthButtons = document.getElementById("sideAuthButtons");
-  const profileLink = document.getElementById("profileLink");
-  const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-  if (authButtons) authButtons.style.display = "none";
-  if (sideAuthButtons) sideAuthButtons.style.display = "none";
-  if (profileLink) {
-    profileLink.style.display = "inline-block";
-    profileLink.textContent = "ملفي";
-  }
-  if (profileLinkMobile) {
-    profileLinkMobile.style.display = "inline-block";
-    profileLinkMobile.textContent = "ملفي";
-  }
-
-  // جلب بيانات المستخدم من جدول login
-  const { data: userData, error } = await supabase
-    .from("login")
-    .select("*")
-    .eq("id", userId)
-    .single();
-
-  if (error) {
-    console.error("خطأ في جلب بيانات المستخدم:", error);
-    return;
-  }
-
-  // عرض البيانات في الصفحة
-  document.getElementById("userName").textContent = userData.name || "اسم المستخدم";
-  document.getElementById("userCity").textContent = userData.city || "غير محددة";
-  document.querySelector(".blood-type-badge").textContent = userData.blood_type || "N/A";
-
-  const donationCount = userData.donation_count || 0;
-  const points = donationCount * 50;
-
-  const pointsSpan = document.getElementById("points");
-  const badgeDiv = document.getElementById("badge");
-  const badgeText = document.getElementById("badgeText");
-
-  pointsSpan.textContent = points;
-  if (points >= 200) {
-    badgeDiv.style.display = "block";
-    badgeText.textContent = "🥇 وسام المتبرع الذهبي";
-  }
-
-  // تحديث رابط الطلبات حسب نوع المستخدم
-  const userType = userData.account_type;
-  const linkText = (userType === "hospital" || userType === "bloodbank") ? "طلبات المتبرعين" : "الطلبات العاجلة";
-  const linkHref = (userType === "hospital" || userType === "bloodbank") ? "donate_card.html" : "emergency_card.html";
-  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
-
-  const placeholders = [
-    document.getElementById("requestsLinkPlaceholder"),
-    document.getElementById("requestsLinkDesktop"),
-    document.getElementById("requestsLinkMobile")
-  ];
-
-  placeholders.forEach(placeholder => {
-    if (placeholder) placeholder.outerHTML = linkHTML;
+  // أزرار التنقل بين النماذج
+  document.getElementById("btn-login").addEventListener("click", () => {
+    document.getElementById("loginForm").classList.add("active");
+    document.getElementById("registerForm").classList.remove("active");
+    document.getElementById("btn-indicator").style.right = "0%";
   });
 
-  // Dropdown زر تعديل البيانات
-  const dropdownBtn = document.querySelector(".dropdown-btn");
-  const dropdown = document.querySelector(".dropdown");
+  document.getElementById("btn-register").addEventListener("click", () => {
+    document.getElementById("loginForm").classList.remove("active");
+    document.getElementById("registerForm").classList.add("active");
+    document.getElementById("btn-indicator").style.right = "50%";
+  });
 
-  if (dropdownBtn && dropdown) {
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-
-    window.addEventListener("click", () => {
-      dropdown.classList.remove("show");
-    });
+  // عناصر لعرض رسائل الخطأ
+  const loginError = document.getElementById("loginError");
+  let registerError = document.getElementById("registerError");
+  if (!registerError) {
+    registerError = document.createElement("p");
+    registerError.id = "registerError";
+    registerError.style.color = "red";
+    registerError.style.display = "none";
+    document.getElementById("registerForm").prepend(registerError);
   }
+
+  // إنشاء حساب
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    registerError.style.display = "none";
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    if (!data.email || !data.registerPassword) {
+      registerError.textContent = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+      registerError.style.display = "block";
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(data.email)) {
+      registerError.textContent = "يرجى إدخال بريد إلكتروني صالح";
+      registerError.style.display = "block";
+      return;
+    }
+
+    if (data.registerPassword.length < 6) {
+      registerError.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+      registerError.style.display = "block";
+      return;
+    }
+
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.registerPassword
+    });
+
+    if (authError) {
+      registerError.textContent = authError.status === 409
+        ? "هذا البريد مسجل بالفعل."
+        : "خطأ في إنشاء الحساب: " + authError.message;
+      registerError.style.display = "block";
+      return;
+    }
+
+    const userId = authData.user?.id;
+    if (!userId) {
+      registerError.textContent = "لم يتم إنشاء الحساب بنجاح.";
+      registerError.style.display = "block";
+      return;
+    }
+
+    const { error: profileError } = await supabase
+      .from("login")
+      .insert([{
+        id: userId,
+        account_type: data.accountType,
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        city: data.city,
+        blood_type: data.blood_type || null,
+        last_donation_date: data.last_donation_date || null,
+        diseases: data.diseases || null,
+        hospital_name: data.hospital_name || null,
+        license_number: data.license_number || null,
+        contact_person: data.contact_person || null
+      }]);
+
+    if (profileError) {
+      registerError.textContent = "تم إنشاء الحساب ولكن حدث خطأ في حفظ البيانات: " + profileError.message;
+      registerError.style.display = "block";
+    } else {
+      localStorage.setItem("userType", data.accountType);
+      registerError.style.color = "green";
+      registerError.textContent = "تم التسجيل بنجاح! جاري التحويل...";
+      registerError.style.display = "block";
+      setTimeout(() => { window.location.href = "index.html"; }, 2000);
+    }
+  });
+
+  // تسجيل الدخول
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginError.style.display = "none";
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!email || !password) {
+      loginError.textContent = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+      loginError.style.display = "block";
+      return;
+    }
+
+    const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      loginError.textContent = "خطأ في تسجيل الدخول: " + error.message;
+      loginError.style.display = "block";
+    } else {
+      // جلب نوع المستخدم من الجدول login
+      const { data: userData, error: userError } = await supabase
+        .from("login")
+        .select("account_type")
+        .eq("id", loginData.user.id)
+        .single();
+
+      if (!userError) localStorage.setItem("userType", userData.account_type);
+
+      loginError.style.color = "green";
+      loginError.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
+      loginError.style.display = "block";
+      setTimeout(() => { window.location.href = "index.html"; }, 1500);
+    }
+  });
 });
