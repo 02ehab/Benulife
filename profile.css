@@ -1,384 +1,173 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-}
-
+/* الخطوط العامة وخلفية الصفحة */
 body {
-  line-height: 1.6;
-  direction: rtl;
-  background-color: #FFFFF0;
-}
-
-
-/* الحاوية العامة */
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: auto;
-}
-
-/* الهيدر */
-body {
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: #e3edf2;
-}
-
-.modern-header {
-  background-color: #e3edf2;
-  border-radius: 0 0 20px 20px;
-  padding: 16px 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.header-container {
-  background-color: #f5f3ef;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  max-width: 1200px;
-  margin: auto;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1a1a1a;
-  margin-top: 10px;
-}
-
-.main-nav {
-  display: flex;
-  gap: 28px;
-}
-
-.main-nav a {
-  text-decoration: none;
-  color: #1a1a1a;
-  font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s;
-  margin-top: 10px;
-}
-
-.main-nav a:hover {
-  color: #ff5520;
-}
-
-.auth-buttons {
-  display: flex;
-  gap: 16px;
-}
-
-.btn-signin {
-  padding: 8px 20px;
-  background-color: #fff;
-  color: #1a1a1a;
-  border-radius: 30px;
-  font-weight: 500;
-  text-decoration: none;
-  border: 1px solid #ddd;
-  transition: all 0.3s ease;
-  margin-top: 10px;
-}
-
-.btn-signup {
-  padding: 8px 20px;
-  background-color: #ff5520;
-  color: #fff;
-  border-radius: 30px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  transition: background-color 0.3s;
- margin-top: 10px;
-}
-
-.btn-signup:hover {
-  background-color: #e8491b;
-}
-
-.btn-signin:hover {
-  background-color: #f0f0f0;
-}
-
-/* زر القائمة للموبايل */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #1a1a1a;
-  margin-top: 10px;
-}
-
-.side-menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 75%;
-  max-width: 300px;
-  height: 100%;
-  background-color: #f5f3ef;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-  padding: 2rem 1.5rem;
-  z-index: 2000;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.side-menu nav {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.side-menu a {
-  text-decoration: none;
-  color: #1a1a1a;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.side-menu .btn-signup,
-.side-menu .btn-signin {
-  display: inline-block;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.side-menu .close-btn {
-  align-self: flex-end;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  color: #1a1a1a;
-}
-
-.side-menu.open {
-  display: flex;
-}
-
-/* ميديا كويري للموبايل */
-@media (max-width: 768px) {
-  .main-nav,
-  .auth-buttons {
-    display: none;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-}
-
-
-/* تنسيق الصفحة الشخصية */
-.profile-main {
+  background: linear-gradient(to right, #21B26F, #d90429);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  align-items: center;
 }
 
-.profile-card-modern {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+/* الصندوق الرئيسي للنموذج */
+.container {
   width: 100%;
-  max-width: 400px;
-  overflow: visible; /* يسمح بعرض القائمة خارج حدود الكارت */
-  direction: rtl;
-  position: relative; /* ضروري للقائمة المنسدلة */
-}
-
-.profile-header {
-  background: #B22222;
-  color: #fff;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Dropdown Container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-/* زر القائمة */
-.dropdown-btn {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/* محتوى القائمة المنسدلة (مخفي افتراضيًا) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  background-color: #fff;
-  min-width: 160px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  border-radius: 6px;
-  z-index: 9999; /* يضمن الظهور فوق كل العناصر */
-}
-
-/* روابط القائمة */
-.dropdown-content a {
-  color: #333;
-  padding: 10px 15px;
-  text-decoration: none;
-  display: block;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
-}
-
-.dropdown-content a:last-child {
-  border-bottom: none;
-}
-
-/* تغير الخلفية عند المرور */
-.dropdown-content a:hover {
-  background-color: #f3f3f3;
-}
-
-/* اظهار القائمة عند الضغط على الزر */
-.dropdown.show .dropdown-content {
-  display: block;
-}
-
-
-.profile-body {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  gap: 16px;
-}
-
-.avatar img {
-  width: 160px;
-  height: 240px;
+  max-width: 450px;
+  background: #fff;
   border-radius: 12px;
-  border: 2px solid #B22222;
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-  margin-top: 18px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
+/* صندوق الأزرار (تسجيل دخول / إنشاء حساب) */
+.button-box {
+  display: flex;
+  position: relative;
+  margin-bottom: 25px;
+  border-radius: 30px;
+  background-color: #eee;
+  overflow: hidden;
+}
 
-
-.user-details {
+.button-box button {
   flex: 1;
-}
-
-.user-details h2 {
-  margin: 0 0 8px;
-  font-size: 22px;
-  color: #333;
-}
-
-label {
+  padding: 12px 0;
+  background: none;
+  border: none;
+  outline: none;
   font-weight: bold;
-  margin-right: 4px;
+  cursor: pointer;
+  z-index: 1;
+  color: #000;
+  transition: color 0.3s;
 }
 
-.user-details p {
-  margin: 6px 0;
-  font-size: 16px;
-  color: #555;
+.button-box button:hover {
+  color: #21B26F;
 }
 
-.points-section {
-  background: #f3f3f3;
-  padding: 16px;
+/* مؤشر التنقل بين النماذج */
+#btn-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, #21B26F, #d90429);
+  border-radius: 30px;
+  transition: 0.4s ease;
+  z-index: 0;
+}
+
+/* النماذج */
+.form {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.form.active {
+  display: block;
+}
+
+/* عنوان النموذج */
+.form-title {
+  margin-bottom: 20px;
+  color: #333;
   text-align: center;
-}
-
-.points-section h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.badge {
-  background: gold;
-  padding: 6px 12px;
-  border-radius: 20px;
-  display: inline-block;
-  margin-top: 8px;
-  font-weight: bold;
-  color: #333;
-}
-
-
-/* وسام المتبرع الذهبي*/
-.points-section {
-  background: #fff4e6;
-  padding: 15px 20px;
-  border-radius: 10px;
-  margin-top: 20px;
-  text-align: center;
-}
-
-
-.points-section h3 {
-  margin: 0 0 10px;
-  color: #333;
-}
-
-.points-section p {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.badge {
-  margin-top: 10px;
   font-size: 20px;
+}
+
+/* الحقول */
+.form input,
+.form select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* الأزرار */
+.form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #010101;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
   font-weight: bold;
-  color: #e0a800;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 16px;
+}
+
+.form button:hover {
+  background-color: #5f5f5f;
+}
+
+/* رسائل الخطأ والتحذيرات */
+#loginError,
+#registerError {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
+  display: none;
+  text-align: center;
+}
+
+/* الحقول المخفية */
+.hidden {
   display: none;
 }
 
-
-/* أساس التنسيق */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+/* تأثير الدخول للنموذج */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.wrapper {
-  flex: 1;
-  padding: 20px; /* أو حسب الحاجة */
-}
-
-/* تنسيق الفوتر */
-.footer {
-  background-color: #333;
-  color: white;
+/* روابط العودة */
+.back-home,
+.forgot-password {
+  display: block;
   text-align: center;
-  padding: 15px 0;
+  margin-top: 12px;
+  color: #d90429;
+  text-decoration: none;
+  font-weight: bold;
   font-size: 14px;
+  transition: color 0.3s;
+}
+
+.back-home:hover,
+.forgot-password:hover {
+  color: #21B26F;
+}
+
+/* تحسين التوافق مع الشاشات الصغيرة */
+@media (max-width: 500px) {
+  .container {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .form-title {
+    font-size: 18px;
+  }
+
+  .form input,
+  .form select,
+  .form button {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
