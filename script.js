@@ -130,14 +130,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ----- تحقق من تسجيل الدخول عبر Supabase -----
+  // 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض رابط "ملفي"
+document.addEventListener("DOMContentLoaded", async () => {
   const { data: { session } } = await supabase.auth.getSession();
 
   const authButtons = document.getElementById("authButtons");
   const sideAuthButtons = document.getElementById("sideAuthButtons");
   const profileLink = document.getElementById("profileLink");
   const profileLinkMobile = document.getElementById("profileLinkMobile");
-  const logoutBtn = document.getElementById("logoutBtn");
 
   if (session) {
     const userId = session.user.id;
@@ -158,15 +158,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         profileLinkMobile.style.display = "inline-block";
         profileLinkMobile.textContent = "ملفي";
       }
-      if (logoutBtn) logoutBtn.style.display = "inline-block";
-
-      // تسجيل الخروج
-      logoutBtn?.addEventListener("click", async () => {
-        await supabase.auth.signOut();
-        window.location.href = "index.html";
-      });
     }
   }
+});
 
   // ----- تغيير صفحة الطلبات على حسب نوع المستخدم -----
   const userType = localStorage.getItem("userType");
