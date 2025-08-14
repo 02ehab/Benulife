@@ -1,6 +1,8 @@
 import { supabase } from './supabase.js';
 
+// ========================
 // فتح وإغلاق القائمة الجانبية
+// ========================
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
 }
@@ -8,7 +10,9 @@ window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
 
+// ========================
 // إعداد خريطة Mapbox
+// ========================
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWhhYjEwIiwiYSI6ImNtY3ZsaXZucDBidzUyaXM4cWluZjcxMzYifQ.EUIFT090mttpMoVNzUrYhg';
 
 const map = new mapboxgl.Map({
@@ -25,15 +29,17 @@ new mapboxgl.Marker()
   .setPopup(new mapboxgl.Popup().setHTML("<strong>موقع التبرع</strong>"))
   .addTo(map);
 
-// حساب المسافة
+// ========================
+// حساب المسافة + المستشفيات القريبة
+// ========================
 function getDistance(lat1, lng1, lat2, lng2) {
   const toRad = (x) => (x * Math.PI) / 180;
   const R = 6371;
   const dLat = toRad(lat2 - lat1);
   const dLng = toRad(lng2 - lng1);
   const a = Math.sin(dLat / 2) ** 2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLng / 2) ** 2;
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLng / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -60,7 +66,9 @@ function showHospitalsOnMap(hospitals) {
   });
 }
 
+// ========================
 // إظهار موقع المستخدم
+// ========================
 navigator.geolocation.getCurrentPosition(position => {
   const { latitude, longitude } = position.coords;
   findNearbyHospitals(latitude, longitude);
@@ -70,62 +78,59 @@ navigator.geolocation.getCurrentPosition(position => {
     .addTo(map);
 });
 
-// فورم التواصل
-const contactForm = document.getElementById("contactForm");
-const contactSuccess = document.getElementById("contactSuccess");
+// ========================
+// كود يتم تنفيذه بعد تحميل الصفحة
+// ========================
+document.addEventListener("DOMContentLoaded", async () => {
 
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    contactSuccess.classList.add("hidden");
-    setTimeout(() => {
-      contactSuccess.classList.remove("hidden");
-      contactForm.reset();
-    }, 300);
-  });
-}
+  // ----- فورم التواصل -----
+  const contactForm = document.getElementById("contactForm");
+  const contactSuccess = document.getElementById("contactSuccess");
 
-// السلايدر للطلبات العاجلة
-document.addEventListener("DOMContentLoaded", () => {
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      contactSuccess.classList.add("hidden");
+      setTimeout(() => {
+        contactSuccess.classList.remove("hidden");
+        contactForm.reset();
+      }, 300);
+    });
+  }
+
+  // ----- السلايدر للطلبات العاجلة -----
   const slider = document.getElementById("emergencySlider");
   const requests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
 
-  if (!slider) return;
+  if (slider) {
+    if (!requests.length) {
+      slider.innerHTML = "<p>لا توجد طلبات حالياً</p>";
+    } else {
+      requests.forEach(req => {
+        const card = document.createElement("div");
+        card.className = "request-card";
+        card.innerHTML = `
+          <div class="blood-type">${req.bloodType}</div>
+          <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
+          <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
+          <div class="timer">⏳ ${req.timeLeftText}</div>
+          <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
+        `;
+        slider.appendChild(card);
+      });
 
-  if (!requests.length) {
-    slider.innerHTML = "<p>لا توجد طلبات حالياً</p>";
-    return;
+      const scrollAmount = 300;
+      const leftBtn = document.getElementById("leftBtn");
+      const rightBtn = document.getElementById("rightBtn");
+
+      if (leftBtn && rightBtn) {
+        leftBtn.onclick = () => slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        rightBtn.onclick = () => slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }
   }
 
-  requests.forEach(req => {
-    const card = document.createElement("div");
-    card.className = "request-card";
-    card.innerHTML = `
-      <div class="blood-type">${req.bloodType}</div>
-      <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
-      <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
-      <div class="timer">⏳ ${req.timeLeftText}</div>
-      <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
-    `;
-    slider.appendChild(card);
-  });
-
-  const scrollAmount = 300;
-  const leftBtn = document.getElementById("leftBtn");
-  const rightBtn = document.getElementById("rightBtn");
-
-  if (leftBtn && rightBtn) {
-    leftBtn.onclick = () => {
-      slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    };
-    rightBtn.onclick = () => {
-      slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    };
-  }
-});
-
-// 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض الملف الشخصي
-document.addEventListener("DOMContentLoaded", async () => {
+  // ----- تحقق من تسجيل الدخول عبر Supabase -----
   const { data: { session } } = await supabase.auth.getSession();
 
   const authButtons = document.getElementById("authButtons");
@@ -155,28 +160,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (logoutBtn) logoutBtn.style.display = "inline-block";
 
-      // 🔹 تسجيل الخروج
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", async () => {
-          await supabase.auth.signOut();
-          window.location.href = "index.html";
-        });
-      }
+      // تسجيل الخروج
+      logoutBtn?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "index.html";
+      });
     }
   }
-});
 
-  // زر تسجيل الخروج
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      window.location.href = "index.html";
-    });
-  }
-});
-
-// تغيير صفحة الطلبات علي نوع المستخدم
-document.addEventListener("DOMContentLoaded", () => {
+  // ----- تغيير صفحة الطلبات على حسب نوع المستخدم -----
   const userType = localStorage.getItem("userType");
 
   const linkText = (userType === "hospital" || userType === "bloodbank")
@@ -200,4 +192,5 @@ document.addEventListener("DOMContentLoaded", () => {
       placeholder.outerHTML = linkHTML;
     }
   });
+
 });
