@@ -130,8 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض رابط "ملفي"
-document.addEventListener("DOMContentLoaded", async () => {
+  // ----- تحقق من تسجيل الدخول -----
   const { data: { session } } = await supabase.auth.getSession();
 
   const authButtons = document.getElementById("authButtons");
@@ -160,7 +159,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   }
-});
 
   // ----- تغيير صفحة الطلبات على حسب نوع المستخدم -----
   const userType = localStorage.getItem("userType");
@@ -188,3 +186,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
+
+// ========================
+// تسجيل الخروج
+// ========================
+window.logout = async function () {
+  await supabase.auth.signOut();
+  localStorage.clear();
+  window.location.href = "index.html"; // رجوع للصفحة الرئيسية
+}
