@@ -23,35 +23,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (logoutBtn) logoutBtn.addEventListener("click", logout);
   if (logoutBtn2) logoutBtn2.addEventListener("click", logout);
 
-  // جلب المستخدم الحالي
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    console.error("خطأ في جلب المستخدم:", userError);
+  // الحصول على الجلسة الحالية
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    // المستخدم غير مسجل دخول → رجعه لصفحة تسجيل الدخول
+    window.location.href = "login.html";
     return;
   }
 
+  const userId = session.user.id;
+
+  // إخفاء أزرار تسجيل الدخول / إنشاء حساب في حالة تسجيل الدخول
   const authButtons = document.getElementById("authButtons");
   const sideAuthButtons = document.getElementById("sideAuthButtons");
   const profileLink = document.getElementById("profileLink");
   const profileLinkMobile = document.getElementById("profileLinkMobile");
 
-  if (!user) {
-    if (profileLink) profileLink.style.display = "none";
-    if (profileLinkMobile) profileLinkMobile.style.display = "none";
-    return;
-  }
-
-  // إظهار الملف الشخصي وإخفاء أزرار تسجيل الدخول
-  if (profileLink) profileLink.style.display = "inline-block";
-  if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
   if (authButtons) authButtons.style.display = "none";
   if (sideAuthButtons) sideAuthButtons.style.display = "none";
+  if (profileLink) {
+    profileLink.style.display = "inline-block";
+    profileLink.textContent = "ملفي";
+  }
+  if (profileLinkMobile) {
+    profileLinkMobile.style.display = "inline-block";
+    profileLinkMobile.textContent = "ملفي";
+  }
 
   // جلب بيانات المستخدم من جدول login
   const { data: userData, error } = await supabase
     .from("login")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", userId)
     .single();
 
   if (error) {
@@ -93,18 +97,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (placeholder) placeholder.outerHTML = linkHTML;
   });
 
-  // Dropdown زر تعديل البيانات + تسجيل الخروج
-const dropdownBtn = document.querySelector(".dropdown-btn");
-const dropdown = document.querySelector(".dropdown"); // العنصر الأب
+  // Dropdown زر تعديل البيانات
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdown = document.querySelector(".dropdown");
 
-if (dropdownBtn && dropdown) {
-  dropdownBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // منع إغلاق القائمة فورًا عند الضغط
-    dropdown.classList.toggle("show"); // إضافة أو إزالة الكلاس على الأب
-  });
+  if (dropdownBtn && dropdown) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle("show");
+    });
 
-  window.addEventListener("click", () => {
-    dropdown.classList.remove("show"); // إخفاء عند الضغط خارج
-  });
-}
+    window.addEventListener("click", () => {
+      dropdown.classList.remove("show");
+    });
+  }
 });
