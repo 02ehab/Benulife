@@ -17,64 +17,62 @@
       </div>
 
       <!-- تسجيل الدخول -->
-      <form id="loginForm" class="form active">
-        <h2 class="form-title">تسجيل الدخول</h2>
-        <label for="loginEmail">البريد الإلكتروني</label>
-<input type="email" id="loginEmail" name="loginEmail" required>
-<label for="loginPassword">كلمة المرور</label>
-<input type="password" id="loginPassword" name="loginPassword" required>
+      <form id="loginForm" class="form active" novalidate>
+  <h2 class="form-title">تسجيل الدخول</h2>
+  <label for="loginEmail">البريد الإلكتروني</label>
+  <input type="email" id="loginEmail" name="loginEmail" required>
+  <label for="loginPassword">كلمة المرور</label>
+  <input type="password" id="loginPassword" name="loginPassword" required>
 
-        <button type="submit">دخول</button>
-        <a href="reset_passowrd.html" class="forgot-password">نسيت كلمة المرور؟</a>
-         <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
+  <button type="submit">دخول</button>
+  <a href="reset_password.html" class="forgot-password">نسيت كلمة المرور؟</a>
+  <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
 
-      </form>
-      <p id="loginError" style="color: red; display: none;">⚠️ الرقم غير مسجل</p>
+  <p id="loginError"></p>
+</form>
 
-      <!-- إنشاء حساب -->
-      <form id="registerForm" class="form">
-        <h2 class="form-title">إنشاء حساب</h2>
+<form id="registerForm" class="form" novalidate>
+  <h2 class="form-title">إنشاء حساب</h2>
+  <select id="accountType" name="accountType" required>
+    <option value="">اختر نوع الحساب</option>
+    <option value="donor">متبرع</option>
+    <option value="hospital">مستشفى / بنك دم</option>
+  </select>
 
-        <select id="accountType" name="accountType" onchange="toggleAccountFields()" required>
-  <option value="">اختر نوع الحساب</option>
-  <option value="donor">متبرع</option>
-  <option value="hospital">مستشفى / بنك دم</option>
-</select>
+  <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
+  <input name="email" type="email" placeholder=" البريد الالكتروني" required  />
+  <input type="password" id="registerPassword" name="registerPassword" placeholder="كلمة المرور" required>
+  <input name="phone" type="text" placeholder="رقم الموبايل الخاص بالمسئول" required />
+  <input name="city" type="text" placeholder="المدينة" required />
 
-        <!-- مشترك -->
-        <input name="name" type="text" placeholder="الاسم الكامل / اسم الجهة" required />
-        <input name="email" type="email" placeholder=" البريد الالكتروني (اختياري)"  />
-        <input name="phone" type="text" placeholder="  رقم الموبايل الخاص بالمسئول" required />
-        <input name="city" type="text" placeholder="المدينة" required />
+  <div id="donorFields" class="hidden">
+    <select name="blood_type">
+      <option value="">فصيلة الدم</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+    <input name="last_donation_date" type="date" placeholder="آخر تاريخ تبرع" />
+    <input name="diseases" type="text" placeholder="أمراض مزمنة (إن وجد)" />
+  </div>
 
-        <!-- خاص بالمتبرع -->
-        <div id="donorFields" class="hidden">
-          <select name="blood_type" required>
-            <option value="">فصيلة الدم</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-          <input name="last_donation_date" type="date" placeholder="آخر تاريخ تبرع" />
-          <input name="diseases" type="text" placeholder="أمراض مزمنة (إن وجد)" />
-        </div>
+  <div id="hospitalFields" class="hidden">
+    <input name="hospital_name" type="text" placeholder="اسم المستشفى / بنك الدم" />
+    <input name="license_number" type="text" placeholder="رقم الترخيص" />
+    <input name="contact_person" type="text" placeholder="اسم المسؤول الطبي" />
+  </div>
 
-        <!-- خاص بالمستشفى -->
-        <div id="hospitalFields" class="hidden">
-          <input name="hospital_name" type="text" placeholder="اسم المستشفى / بنك الدم" />
-          <input name="license_number" type="text" placeholder="رقم الترخيص" />
-          <input name="contact_person" type="text" placeholder="اسم المسؤول الطبي" />
-        </div>
+  <button type="submit">تسجيل</button>
+  <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
 
-        <button type="submit">تسجيل</button>
-        <a href="index.html" class="back-home">← العودة إلى الصفحة الرئيسية</a>
+  <p id="registerError"></p>
+</form>
 
-      </form>
     </div>
   </div>
 
