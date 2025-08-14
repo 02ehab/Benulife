@@ -147,15 +147,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (sideAuthButtons) sideAuthButtons.style.display = "none";
       if (profileLink) {
         profileLink.style.display = "inline-block";
-        profileLink.textContent = profile.name;
+        profileLink.textContent = "ملفي";
       }
       if (profileLinkMobile) {
         profileLinkMobile.style.display = "inline-block";
-        profileLinkMobile.textContent = profile.name;
+        profileLinkMobile.textContent = "ملفي";
       }
       if (logoutBtn) logoutBtn.style.display = "inline-block";
     }
   }
+});
 
   // زر تسجيل الخروج
   if (logoutBtn) {
