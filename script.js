@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (session) {
     const userId = session.user.id;
-    const { data: profile, error } = await supabase
+    const { data: profile } = await supabase
       .from('login')
       .select('*')
       .eq('id', userId)
@@ -154,6 +154,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         profileLinkMobile.textContent = "ملفي";
       }
       if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+      // 🔹 تسجيل الخروج
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+          await supabase.auth.signOut();
+          window.location.href = "index.html";
+        });
+      }
     }
   }
 });
