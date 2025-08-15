@@ -1,69 +1,17 @@
-// profile.js
 import { supabase } from './supabase.js';
 
-// فتح/إغلاق القائمة الجانبية
-window.openMenu = function () {
-  document.getElementById("sideMenu").classList.add("open");
-};
+// --- فتح/إغلاق القائمة الجانبية ---
+window.openMenu = () => document.getElementById("sideMenu")?.classList.add("open");
+window.closeMenu = () => document.getElementById("sideMenu")?.classList.remove("open");
 
-window.closeMenu = function () {
-  document.getElementById("sideMenu").classList.remove("open");
-};
-
-// تسجيل الخروج
+// --- تسجيل الخروج ---
 async function logout() {
   await supabase.auth.signOut();
   window.location.href = "login.html";
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const logoutBtn = document.getElementById("logoutBtn");
-  const logoutBtn2 = document.getElementById("logoutBtn2");
-
-  if (logoutBtn) logoutBtn.addEventListener("click", logout);
-  if (logoutBtn2) logoutBtn2.addEventListener("click", logout);
-
-  // الحصول على الجلسة الحالية
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    // المستخدم غير مسجل دخول → رجعه لصفحة تسجيل الدخول
-    window.location.href = "login.html";
-    return;
-  }
-
-  const userId = session.user.id;
-
-  // إخفاء أزرار تسجيل الدخول / إنشاء حساب في حالة تسجيل الدخول
-  const authButtons = document.getElementById("authButtons");
-  const sideAuthButtons = document.getElementById("sideAuthButtons");
-  const profileLink = document.getElementById("profileLink");
-  const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-  if (authButtons) authButtons.style.display = "none";
-  if (sideAuthButtons) sideAuthButtons.style.display = "none";
-  if (profileLink) {
-    profileLink.style.display = "inline-block";
-    profileLink.textContent = "ملفي";
-  }
-  if (profileLinkMobile) {
-    profileLinkMobile.style.display = "inline-block";
-    profileLinkMobile.textContent = "ملفي";
-  }
-
-  // جلب بيانات المستخدم من جدول login
-  const { data: userData, error } = await supabase
-    .from("login")
-    .select("*")
-    .eq("id", userId)
-    .single();
-
-  if (error) {
-    console.error("خطأ في جلب بيانات المستخدم:", error);
-    return;
-  }
-
-  // عرض البيانات في الصفحة
+// --- عرض بيانات المستخدم ---
+function displayUserData(userData) {
   document.getElementById("userName").textContent = userData.name || "اسم المستخدم";
   document.getElementById("userCity").textContent = userData.city || "غير محددة";
   document.querySelector(".blood-type-badge").textContent = userData.blood_type || "N/A";
@@ -75,16 +23,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const badgeDiv = document.getElementById("badge");
   const badgeText = document.getElementById("badgeText");
 
-  pointsSpan.textContent = points;
-  if (points >= 200) {
+  if (pointsSpan) pointsSpan.textContent = points;
+  if (badgeDiv && badgeText && points >= 200) {
     badgeDiv.style.display = "block";
     badgeText.textContent = "🥇 وسام المتبرع الذهبي";
   }
+}
 
-  // تحديث رابط الطلبات حسب نوع المستخدم
-  const userType = userData.account_type;
-  const linkText = (userType === "hospital" || userType === "bloodbank") ? "طلبات المتبرعين" : "الطلبات العاجلة";
-  const linkHref = (userType === "hospital" || userType === "bloodbank") ? "donate_card.html" : "emergency_card.html";
+// --- تحديث رابط الطلبات حسب نوع المستخدم ---
+function updateRequestsLink(userType) {
+  const isHospital = userType === "hospital" || userType === "bloodbank";
+  const linkText = isHospital ? "طلبات المتبرعين" : "الطلبات العاجلة";
+  const linkHref = isHospital ? "donate_card.html" : "emergency_card.html";
   const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
 
   const placeholders = [
@@ -93,22 +43,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("requestsLinkMobile")
   ];
 
-  placeholders.forEach(placeholder => {
-    if (placeholder) placeholder.outerHTML = linkHTML;
+  placeholders.forEach(el => {
+    if (el) el.outerHTML = linkHTML;
+  });
+}
+
+// --- إعداد Dropdown ---
+function setupDropdown() {
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+
+  if (!dropdown || !dropdownBtn) return;
+
+  dropdownBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdown.classList.toggle("show");
   });
 
-  // Dropdown زر تعديل البيانات
-  const dropdownBtn = document.querySelector(".dropdown-btn");
-  const dropdown = document.querySelector(".dropdown");
+  document.addEventListener("click", () => {
+    dropdown.classList.remove("show");
+  });
+}
 
-  if (dropdownBtn && dropdown) {
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
+// --- تحميل الصفحة ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // أزرار تسجيل الخروج
+  ["logoutBtn", "logoutBtn2"].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", logout);
+  });
 
-    window.addEventListener("click", () => {
-      dropdown.classList.remove("show");
-    });
+  // الجلسة الحالية
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return window.location.href = "login.html";
+
+  const userId = session.user.id;
+
+  // إخفاء أزرار تسجيل الدخول / إنشاء حساب
+  ["authButtons", "sideAuthButtons"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  ["profileLink", "profileLinkMobile"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = "inline-block";
+      el.textContent = "ملفي";
+    }
+  });
+
+  // جلب بيانات المستخدم من جدول profiles (استخدام maybeSingle لتجنب أخطاء JSON)
+  const { data: userData, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) return console.error("خطأ في جلب بيانات المستخدم:", error);
+  if (!userData) {
+    console.warn("المستخدم غير موجود في جدول profiles");
+    return;
   }
+
+  displayUserData(userData);
+  updateRequestsLink(userData.account_type);
+  setupDropdown();
 });
