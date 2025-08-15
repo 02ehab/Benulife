@@ -174,7 +174,9 @@ body {
 /* ميديا كويري للموبايل */
 @media (max-width: 768px) {
   .main-nav,
-  .auth-buttons {
+  .auth-buttons 
+  .btn-signin,
+  .btn-signup{
     display: none;
   }
 
@@ -615,3 +617,4 @@ body {
 .footer-links a:hover {
   color: #df5fa2;
 }
+
