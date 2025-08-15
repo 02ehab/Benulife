@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js';
 
-// تبديل الحقول حسب نوع الحساب
+// --- تبديل الحقول حسب نوع الحساب ---
 function toggleAccountFields() {
   const accountType = document.getElementById("accountType").value;
   const donorFields = document.getElementById("donorFields");
@@ -10,9 +10,96 @@ function toggleAccountFields() {
   hospitalFields.classList.toggle("hidden", accountType !== "hospital");
 
   const bloodTypeSelect = donorFields.querySelector('[name="blood_type"]');
-  bloodTypeSelect.required = accountType === "donor";
+  if (bloodTypeSelect) bloodTypeSelect.required = accountType === "donor";
 }
 
+// --- عرض رسالة خطأ أو نجاح ---
+function showMessage(element, message, isError = true) {
+  element.style.color = isError ? "red" : "green";
+  element.textContent = message;
+  element.style.display = "block";
+}
+
+// --- التحقق من صحة البيانات ---
+function validateRegisterData(data) {
+  if (!data.email || !data.registerPassword) return "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+  if (!/\S+@\S+\.\S+/.test(data.email)) return "يرجى إدخال بريد إلكتروني صالح";
+  if (data.registerPassword.length < 6) return "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+  return null;
+}
+
+// --- إنشاء حساب جديد ---
+async function registerUser(data, registerError) {
+  try {
+    // تسجيل في Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.registerPassword
+    });
+    if (authError) throw authError;
+
+    const userId = authData.user?.id;
+    if (!userId) throw new Error("لم يتم إنشاء الحساب بنجاح.");
+
+    // حفظ بيانات المستخدم في جدول profiles
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert([{
+        user_id: userId,
+        account_type: data.accountType,
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        city: data.city,
+        blood_type: data.blood_type || null,
+        last_donation_date: data.last_donation_date || null,
+        diseases: data.diseases || null,
+        hospital_name: data.hospital_name || null,
+        license_number: data.license_number || null,
+        contact_person: data.contact_person || null
+      }]);
+    if (profileError) throw profileError;
+
+    localStorage.setItem("userType", data.accountType);
+    showMessage(registerError, "تم التسجيل بنجاح! جاري التحويل...", false);
+    setTimeout(() => window.location.href = "index.html", 2000);
+
+  } catch (err) {
+    showMessage(registerError, err.message || "حدث خطأ أثناء التسجيل.");
+  }
+}
+
+// --- تسجيل الدخول ---
+async function loginUser(email, password, loginError) {
+  try {
+    const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+
+    const userId = loginData.user.id;
+
+    // جلب بيانات المستخدم من جدول profiles
+    const { data: userData, error: userError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle(); // ← استخدام maybeSingle لتجنب أخطاء JSON
+    if (userError) throw userError;
+
+    if (!userData) {
+      showMessage(loginError, "لم يتم العثور على بيانات المستخدم.");
+      return;
+    }
+
+    localStorage.setItem("userType", userData.account_type);
+    showMessage(loginError, "تم تسجيل الدخول بنجاح! جاري التحويل...", false);
+    setTimeout(() => window.location.href = "profile.html", 1500);
+
+  } catch (err) {
+    showMessage(loginError, err.message || "حدث خطأ أثناء تسجيل الدخول.");
+  }
+}
+
+// --- تحميل الصفحة ---
 document.addEventListener("DOMContentLoaded", () => {
   toggleAccountFields();
 
@@ -31,18 +118,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-indicator").style.right = "50%";
   });
 
-  // عناصر لعرض رسائل الخطأ
+  // عناصر عرض الرسائل
   const loginError = document.getElementById("loginError");
   let registerError = document.getElementById("registerError");
   if (!registerError) {
     registerError = document.createElement("p");
     registerError.id = "registerError";
-    registerError.style.color = "red";
     registerError.style.display = "none";
     document.getElementById("registerForm").prepend(registerError);
   }
 
-  // إنشاء حساب
+  // حدث تسجيل الحساب
   document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     registerError.style.display = "none";
@@ -50,74 +136,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    if (!data.email || !data.registerPassword) {
-      registerError.textContent = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-      registerError.style.display = "block";
+    const validationError = validateRegisterData(data);
+    if (validationError) {
+      showMessage(registerError, validationError);
       return;
     }
 
-    if (!/\S+@\S+\.\S+/.test(data.email)) {
-      registerError.textContent = "يرجى إدخال بريد إلكتروني صالح";
-      registerError.style.display = "block";
-      return;
-    }
-
-    if (data.registerPassword.length < 6) {
-      registerError.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
-      registerError.style.display = "block";
-      return;
-    }
-
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.registerPassword
-    });
-
-    if (authError) {
-      registerError.textContent = authError.status === 409
-        ? "هذا البريد مسجل بالفعل."
-        : "خطأ في إنشاء الحساب: " + authError.message;
-      registerError.style.display = "block";
-      return;
-    }
-
-    const userId = authData.user?.id;
-    if (!userId) {
-      registerError.textContent = "لم يتم إنشاء الحساب بنجاح.";
-      registerError.style.display = "block";
-      return;
-    }
-
-    const { error: profileError } = await supabase
-      .from("login")
-      .insert([{
-        id: userId,
-        account_type: data.accountType,
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
-        city: data.city,
-        blood_type: data.blood_type || null,
-        last_donation_date: data.last_donation_date || null,
-        diseases: data.diseases || null,
-        hospital_name: data.hospital_name || null,
-        license_number: data.license_number || null,
-        contact_person: data.contact_person || null
-      }]);
-
-    if (profileError) {
-      registerError.textContent = "تم إنشاء الحساب ولكن حدث خطأ في حفظ البيانات: " + profileError.message;
-      registerError.style.display = "block";
-    } else {
-      localStorage.setItem("userType", data.accountType);
-      registerError.style.color = "green";
-      registerError.textContent = "تم التسجيل بنجاح! جاري التحويل...";
-      registerError.style.display = "block";
-      setTimeout(() => { window.location.href = "index.html"; }, 2000);
-    }
+    await registerUser(data, registerError);
   });
 
-  // تسجيل الدخول
+  // حدث تسجيل الدخول
   document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     loginError.style.display = "none";
@@ -126,30 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("loginPassword").value.trim();
 
     if (!email || !password) {
-      loginError.textContent = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-      loginError.style.display = "block";
+      showMessage(loginError, "يرجى إدخال البريد الإلكتروني وكلمة المرور");
       return;
     }
 
-    const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      loginError.textContent = "خطأ في تسجيل الدخول: " + error.message;
-      loginError.style.display = "block";
-    } else {
-      // جلب نوع المستخدم من الجدول login
-      const { data: userData, error: userError } = await supabase
-        .from("login")
-        .select("account_type")
-        .eq("id", loginData.user.id)
-        .single();
-
-      if (!userError) localStorage.setItem("userType", userData.account_type);
-
-      loginError.style.color = "green";
-      loginError.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
-      loginError.style.display = "block";
-      setTimeout(() => { window.location.href = "index.html"; }, 1500);
-    }
+    await loginUser(email, password, loginError);
   });
 });
