@@ -1,33 +1,56 @@
-// قائمة الشات في الهاتف
+import { supabase } from "./supabase.js";
+
+// ✅ التحقق من المستخدم وعرض اسمه والتاريخ
+async function checkUserAndSetCertificate() {
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    alert("من فضلك سجل دخول أولاً");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // جلب الاسم من user_metadata أو البريد
+  const donorName = user.user_metadata?.full_name || user.email || "متبرع كريم";
+
+  // عرض الاسم
+  const donorNameEl = document.getElementById("donorName");
+  if (donorNameEl) donorNameEl.textContent = donorName;
+
+  // عرض التاريخ الحالي بصيغة عربية
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString("ar-EG", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+  const dateEl = document.getElementById("currentDate");
+  if (dateEl) dateEl.textContent = formattedDate;
+}
+
+// نشغل الدالة بعد تحميل الصفحة بالكامل
+document.addEventListener("DOMContentLoaded", checkUserAndSetCertificate);
+
+// فتح وإغلاق القائمة الجانبية
 window.openMenu = function () {
   document.getElementById("sideMenu").classList.add("open");
 };
-
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 };
 
-// استخراج اسم المتبرع من الرابط
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "متبرع كريم";
-
-// عرض الاسم والتاريخ على الشهادة (إن وُجدت العناصر)
-const donorNameEl = document.getElementById("donorName");
-if (donorNameEl) donorNameEl.textContent = name;
-
-const dateEl = document.getElementById("currentDate");
-if (dateEl) dateEl.textContent = new Date().toLocaleDateString("ar-EG");
-
 // تحميل الشهادة كـ PDF
 window.downloadPDF = function () {
-  const element = document.getElementById("certificate");
+  const donorNameEl = document.getElementById("donorName");
+  const name = donorNameEl ? donorNameEl.textContent : "متبرع كريم";
 
+  const element = document.getElementById("certificate");
   const options = {
-    margin:       0.5,
-    filename:     `شهادة شكر - ${name}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    margin: 0.5,
+    filename: `شهادة شكر - ${name}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
   };
 
   html2pdf().set(options).from(element).save();
@@ -59,20 +82,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
-
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-    if (isLoggedIn) {
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
-    }
-  });
