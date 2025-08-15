@@ -232,13 +232,18 @@ body {
 .dropdown-content {
   display: none;
   position: absolute;
-  left: 0;
+  right: 0;
   top: 100%;
   background-color: #fff;
   min-width: 160px;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   border-radius: 6px;
-  z-index: 9999; /* يضمن الظهور فوق كل العناصر */
+  z-index: 9999;
+  border: 1px solid #ddd;
+}
+
+.dropdown-content.show {
+  display: block !important;
 }
 
 /* روابط القائمة */
