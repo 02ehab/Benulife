@@ -1,10 +1,24 @@
-window.openMenu = function () {
-  document.getElementById("sideMenu").classList.add("open");
+import { supabase } from "./supabase.js";
+
+async function checkUser() {
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    alert("من فضلك سجل دخول أولاً");
+    window.location.href = "login.html";
+  } else {
+    console.log("المستخدم الحالي:", user.email);
+  }
 }
 
+checkUser();
+
+window.openMenu = function () {
+  document.getElementById("sideMenu").classList.add("open");
+};
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
-}
+};
 
 
     // تغيير صفحة الطلبات علي نوع المستخدم
@@ -34,20 +48,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
+// 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض الملف الشخصي
+document.addEventListener("DOMContentLoaded", async () => {
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
 
-    if (isLoggedIn) {
+  if (session) {
+    const userId = session.user.id;
+    const { data: profile, error } = await supabase
+      .from('login')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (profile) {
+      // إخفاء أزرار تسجيل الدخول / إنشاء حساب
       if (authButtons) authButtons.style.display = "none";
       if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+
+      // إظهار كلمة "ملفي"
+      if (profileLink) {
+        profileLink.style.display = "inline-block";
+        profileLink.textContent = "ملفي";
+      }
+      if (profileLinkMobile) {
+        profileLinkMobile.style.display = "inline-block";
+        profileLinkMobile.textContent = "ملفي";
+      }
     }
-  });
+  }
+});
