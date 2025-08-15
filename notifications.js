@@ -3,13 +3,11 @@ import { supabase } from './supabase.js';
 // -------------------------
 // فتح وإغلاق القائمة الجانبية
 // -------------------------
-window.openMenu = () => {
-  const menu = document.getElementById("sideMenu");
-  if (menu) menu.classList.add("open");
+window.openMenu = function () {
+  document.getElementById("sideMenu").classList.add("open");
 };
-window.closeMenu = () => {
-  const menu = document.getElementById("sideMenu");
-  if (menu) menu.classList.remove("open");
+window.closeMenu = function () {
+  document.getElementById("sideMenu").classList.remove("open");
 };
 
 // -------------------------
@@ -191,3 +189,4 @@ async function updateAuthUI(session) {
     });
   }
 });
+
