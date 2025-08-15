@@ -12,9 +12,15 @@ async function logout() {
 
 // --- عرض بيانات المستخدم ---
 function displayUserData(userData) {
-  document.getElementById("userName").textContent = userData.name || "اسم المستخدم";
-  document.getElementById("userCity").textContent = userData.city || "غير محددة";
-  document.querySelector(".blood-type-badge").textContent = userData.blood_type || "N/A";
+  console.log("Displaying user data:", userData);
+  
+  const userNameEl = document.getElementById("userName");
+  const userCityEl = document.getElementById("userCity");
+  const bloodTypeEl = document.querySelector(".blood-type-badge");
+
+  if (userNameEl) userNameEl.textContent = userData.name || "اسم المستخدم";
+  if (userCityEl) userCityEl.textContent = userData.city || "غير محددة";
+  if (bloodTypeEl) bloodTypeEl.textContent = userData.blood_type || "N/A";
 
   const donationCount = userData.donation_count || 0;
   const points = donationCount * 50;
@@ -52,18 +58,22 @@ function updateRequestsLink(userType) {
 function setupDropdown() {
   const dropdown = document.querySelector(".dropdown");
   const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdownContent = document.querySelector(".dropdown-content");
 
   if (!dropdown || !dropdownBtn) return;
 
   dropdownBtn.addEventListener("click", e => {
-    e.stopPropagation();
-    dropdown.classList.toggle("show");
+    e.stopPropagation(); // يمنع إغلاق القائمة عند الضغط على الزر
+    dropdownContent.classList.toggle("show");
   });
 
-  document.addEventListener("click", () => {
-    dropdown.classList.remove("show");
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdownContent.classList.remove("show"); // إغلاق القائمة عند الضغط خارجها
+    }
   });
 }
+
 
 // --- تحميل الصفحة ---
 document.addEventListener("DOMContentLoaded", async () => {
@@ -93,6 +103,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // التحقق من معلمة التحديث في URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const isUpdated = urlParams.get('updated');
+  
+  if (isUpdated) {
+    // إزالة المعلمة من URL بعد التحديث
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // إظهار رسالة تأكيد
+    setTimeout(() => {
+      const successMsg = document.createElement('div');
+      successMsg.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:15px;border-radius:5px;z-index:1000';
+      successMsg.textContent = 'تم تحديث الملف الشخصي بنجاح!';
+      document.body.appendChild(successMsg);
+      
+      setTimeout(() => successMsg.remove(), 3000);
+    }, 500);
+  }
+
   // جلب بيانات المستخدم من جدول profiles (استخدام maybeSingle لتجنب أخطاء JSON)
   const { data: userData, error } = await supabase
     .from("profiles")
@@ -100,13 +129,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (error) return console.error("خطأ في جلب بيانات المستخدم:", error);
-  if (!userData) {
-    console.warn("المستخدم غير موجود في جدول profiles");
+  if (error) {
+    console.error("خطأ في جلب بيانات المستخدم:", error);
+    alert("خطأ في تحميل بيانات الملف الشخصي: " + error.message);
     return;
   }
 
-  displayUserData(userData);
-  updateRequestsLink(userData.account_type);
-  setupDropdown();
+  if (!userData) {
+    console.warn("المستخدم غير موجود في جدول profiles");
+    // إنشاء سجل افتراضي إذا لم يكن موجوداً
+    const defaultProfile = {
+      user_id: userId,
+      name: "مستخدم جديد",
+      blood_type: "غير محدد",
+      city: "غير محددة",
+      account_type: "user",
+      donation_count: 0,
+      created_at: new Date().toISOString()
+    };
+    
+    const { error: insertError } = await supabase
+      .from('profiles')
+      .insert([defaultProfile]);
+      
+    if (!insertError) {
+      displayUserData(defaultProfile);
+    }
+  } else {
+    displayUserData(userData);
+    updateRequestsLink(userData.account_type);
+  }
 });
