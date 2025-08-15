@@ -7,58 +7,6 @@ window.openMenu = () => document.getElementById("sideMenu")?.classList.add("open
 window.closeMenu = () => document.getElementById("sideMenu")?.classList.remove("open");
 
 // -------------------------
-// تحديث واجهة المستخدم بناءً على نوع المستخدم (Hospital / Donor)
-// -------------------------
-async function updateDashboard() {
-  const { data: { session } } = await supabase.auth.getSession();
-  const userType = session?.user?.user_metadata?.account_type || localStorage.getItem("userType") || "donor";
-
-  const dashboard = document.getElementById("dashboard");
-  const donorProfile = document.getElementById("donorProfile");
-  const badgeDiv = document.getElementById("badge");
-  const badgeText = document.getElementById("badgeText");
-  const pointsSpan = document.getElementById("points");
-
-  if (userType === "hospital") {
-    dashboard?.style.display = "block";
-    donorProfile?.style.display = "none";
-
-    const requestsHandled = 5; // مثال: عدد الطلبات المستلمة بنجاح
-    if (requestsHandled >= 5) {
-      badgeDiv.style.display = "block";
-      badgeText.textContent = "🏥 وسام العطاء المجتمعي";
-    }
-
-    renderRequestsDashboard(); // تأكد أن هذه الدالة معرفة في مكان آخر
-  } else {
-    dashboard?.style.display = "none";
-    donorProfile?.style.display = "block";
-
-    const donationCount = 5;
-    const points = donationCount * 50;
-    pointsSpan && (pointsSpan.textContent = points);
-
-    if (points >= 200) {
-      badgeDiv.style.display = "block";
-      badgeText.textContent = "🥇 وسام المتبرع الذهبي";
-    }
-  }
-
-  // تحديث روابط الطلبات حسب نوع المستخدم
-  const linkText = (userType === "hospital" || userType === "bloodbank") ? "طلبات المتبرعين" : "الطلبات العاجلة";
-  const linkHref = (userType === "hospital" || userType === "bloodbank") ? "donate_card.html" : "emergency_card.html";
-  const placeholders = [
-    document.getElementById("requestsLinkPlaceholder"),
-    document.getElementById("requestsLinkDesktop"),
-    document.getElementById("requestsLinkMobile")
-  ];
-
-  placeholders.forEach(ph => {
-    if (ph) ph.outerHTML = `<a href="${linkHref}">${linkText}</a>`;
-  });
-}
-
-// -------------------------
 // تعبئة وتعديل بيانات الملف الشخصي
 // -------------------------
 async function setupProfileForm() {
@@ -66,84 +14,138 @@ async function setupProfileForm() {
   if (!form) return;
 
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) return alert("يجب تسجيل الدخول أولاً.");
+  if (!session?.user) {
+    alert("يجب تسجيل الدخول أولاً.");
+    return;
+  }
 
   const userId = session.user.id;
+  console.log("Logged in userId:", userId);
 
-  // جلب البيانات الحالية
-  const { data: profile, error } = await supabase
-    .from('login')
-    .select('*')
-    .eq('id', userId)
-    .single();
+  try {
+    // جلب البيانات من جدول profiles
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
 
-  if (error) return console.error("خطأ في جلب البيانات:", error.message);
+    if (error) {
+      console.error("خطأ في جلب البيانات:", error);
+      alert("خطأ في جلب البيانات: " + error.message);
+      return;
+    }
 
-  // تعبئة الفورم
-  form.name.value = profile?.name || "";
-  form.bloodType.value = profile?.bloodType || "";
-  form.city.value = profile?.city || "";
+    if (!profile) {
+      console.log("لم يتم العثور على بيانات المستخدم، إنشاء سجل جديد...");
+      // إنشاء سجل جديد إذا لم يكن موجوداً
+      const newProfile = {
+        user_id: userId,
+        name: "",
+        blood_type: "",
+        city: "",
+        created_at: new Date().toISOString()
+      };
+      
+      const { error: insertError } = await supabase
+        .from('profiles')
+        .insert([newProfile]);
+
+      if (insertError) {
+        console.error("خطأ في إنشاء سجل جديد:", insertError);
+        alert("خطأ في إنشاء سجل الملف الشخصي: " + insertError.message);
+        return;
+      }
+
+      // إعادة تحميل البيانات بعد الإنشاء
+      const { data: newData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (newData) {
+        populateForm(newData);
+      }
+    } else {
+      console.log("Profile data loaded:", profile);
+      populateForm(profile);
+    }
+
+  } catch (error) {
+    console.error("خطأ غير متوقع:", error);
+    alert("حدث خطأ غير متوقع: " + error.message);
+  }
+
+  function populateForm(profile) {
+    // تعبئة الفورم تلقائيًا مع التحقق من وجود الحقول
+    if (document.getElementById("name")) {
+      document.getElementById("name").value = profile.name || "";
+    }
+    if (document.getElementById("bloodType")) {
+      document.getElementById("bloodType").value = profile.blood_type || "";
+    }
+    if (document.getElementById("city")) {
+      document.getElementById("city").value = profile.city || "";
+    }
+  }
 
   // حفظ التعديلات
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const updates = {
-      name: form.name.value,
-      bloodType: form.bloodType.value,
-      city: form.city.value,
-      updated_at: new Date().toISOString()
-    };
 
-    const { error: updateError } = await supabase
-      .from('login')
-      .update(updates)
-      .eq('id', userId);
+    const updates = {};
+    
+    // بناء التحديثات فقط للحقول الموجودة في النموذج
+    const nameValue = document.getElementById("name")?.value;
+    const bloodTypeValue = document.getElementById("bloodType")?.value;
+    const cityValue = document.getElementById("city")?.value;
 
-    if (updateError) return alert("حدث خطأ أثناء تحديث البيانات: " + updateError.message);
+    if (nameValue !== undefined) updates.name = nameValue;
+    if (bloodTypeValue !== undefined) updates.blood_type = bloodTypeValue;
+    if (cityValue !== undefined) updates.city = cityValue;
+    
+    // Only add updated_at if the column exists in the table
+    // The error indicates this column might not exist, so we'll skip it
+    // updates.updated_at = new Date().toISOString();
 
-    alert("تم حفظ التعديلات بنجاح!");
-    window.location.href = "profile.html";
+    console.log("Attempting to update with:", updates);
+
+    try {
+      // تحديث البيانات في جدول profiles
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('user_id', userId);
+
+      if (updateError) {
+        console.error("خطأ في التحديث:", updateError);
+        
+        // محاولة التعامل مع أخطاء محددة
+        if (updateError.code === 'PGRST204') {
+          alert("الحقول المحدثة غير موجودة في قاعدة البيانات. يرجى التحقق من أسماء الحقول.");
+        } else if (updateError.code === '23505') {
+          alert("يوجد تكرار في البيانات.");
+        } else {
+          alert("حدث خطأ أثناء تحديث البيانات: " + updateError.message);
+        }
+        return;
+      }
+
+      alert("تم حفظ التعديلات بنجاح!");
+      // إعادة التوجيه إلى صفحة الملف الشخصي
+      window.location.href = "profile.html?updated=true";
+      
+    } catch (error) {
+      console.error("خطأ غير متوقع أثناء التحديث:", error);
+      alert("حدث خطأ غير متوقع أثناء التحديث: " + error.message);
+    }
   });
 }
 
 // -------------------------
-// تحديث أزرار تسجيل الدخول وملفي
-// -------------------------
-async function updateAuthUI() {
-  const { data: { session } } = await supabase.auth.getSession();
-
-  const authButtons = document.getElementById("authButtons");
-  const sideAuthButtons = document.getElementById("sideAuthButtons");
-  const profileLink = document.getElementById("profileLink");
-  const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-  if (session?.user) {
-    const { data: profile } = await supabase
-      .from('login')
-      .select('*')
-      .eq('id', session.user.id)
-      .single();
-
-    if (profile) {
-      authButtons && (authButtons.style.display = "none");
-      sideAuthButtons && (sideAuthButtons.style.display = "none");
-
-      profileLink && (profileLink.style.display = "inline-block", profileLink.textContent = "ملفي");
-      profileLinkMobile && (profileLinkMobile.style.display = "inline-block", profileLinkMobile.textContent = "ملفي");
-    }
-  } else {
-    authButtons && (authButtons.style.display = "flex");
-    sideAuthButtons && (sideAuthButtons.style.display = "flex");
-    profileLink && (profileLink.style.display = "none");
-    profileLinkMobile && (profileLinkMobile.style.display = "none");
-  }
-}
-
-// -------------------------
-// تشغيل كل الوظائف عند تحميل الصفحة
+// تشغيل الوظائف عند تحميل الصفحة
 // -------------------------
 document.addEventListener("DOMContentLoaded", () => {
-  updateDashboard();
   setupProfileForm();
-  updateAuthUI();
 });
