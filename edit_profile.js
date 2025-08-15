@@ -1,119 +1,149 @@
- window.openMenu = function () {
-      document.getElementById("sideMenu").classList.add("open");
-    };
+import { supabase } from './supabase.js';
 
-    window.closeMenu = function () {
-      document.getElementById("sideMenu").classList.remove("open");
-    };
+// -------------------------
+// فتح وإغلاق القائمة الجانبية
+// -------------------------
+window.openMenu = () => document.getElementById("sideMenu")?.classList.add("open");
+window.closeMenu = () => document.getElementById("sideMenu")?.classList.remove("open");
 
-        //وسام المتبرع الذهبي
-    document.addEventListener("DOMContentLoaded", () => {
-  const userType = localStorage.getItem("userType");
+// -------------------------
+// تحديث واجهة المستخدم بناءً على نوع المستخدم (Hospital / Donor)
+// -------------------------
+async function updateDashboard() {
+  const { data: { session } } = await supabase.auth.getSession();
+  const userType = session?.user?.user_metadata?.account_type || localStorage.getItem("userType") || "donor";
+
   const dashboard = document.getElementById("dashboard");
   const donorProfile = document.getElementById("donorProfile");
+  const badgeDiv = document.getElementById("badge");
+  const badgeText = document.getElementById("badgeText");
+  const pointsSpan = document.getElementById("points");
 
   if (userType === "hospital") {
-    dashboard.style.display = "block";
-    donorProfile.style.display = "none";
+    dashboard?.style.display = "block";
+    donorProfile?.style.display = "none";
 
-    // وسام المستشفى
-    const badgeDiv = document.getElementById("badge");
-    const badgeText = document.getElementById("badgeText");
-    const requestsHandled = 5; // عدد الطلبات المستلمة الناجحة كمثال
-
+    const requestsHandled = 5; // مثال: عدد الطلبات المستلمة بنجاح
     if (requestsHandled >= 5) {
       badgeDiv.style.display = "block";
       badgeText.textContent = "🏥 وسام العطاء المجتمعي";
     }
 
-    renderRequestsDashboard();
+    renderRequestsDashboard(); // تأكد أن هذه الدالة معرفة في مكان آخر
   } else {
-    dashboard.style.display = "none";
-    donorProfile.style.display = "block";
+    dashboard?.style.display = "none";
+    donorProfile?.style.display = "block";
 
-    // وسام المتبرع
-    const donationCount = 5; // عدد التبرعات
+    const donationCount = 5;
     const points = donationCount * 50;
-
-    const pointsSpan = document.getElementById("points");
-    const badgeDiv = document.getElementById("badge");
-    const badgeText = document.getElementById("badgeText");
-
-    pointsSpan.textContent = points;
+    pointsSpan && (pointsSpan.textContent = points);
 
     if (points >= 200) {
       badgeDiv.style.display = "block";
       badgeText.textContent = "🥇 وسام المتبرع الذهبي";
     }
   }
-});
 
-// تغيير صفحة الطلبات علي نوع المستخدم
-document.addEventListener("DOMContentLoaded", () => {
-  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
-
-  const linkText = (userType === "hospital" || userType === "bloodbank")
-    ? "طلبات المتبرعين"
-    : "الطلبات العاجلة";
-
-  const linkHref = (userType === "hospital" || userType === "bloodbank")
-    ? "donate_card.html"
-    : "emergency_card.html";
-
-  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
-
-  // تعويض أماكن الروابط
+  // تحديث روابط الطلبات حسب نوع المستخدم
+  const linkText = (userType === "hospital" || userType === "bloodbank") ? "طلبات المتبرعين" : "الطلبات العاجلة";
+  const linkHref = (userType === "hospital" || userType === "bloodbank") ? "donate_card.html" : "emergency_card.html";
   const placeholders = [
     document.getElementById("requestsLinkPlaceholder"),
     document.getElementById("requestsLinkDesktop"),
     document.getElementById("requestsLinkMobile")
   ];
 
-  placeholders.forEach(placeholder => {
-    if (placeholder) {
-      placeholder.outerHTML = linkHTML;
-    }
+  placeholders.forEach(ph => {
+    if (ph) ph.outerHTML = `<a href="${linkHref}">${linkText}</a>`;
   });
-});
+}
 
-document.addEventListener("DOMContentLoaded", () => {
+// -------------------------
+// تعبئة وتعديل بيانات الملف الشخصي
+// -------------------------
+async function setupProfileForm() {
   const form = document.getElementById("editProfileForm");
-  const userData = JSON.parse(localStorage.getItem("userProfile")) || {};
+  if (!form) return;
 
-  // تعبئة البيانات القديمة
-  document.getElementById("name").value = userData.name || "";
-  document.getElementById("bloodType").value = userData.bloodType || "";
-  document.getElementById("city").value = userData.city || "";
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return alert("يجب تسجيل الدخول أولاً.");
 
-  // عند حفظ التعديلات
-  form.addEventListener("submit", (e) => {
+  const userId = session.user.id;
+
+  // جلب البيانات الحالية
+  const { data: profile, error } = await supabase
+    .from('login')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  if (error) return console.error("خطأ في جلب البيانات:", error.message);
+
+  // تعبئة الفورم
+  form.name.value = profile?.name || "";
+  form.bloodType.value = profile?.bloodType || "";
+  form.city.value = profile?.city || "";
+
+  // حفظ التعديلات
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    const updatedData = {
-      name: document.getElementById("name").value,
-      bloodType: document.getElementById("bloodType").value,
-      city: document.getElementById("city").value,
+    const updates = {
+      name: form.name.value,
+      bloodType: form.bloodType.value,
+      city: form.city.value,
+      updated_at: new Date().toISOString()
     };
 
-    localStorage.setItem("userProfile", JSON.stringify(updatedData));
+    const { error: updateError } = await supabase
+      .from('login')
+      .update(updates)
+      .eq('id', userId);
+
+    if (updateError) return alert("حدث خطأ أثناء تحديث البيانات: " + updateError.message);
+
     alert("تم حفظ التعديلات بنجاح!");
-    window.location.href = "profile.html"; // الرجوع للملف الشخصي
+    window.location.href = "profile.html";
   });
-});
-//وقت تسجيل الدخول يظهر ملفي ويختفي تسجيل الدخول
- document.addEventListener("DOMContentLoaded", function () {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+}
 
-    const authButtons = document.getElementById("authButtons");
-    const sideAuthButtons = document.getElementById("sideAuthButtons");
+// -------------------------
+// تحديث أزرار تسجيل الدخول وملفي
+// -------------------------
+async function updateAuthUI() {
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const profileLink = document.getElementById("profileLink");
-    const profileLinkMobile = document.getElementById("profileLinkMobile");
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
 
-    if (isLoggedIn) {
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) profileLink.style.display = "inline-block";
-      if (profileLinkMobile) profileLinkMobile.style.display = "inline-block";
+  if (session?.user) {
+    const { data: profile } = await supabase
+      .from('login')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    if (profile) {
+      authButtons && (authButtons.style.display = "none");
+      sideAuthButtons && (sideAuthButtons.style.display = "none");
+
+      profileLink && (profileLink.style.display = "inline-block", profileLink.textContent = "ملفي");
+      profileLinkMobile && (profileLinkMobile.style.display = "inline-block", profileLinkMobile.textContent = "ملفي");
     }
-  });
+  } else {
+    authButtons && (authButtons.style.display = "flex");
+    sideAuthButtons && (sideAuthButtons.style.display = "flex");
+    profileLink && (profileLink.style.display = "none");
+    profileLinkMobile && (profileLinkMobile.style.display = "none");
+  }
+}
+
+// -------------------------
+// تشغيل كل الوظائف عند تحميل الصفحة
+// -------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  updateDashboard();
+  setupProfileForm();
+  updateAuthUI();
+});
