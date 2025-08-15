@@ -232,7 +232,7 @@ body {
 .dropdown-content {
   display: none;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 100%;
   background-color: #fff;
   min-width: 160px;
@@ -387,3 +387,4 @@ html, body {
   padding: 15px 0;
   font-size: 14px;
 }
+
