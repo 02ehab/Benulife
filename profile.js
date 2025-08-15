@@ -122,6 +122,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 500);
   }
 
+  // إعداد القائمة المنسدلة
+  setupDropdown();
+
   // جلب بيانات المستخدم من جدول profiles (استخدام maybeSingle لتجنب أخطاء JSON)
   const { data: userData, error } = await supabase
     .from("profiles")
