@@ -309,6 +309,29 @@ body {
     opacity: 1;
   }
 }
+.contact-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.contact-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.contact-btn:first-child {
+  background: #2196F3; /* زر الاتصال */
+}
+
+.contact-btn:last-child {
+  background: #25D366; /* زر الواتساب */
+}
 
 /* أساس التنسيق */
 html, body {
@@ -332,3 +355,4 @@ html, body {
   padding: 15px 0;
   font-size: 14px;
 }
+
