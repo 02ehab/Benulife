@@ -1,18 +1,47 @@
 import { supabase } from './supabase.js';
 
-// -------------------------
-// فتح وإغلاق القائمة الجانبية
-// -------------------------
+
+// فتح وإغلاق القائمة الجانبية - إصلاح المشكلة
 window.openMenu = function () {
-  document.getElementById("sideMenu").classList.add("open");
-};
-window.closeMenu = function () {
-  document.getElementById("sideMenu").classList.remove("open");
+  const menu = document.getElementById("sideMenu");
+  if (menu) {
+    menu.classList.add("open");
+    // منع التمرير عند فتح القائمة
+    document.body.style.overflow = 'hidden';
+  }
 };
 
-// -------------------------
+window.closeMenu = function () {
+  const menu = document.getElementById("sideMenu");
+  if (menu) {
+    menu.classList.remove("open");
+    // إعادة التمرير عند إغلاق القائمة
+    document.body.style.overflow = '';
+  }
+};
+
+// إغلاق القائمة عند النقر خارجها
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById("sideMenu");
+  const menuToggle = document.querySelector('.menu-toggle');
+  
+  if (menu && menu.classList.contains('open')) {
+    if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
+      window.closeMenu();
+    }
+  }
+});
+
+// إغلاق القائمة عند الضغط على زر Escape
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    window.closeMenu();
+  }
+});
+
+
 // التحقق إذا المستخدم مستشفى
-// -------------------------
+
 function isUserHospital(userType) {
   return userType === "hospital" || userType === "bloodbank";
 }
@@ -86,6 +115,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (error || !userData) return console.error("خطأ في جلب بيانات المستخدم:", error);
 
   const userType = userData.account_type || "";
+
+
+  // الحصول على موقع المستخدم
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+      // جلب جميع الطلبات الحالية وإرسال إشعارات
+      supabase.from("emergencyRequests").select("*").then(({ data }) => {
+        if (data && data.length) data.forEach(req => handleRequestNotification(req, userLocation, userType));
+      });
+
+      // الاشتراك في التحديثات الفورية (Realtime)
+      supabase
+        .channel('realtime-emergency')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergencyRequests' }, payload => {
+          handleRequestNotification(payload.new, userLocation, userType);
+        })
+        .subscribe();
+    });
+  }
+});
 
   // تحديث واجهة Navbar حسب تسجيل الدخول
 
@@ -169,24 +220,30 @@ async function updateAuthUI(session) {
   }
 }
 
-  // الحصول على موقع المستخدم
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+// تغيير صفحة الطلبات علي نوع المستخدم
+document.addEventListener("DOMContentLoaded", () => {
+  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
 
-      // جلب جميع الطلبات الحالية وإرسال إشعارات
-      supabase.from("emergencyRequests").select("*").then(({ data }) => {
-        if (data && data.length) data.forEach(req => handleRequestNotification(req, userLocation, userType));
-      });
+  const linkText = (userType === "hospital" || userType === "bloodbank")
+    ? "طلبات المتبرعين"
+    : "الطلبات العاجلة";
 
-      // الاشتراك في التحديثات الفورية (Realtime)
-      supabase
-        .channel('realtime-emergency')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergencyRequests' }, payload => {
-          handleRequestNotification(payload.new, userLocation, userType);
-        })
-        .subscribe();
-    });
-  }
+  const linkHref = (userType === "hospital" || userType === "bloodbank")
+    ? "donate_card.html"
+    : "emergency_card.html";
+
+  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
+
+  // تعويض أماكن الروابط
+  const placeholders = [
+    document.getElementById("requestsLinkPlaceholder"),
+    document.getElementById("requestsLinkDesktop"),
+    document.getElementById("requestsLinkMobile")
+  ];
+
+  placeholders.forEach(placeholder => {
+    if (placeholder) {
+      placeholder.outerHTML = linkHTML;
+    }
+  });
 });
-
