@@ -48,11 +48,25 @@ function renderRequests(requests) {
       <div class="request-info"><strong>الاسم:</strong> ${req.full_name}</div>
       <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
       <div class="timer">⏳ ${timeText}</div>
-      <button onclick="alert('سيتم التواصل مع ${req.full_name}')">ساعد الآن</button>
+      <button class="help-btn">ساعد الآن</button>
+      <div class="contact-options" style="display: none; margin-top:10px;">
+        <a href="tel:${req.phone}" class="contact-btn">📞 اتصال</a>
+        <a href="https://wa.me/${req.whatsapp || req.phone}" target="_blank" class="contact-btn">💬 واتساب</a>
+      </div>
     `;
+
+    // لما يضغط على الزر يفتح خيارات التواصل
+    const helpBtn = card.querySelector(".help-btn");
+    const contactBox = card.querySelector(".contact-options");
+
+    helpBtn.addEventListener("click", () => {
+      contactBox.style.display = contactBox.style.display === "none" ? "block" : "none";
+    });
+
     container.appendChild(card);
   });
 }
+
 
 // فلترة الطلبات حسب الفصيلة والمدينة
 async function filterRequests() {
@@ -117,3 +131,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
+
