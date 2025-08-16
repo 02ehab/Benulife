@@ -11,72 +11,82 @@
 <body>
 
   <!-- الهيدر -->
-<header class="header">
-  <div class="container header-container">
-    <div class="logo">🩸 حياه</div>
-    <button class="menu-toggle" onclick="openMenu()">☰</button>
-
-    <nav class="main-nav">
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">من نحن</a>
-      <span id="requestsLinkDesktop"></span>
-      <a href="notifications.html">الإشعارات</a>
-      <a href="donation_fund.html" class="active">تبرع مالي</a>
-      <a href="profile.html" id="profileLink" class="auth-link" style="display: none;">ملفي</a>
-    </nav>
-
-    <div class="auth-buttons" id="authButtons">
-      <a href="login.html" class="btn-signin">تسجيل دخول</a>
-      <a href="signup.html" class="btn-signup">حساب جديد</a>
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياه</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkDesktop"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
     </div>
-  </div>
-
-  <div id="sideMenu" class="side-menu">
-    <button class="close-btn" onclick="closeMenu()">✖</button>
-    <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">من نحن</a>
-      <a href="notifications.html">الإشعارات</a>
-      <a href="donation_fund.html">تبرع مالي</a>
-      <a href="profile.html" id="profileLinkMobile" class="auth-link" style="display: none;">ملفي</a>
-
-      <div id="sideAuthButtons">
-        <a href="login.html" class="btn-signin">تسجيل دخول</a>
-        <a href="signup.html" class="btn-signup">حساب جديد</a>
-      </div>
-    </nav>
-  </div>
-</header>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkMobile"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
 
   <!-- محتوى الصفحة -->
    <div class="wrapper">
   <main>
-    <div class="track-wrapper">
-      <div class="track-card">
-        <div class="track-header">
-          <h2>تتبع الطلب #12567</h2>
-        </div>
-        <ul class="timeline">
-          <li class="timeline-item done">
-            <h4>تم استلام الطلب</h4>
-            <p>14 يوليو، 10:00 صباحًا</p>
-          </li>
-          <li class="timeline-item done">
-            <h4>جاري المعالجة</h4>
-            <p>14 يوليو، 11:30 صباحًا</p>
-          </li>
-          <li class="timeline-item">
-            <h4>في الطريق</h4>
-            <p>في انتظار المندوب</p>
-          </li>
-          <li class="timeline-item">
-            <h4>تم التسليم</h4>
-            <p>سيتم التحديث عند التسليم</p>
-          </li>
-        </ul>
+  <div class="track-wrapper">
+    <div class="track-card">
+      <div class="track-header">
+        <h2>تتبع التبرع #12567</h2>
+      </div>
+
+      <ul class="timeline">
+        <li class="timeline-item done">
+          <h4>تم استلام تبرعك</h4>
+          <p class="small-text">شكرًا لتبرعك ❤️</p>
+          <p>14 أغسطس، 9:30 صباحًا</p>
+        </li>
+
+        <li class="timeline-item done">
+          <h4>جاري استلام التبرع</h4>
+          <p class="small-text">فريقنا في الطريق لاستلام التبرع</p>
+          <p>14 أغسطس، 10:00 صباحًا</p>
+        </li>
+
+        <li class="timeline-item done">
+          <h4>جاري معالجة التبرع</h4>
+          <p class="small-text">يتم التأكد من مطابقة التبرع للمعايير الطبية</p>
+          <p>14 أغسطس، 11:15 صباحًا</p>
+        </li>
+
+        <li class="timeline-item">
+          <h4>جاري توصيل تبرعك للمستحق</h4>
+          <p class="small-text">مندوبنا في الطريق للمستشفى/المستحق</p>
+          <p>في انتظار التوصيل</p>
+        </li>
+
+        <li class="timeline-item">
+          <h4>تم تسليم تبرعك</h4>
+          <p class="small-text">وصل التبرع للمستحق بنجاح 🎉</p>
+          <p>سيتم التحديث عند التسليم</p>
+        </li>
+      </ul>
+
+      <div class="track-footer">
+        <button onclick="window.location.href='case_details.html'" class="case-btn">
+          تفاصيل الحالة
+        </button>
       </div>
     </div>
-  </main>
+  </div>
+</main>
+
 
   </div>
   
@@ -103,7 +113,7 @@
     <button onclick="sendChatMessage()">إرسال</button>
   </div>
 
-  <script src="track_order.js"></script>
+  <script type="module" src="track_order.js"></script>
   <script src="chatbot.js"></script>
 
 <!-- الفوتر -->
