@@ -262,7 +262,20 @@ body {
       color: #666;
     }
 
+.case-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #4CAF50;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
+.case-btn:hover {
+  background: #45a049;
+}
 /* أساس التنسيق */
 html, body {
   height: 100%;
@@ -285,3 +298,4 @@ html, body {
   padding: 15px 0;
   font-size: 14px;
 }
+
