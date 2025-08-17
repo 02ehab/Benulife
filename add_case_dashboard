@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم - منصة حياة</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      direction: rtl;
+    }
+
+    header {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #007bff;
+    }
+
+    form {
+      margin-bottom: 25px;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .actions button {
+      width: auto;
+      margin: 3px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .edit-btn {
+      background: #28a745;
+    }
+    .edit-btn:hover {
+      background: #1e7e34;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+    }
+    .delete-btn:hover {
+      background: #b02a37;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>لوحة التحكم - منصة حياة</h1>
+  </header>
+
+  <div class="container">
+    <h2>إضافة حالة جديدة</h2>
+    <form id="caseForm">
+      <input type="text" id="name" placeholder="اسم الحالة" required>
+      <input type="text" id="city" placeholder="المدينة" required>
+      <textarea id="beforeDesc" rows="3" placeholder="وصف الحالة قبل التبرع" required></textarea>
+      <textarea id="afterDesc" rows="3" placeholder="وصف الحالة بعد التبرع (اختياري)"></textarea>
+      <textarea id="thankMsg" rows="2" placeholder="رسالة شكر (اختياري)"></textarea>
+      <button type="submit">حفظ الحالة</button>
+    </form>
+
+    <h2>كل الحالات</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>المدينة</th>
+          <th>قبل التبرع</th>
+          <th>بعد التبرع</th>
+          <th>رسالة الشكر</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="casesTable">
+        <!-- الحالات هتظهر هنا -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // بيانات تجريبية (لحد ما نربط مع Supabase)
+    let cases = [];
+
+    const form = document.getElementById('caseForm');
+    const tableBody = document.getElementById('casesTable');
+
+    // إضافة حالة جديدة
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const newCase = {
+        id: Date.now(),
+        name: document.getElementById('name').value,
+        city: document.getElementById('city').value,
+        beforeDesc: document.getElementById('beforeDesc').value,
+        afterDesc: document.getElementById('afterDesc').value,
+        thankMsg: document.getElementById('thankMsg').value
+      };
+
+      cases.push(newCase);
+      form.reset();
+      renderCases();
+    });
+
+    // عرض الحالات في الجدول
+    function renderCases() {
+      tableBody.innerHTML = "";
+      cases.forEach(c => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${c.name}</td>
+          <td>${c.city}</td>
+          <td>${c.beforeDesc}</td>
+          <td>${c.afterDesc || "-"}</td>
+          <td>${c.thankMsg || "-"}</td>
+          <td class="actions">
+            <button class="edit-btn" onclick="editCase(${c.id})">تعديل</button>
+            <button class="delete-btn" onclick="deleteCase(${c.id})">حذف</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // تعديل حالة
+    function editCase(id) {
+      const c = cases.find(cs => cs.id === id);
+      if (!c) return;
+      document.getElementById('name').value = c.name;
+      document.getElementById('city').value = c.city;
+      document.getElementById('beforeDesc').value = c.beforeDesc;
+      document.getElementById('afterDesc').value = c.afterDesc;
+      document.getElementById('thankMsg').value = c.thankMsg;
+      deleteCase(id); // نحذف القديم وننتظر التحديث الجديد
+    }
+
+    // حذف حالة
+    function deleteCase(id) {
+      cases = cases.filter(cs => cs.id !== id);
+      renderCases();
+    }
+  </script>
+</body>
+</html>
