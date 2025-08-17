@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل الحالة</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  line-height: 1.6;
+  direction: rtl;
+  background-color: #FFFFF0;
+}
+
+
+/* الحاوية العامة */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* الهيدر */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #e3edf2;
+}
+
+.modern-header {
+  background-color: #e3edf2;
+  border-radius: 0 0 20px 20px;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  background-color: #f5f3ef;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-top: 10px;
+}
+
+.main-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #1a1a1a;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+  margin-top: 10px;
+}
+
+.main-nav a:hover {
+  color: #ff5520;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-signin {
+  padding: 8px 20px;
+  background-color: #fff;
+  color: #1a1a1a;
+  border-radius: 30px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-signup {
+  padding: 8px 20px;
+  background-color: #ff5520;
+  color: #fff;
+  border-radius: 30px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  transition: background-color 0.3s;
+ margin-top: 10px;
+}
+
+.btn-signup:hover {
+  background-color: #e8491b;
+}
+
+.btn-signin:hover {
+  background-color: #f0f0f0;
+}
+
+/* زر القائمة للموبايل */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #1a1a1a;
+  margin-top: 10px;
+}
+
+.side-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 75%;
+  max-width: 300px;
+  height: 100%;
+  background-color: #f5f3ef;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  padding: 2rem 1.5rem;
+  z-index: 2000;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.side-menu nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.side-menu a {
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.side-menu .btn-signup,
+.side-menu .btn-signin {
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.side-menu .close-btn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.side-menu.open {
+  display: flex;
+}
+
+/* ميديا كويري للموبايل */
+@media (max-width: 768px) {
+  .main-nav,
+  .auth-buttons {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .case-info {
+      margin-bottom: 20px;
+    }
+
+    .case-info h3 {
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .case-info p {
+      background: #f1f1f1;
+      padding: 12px;
+      border-radius: 8px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .thanks {
+      text-align: center;
+      background: #e6f7e9;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #28a745;
+      margin-top: 25px;
+    }
+
+    .btn-back {
+      display: block;
+      text-align: center;
+      margin: 20px auto 0;
+      background: #007bff;
+      color: #fff;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+      width: fit-content;
+    }
+
+    .btn-back:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياه</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkDesktop"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkMobile"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>تفاصيل الحالة</h1>
+
+    <div class="case-info">
+      <h3>الاسم:</h3>
+      <p id="donorName">أحمد محمد</p>
+    </div>
+
+    <div class="case-info">
+      <h3>المدينة:</h3>
+      <p id="city">جدة</p>
+    </div>
+
+    <div class="case-info">
+      <h3>وصف الحالة قبل التبرع:</h3>
+      <p id="beforeDesc">كنت أعاني من نقص دم حاد واحتجت إلى متبرعين بشكل عاجل.</p>
+    </div>
+
+    <div class="case-info">
+      <h3>وصف الحالة بعد التبرع:</h3>
+      <p id="afterDesc">بعد التبرع، تحسنت حالتي الصحية كثيرًا وتمكنت من الحصول على العلاج المطلوب.</p>
+    </div>
+
+    <div class="thanks" id="thankMsg">
+      شكرًا جزيلًا لمساهمتك الكريمة، لقد ساعدتنا في إنقاذ حياة.
+    </div>
+
+    <a href="track_order.html" class="btn-back">الرجوع لتتبع التبرع</a>
+  </div>
+<script>
+window.openMenu = function () {
+  document.getElementById("sideMenu").classList.add("open");
+};
+window.closeMenu = function () {
+  document.getElementById("sideMenu").classList.remove("open");
+};
+  
+</script>
+</body>
+</html>
