@@ -317,3 +317,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+//stats
+async function loadStats() {
+  const { data, error } = await supabase
+    .from("stats")
+    .select("*")
+    .order("updated_at", { ascending: false })
+    .limit(1); // آخر صف فقط
+
+  if (error) {
+    console.error("خطأ في جلب الإحصائيات:", error.message);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    const stats = data[0];
+    document.getElementById("activeDonors").textContent = `+${stats.active_donors}`;
+    document.getElementById("hospitals").textContent = `+${stats.hospitals}`;
+    document.getElementById("unitsProvided").textContent = `+${stats.units_provided}`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadStats);
+
+//realtime updates
+supabase
+  .channel("stats-changes")
+  .on("postgres_changes", { event: "*", schema: "public", table: "stats" }, (payload) => {
+    console.log("تم تحديث الإحصائيات:", payload.new);
+    document.getElementById("donorsCount").textContent = `+${payload.new.donors_count}`;
+    document.getElementById("hospitalsCount").textContent = `+${payload.new.hospitals_count}`;
+    document.getElementById("bloodUnits").textContent = `+${payload.new.blood_units}`;
+  })
+  .subscribe();
+
