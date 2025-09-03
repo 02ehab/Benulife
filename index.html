@@ -16,7 +16,7 @@
 <meta http-equiv="Content-Language" content="ar">
 
 <!-- ضبط عرض الصفحة للجوال -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta property="og:title" content="منصة حياه للتبرع بالدم">
 <meta property="og:description" content="ساهم في إنقاذ الأرواح من خلال التبرع بالدم عبر منصة حياه.">
 <meta property="og:image" content="https://02ehab.github.io/Hayah/assets/og-image.jpg"> <!-- غيّر للرابط الفعلي -->
@@ -41,57 +41,121 @@
 </head>
 <body>
 
-  <!-- Header -->
-<header class="header">
-  <div class="container header-container">
-    <div class="logo">🩸 حياه</div>
-    <button class="menu-toggle" onclick="openMenu()">☰</button>
-
-    <nav class="main-nav">
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">من نحن</a>
-      <span id="requestsLinkDesktop"></span>
-      <a href="notifications.html">الإشعارات</a>
-      <a href="donation_fund.html" class="active">تبرع مالي</a>
-      <a href="profile.html" id="profileLink" class="auth-link" style="display: none;">ملفي</a>
-    </nav>
-
-    <div class="auth-buttons" id="authButtons">
-      <a href="login.html" class="btn-signin">تسجيل دخول</a>
-      <a href="login.html" class="btn-signup">حساب جديد</a>
+<!-- الهيدر -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياه</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html" class="active">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkDesktop"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html">تبرع مالي</a>
+        <a href="profile.html" id="profileLink" class="auth-link" style="display:none">ملفي</a>
+        <span id="authButtons" class="auth-buttons"><a href="login.html">تسجيل الدخول</a></span>
+      </nav>
     </div>
-  </div>
-
-  <div id="sideMenu" class="side-menu">
-    <button class="close-btn" onclick="closeMenu()">✖</button>
-    <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">من نحن</a>
-      <span id="requestsLinkMobile"></span>
-      <a href="notifications.html">الإشعارات</a>
-      <a href="donation_fund.html">تبرع مالي</a>
-      <a href="profile.html" id="profileLinkMobile" class="auth-link" style="display: none;">ملفي</a>
-
-      <div id="sideAuthButtons">
-        <a href="login.html" class="btn-signin">تسجيل دخول</a>
-        <a href="login.html" class="btn-signup">حساب جديد</a>
-      </div>
-    </nav>
-  </div>
-</header>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkMobile"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html">تبرع مالي</a>
+        <a href="profile.html" id="profileLinkMobile" style="display:none">ملفي</a>
+        <span id="sideAuthButtons" class="auth-buttons"><a href="login.html">تسجيل الدخول</a></span>
+      </nav>
+    </div>
+  </header>
 
   <div class="wrapper">
 
 
 <!-- القسم الرئيسي -->
-  <section class="hero">
+  <section class="hero" aria-labelledby="heroTitle">
     <div class="container">
-      <h1>بسم الله نبدأ سعادة جديدة</h1>
-      <p>ساهم في إنقاذ الأرواح من خلال التبرع بالدم عبر منصة حياه</p>
-      <div class="hero-buttons">
-        <a href="login.html" class="btn">سجّل كمتبرع</a>
-        <a href="emergency.html" class="btn btn-outline">طلب دم عاجل</a>
-         <a href="donate.html" class="btn btn-outline">طلب  التبرع بالدم</a>
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1 id="heroTitle"><span class="highlight">تبرعك</span> اليوم قد يُنقذ حياة</h1>
+          <p>نربط المتبرعين بأقرب الحالات والمستشفيات بخطوات بسيطة وسريعة — لأن كل دقيقة تهم.</p>
+          <div class="hero-actions" role="group" aria-label="الإجراءات الرئيسية">
+            <a href="login.html" class="btn btn-primary">سجّل كمتبرع</a>
+            <a href="emergency.html" class="btn btn-secondary">طلب دم عاجل</a>
+            <a href="donate.html" class="btn btn-secondary">طلب التبرع بالدم</a>
+          </div>
+          <div class="trust-badges" aria-label="مؤشرات الثقة">
+            <div class="badge"><strong id="activeDonors">+0</strong><span>متبرع نشط</span></div>
+            <div class="badge"><strong id="hospitals">+0</strong><span>مستشفى مشارك</span></div>
+            <div class="badge"><strong>~10د</strong><span>زمن الاستجابة</span></div>
+          </div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <img src="Innovation-pana.svg" alt="" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- مُحدد ذكي للطلبات القريبة -->
+  <section class="finder" aria-labelledby="finderTitle">
+    <div class="container">
+      <h2 id="finderTitle" class="section-title">اعثر على أقرب الطلبات</h2>
+      <form class="finder-form" onsubmit="event.preventDefault(); window.location.href='emergency_card.html'">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="finderCity">المدينة</label>
+            <input id="finderCity" type="text" placeholder="مثال: الرياض" />
+          </div>
+          <div class="form-field">
+            <label for="finderType">فصيلة الدم</label>
+            <select id="finderType">
+              <option value="">الكل</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="finderUrgency">مدى الاستعجال</label>
+            <select id="finderUrgency">
+              <option value="">أي وقت</option>
+              <option value="6">خلال 6 ساعات</option>
+              <option value="12">خلال 12 ساعة</option>
+              <option value="24">خلال 24 ساعة</option>
+            </select>
+          </div>
+          <div class="form-field align-end">
+            <button type="submit" class="btn btn-primary">اعرض الطلبات القريبة</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- مميزات رئيسية -->
+  <section class="features" aria-labelledby="featuresTitle">
+    <div class="container">
+      <h2 id="featuresTitle" class="section-title">لماذا تختار منصة حياه؟</h2>
+      <div class="features-grid">
+        <div class="feature-box">
+          <h3>سرعة الوصول</h3>
+          <p>نبحث عن أقرب المتبرعين ونجمعهم مع الحالة خلال دقائق.</p>
+        </div>
+        <div class="feature-box">
+          <h3>سهولة الاستخدام</h3>
+          <p>واجهات بسيطة لنشر طلب أو تقديم تبرع بخطوات قليلة.</p>
+        </div>
+        <div class="feature-box">
+          <h3>موثوقية</h3>
+          <p>حسابات موثقة، وإشعارات فورية لضمان سرعة التجاوب.</p>
+        </div>
+        <div class="feature-box">
+          <h3>تأثير ملموس</h3>
+          <p>إحصائيات مباشرة توضح أثر تبرعك على المجتمع.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -120,7 +184,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- الاهداف   -->
   <section class="section goals-section">
@@ -159,30 +222,74 @@
   </div>
 </section>
 
-  <!-- إحصائيات -->
-  <section class="stats">
-  <div class="container">
-    <h2>أثرنا حتى الآن</h2>
-    <div class="stats-grid">
-      <div class="stat-box">
-        <h3 id="activeDonors">+0</h3>
-        <p>متبرع نشط</p>
+
+
+  <!-- شهادات وتجارب -->
+  <section class="section" aria-labelledby="testimonialsTitle">
+    <h2 id="testimonialsTitle" class="section-title">قالوا عن حياه</h2>
+    <div class="container steps-container">
+      <div class="card">
+        <p>"تمكّنت خلال ساعات من إيجاد متبرعين لابني، شكرًا لحياه."</p>
+        <small>وليد - جدة</small>
       </div>
-      <div class="stat-box">
-        <h3 id="hospitals">+0</h3>
-        <p>مستشفى مشارك</p>
+      <div class="card">
+        <p>"واجهة سهلة وإشعارات سريعة جعلت التبرع تجربة سلسة."</p>
+        <small>نورة - الرياض</small>
       </div>
-      <div class="stat-box">
-        <h3 id="unitsProvided">+0</h3>
-        <p>وحدة دم تم توفيرها</p>
+      <div class="card">
+        <p>"شراكات قوية مع المستشفيات ساعدتنا في الحالات الحرجة."</p>
+        <small>إدارة مستشفى خاص - مكة</small>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- شركاء النجاح -->
+  <section class="section" aria-labelledby="partnersTitle">
+    <h2 id="partnersTitle" class="section-title">شركاؤنا</h2>
+    <div class="container steps-container" role="list">
+      <div class="feature-box" role="listitem">شريك 1</div>
+      <div class="feature-box" role="listitem">شريك 2</div>
+      <div class="feature-box" role="listitem">شريك 3</div>
+    </div>
+  </section>
+
+  <!-- شريط دعوة لاتخاذ إجراء -->
+  <section class="cta-band" aria-labelledby="ctaTitle">
+    <div class="container cta-band-inner">
+      <h2 id="ctaTitle">انضم لآلاف المتبرعين وساهم اليوم</h2>
+      <div class="form-actions">
+        <a href="login.html" class="btn btn-primary">ابدأ الآن</a>
+        <a href="about.html" class="btn btn-secondary">تعرف على المنصة</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- مختصر الأسئلة الشائعة -->
+  <section class="faq-teaser" aria-labelledby="faqTitle">
+    <div class="container">
+      <h2 id="faqTitle" class="section-title">أسئلة شائعة</h2>
+      <div class="faq-grid">
+        <details>
+          <summary>من يمكنه التبرع بالدم؟</summary>
+          <p>أي شخص بصحة جيدة بين 18 و60 عامًا ويستوفي الشروط المذكورة بالصفحة.</p>
+        </details>
+        <details>
+          <summary>هل التبرع المتكرر آمن؟</summary>
+          <p>نعم عند الالتزام بالفاصل الزمني الموصى به (3 أشهر) وفحص الحالة الصحية.</p>
+        </details>
+        <details>
+          <summary>كيف أعرف أقرب حالة تحتاج دمي؟</summary>
+          <p>استخدم مُحدد الطلبات أعلاه أو زر طلبات عاجلة لمعرفة الحالات القريبة.</p>
+        </details>
+      </div>
+      <div class="faq-actions">
+        <a href="faq.html" class="btn btn-secondary">كل الأسئلة</a>
+      </div>
+    </div>
+  </section>
 
 <section class="container">
-    <div id="map"></div>
-</div>
+    <div id="map" style="width: 100%; height: 400px; border-radius: 10px;"></div>
 </section>
 
   <section class="cta-contact-wrapper">
@@ -209,11 +316,14 @@
 
       <button type="submit">إرسال</button>
     </form>
-
-<div id="map" style="width: 100%; height: 400px; border-radius: 10px;"></div>
+    <p id="contactSuccess" class="success-message hidden">تم إرسال رسالتك بنجاح ✅</p>
   </div>
 </section>
-
+<!--
+<button id="shareBtn" class="share-button">
+  <span> مشاركة</span>
+</button>
+-->
 <div id="chatbot-container">
 <!-- أيقونة الشات -->
  <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
@@ -237,7 +347,7 @@
   </div>
 
 </div>
- <!-- الفوتر -->
+  <!-- الفوتر -->
   <footer class="footer">
   <div class="container footer-container">
     <div class="footer-links">
@@ -250,15 +360,10 @@
 
 <!-- Mapbox JS -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
-    <script type="module" src="script.js"></script>
+  <script type="module" src="script.js"></script>
   <script src="chatbot.js"></script>
   <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-  
-
 </body>
 </html>
-
-
-
