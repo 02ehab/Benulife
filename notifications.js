@@ -47,40 +47,7 @@ function handleNewRequest(req) {
   appendNotificationCard(req, "unread");
 }
 
-// --- بعد تحميل الصفحة ---
-document.addEventListener("DOMContentLoaded", async () => {
-  if ("Notification" in window) Notification.requestPermission();
-
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) return;
-
-  const userId = session.user.id;
-
-  const { data: userData } = await supabase
-    .from("login")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  const userType = userData?.account_type || "";
-
-  // جلب الطلبات الحالية
-  const { data: requests } = await supabase
-    .from("emergency_requests")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  requests?.forEach(req => handleNewRequest(req));
-
-  // الاشتراك في التحديثات الفورية
-  supabase
-    .channel('realtime-emergency')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergency_requests' }, payload => {
-      handleNewRequest(payload.new);
-    })
-    .subscribe();
-
-  // تغيير روابط الصفحة حسب نوع المستخدم
+// تغيير روابط الصفحة حسب نوع المستخدم
   const userType = localStorage.getItem("userType");
   const linkText = (userType === "hospital" || userType === "bloodbank")
     ? "طلبات المتبرعين"
@@ -119,6 +86,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+// --- بعد تحميل الصفحة ---
+document.addEventListener("DOMContentLoaded", async () => {
+  if ("Notification" in window) Notification.requestPermission();
+
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return;
+
+  const userId = session.user.id;
+
+  const { data: userData } = await supabase
+    .from("login")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  const userType = userData?.account_type || "";
+
+  // جلب الطلبات الحالية
+  const { data: requests } = await supabase
+    .from("emergency_requests")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  requests?.forEach(req => handleNewRequest(req));
+
+  // الاشتراك في التحديثات الفورية
+  supabase
+    .channel('realtime-emergency')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergency_requests' }, payload => {
+      handleNewRequest(payload.new);
+    })
+    .subscribe();
+
   // التحكم في التبويبات
   const tabs = document.querySelectorAll('.tab');
   tabs.forEach(tab => {
@@ -153,4 +153,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch {}
   });
 });
-
