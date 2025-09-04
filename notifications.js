@@ -1,249 +1,116 @@
 import { supabase } from './supabase.js';
 
+// --- فتح وإغلاق القائمة الجانبية ---
+window.openMenu = () => document.getElementById("sideMenu")?.classList.add("open");
+window.closeMenu = () => document.getElementById("sideMenu")?.classList.remove("open");
 
-// فتح وإغلاق القائمة الجانبية - إصلاح المشكلة
-window.openMenu = function () {
-  const menu = document.getElementById("sideMenu");
-  if (menu) {
-    menu.classList.add("open");
-    // منع التمرير عند فتح القائمة
-    document.body.style.overflow = 'hidden';
-  }
-};
-
-window.closeMenu = function () {
-  const menu = document.getElementById("sideMenu");
-  if (menu) {
-    menu.classList.remove("open");
-    // إعادة التمرير عند إغلاق القائمة
-    document.body.style.overflow = '';
-  }
-};
-
-// إغلاق القائمة عند النقر خارجها
-document.addEventListener('click', function(event) {
-  const menu = document.getElementById("sideMenu");
-  const menuToggle = document.querySelector('.menu-toggle');
-  
-  if (menu && menu.classList.contains('open')) {
-    if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
-      window.closeMenu();
-    }
-  }
-});
-
-// إغلاق القائمة عند الضغط على زر Escape
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    window.closeMenu();
-  }
-});
-
-
-// التحقق إذا المستخدم مستشفى
-
-function isUserHospital(userType) {
-  return userType === "hospital" || userType === "bloodbank";
-}
-
-// -------------------------
-// حساب المسافة بين نقطتين (كم)
-// -------------------------
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-// -------------------------
-// إرسال إشعار للمستخدم
-// -------------------------
+// --- إنشاء إشعار ---
 function notify(title, body) {
   if (Notification.permission === "granted") {
     new Notification(title, { body });
   }
 }
 
-// -------------------------
-// التحقق من الطلبات القريبة وإرسال إشعارات
-// -------------------------
-function handleRequestNotification(req, userLocation, userType) {
-  const requestLoc = req.location; // يجب أن يكون { lat, lng } في قاعدة البيانات
-  if (!requestLoc) return;
+// --- إضافة بطاقة إشعار للواجهة ---
+function appendNotificationCard(req, state = "unread") {
+  const container = document.getElementById("notificationsContainer");
+  const emptyState = document.getElementById("emptyState");
+  if (!container) return;
 
-  const distance = calculateDistance(
-    userLocation.lat,
-    userLocation.lng,
-    requestLoc.lat,
-    requestLoc.lng
-  );
+  const card = document.createElement("div");
+  card.className = `notif ${state}`;
+  card.innerHTML = `
+    <div class="title">${req.title || "طلب دم"} - ${req.blood_type || ""}</div>
+    <div class="actions">
+      <button class="btn btn-secondary mark-read">تحديد كمقروء</button>
+    </div>
+    <div class="time">الآن</div>
+  `;
 
-  if (!isUserHospital(userType) && req.urgency === "high" && distance <= 10) {
-    notify("🚨 طلب دم عاجل", `يوجد طلب ${req.bloodType} قريب منك في ${req.hospital}`);
-  }
+  card.querySelector('.mark-read')?.addEventListener('click', e => {
+    e.stopPropagation();
+    card.classList.remove('unread');
+    card.classList.add('read');
+  });
 
-  if (isUserHospital(userType) && distance <= 10) {
-    notify("🔔 طلب تبرع قريب", `يوجد طلب دم بالقرب من المستشفى: ${req.bloodType}`);
-  }
+  container.prepend(card);
+  emptyState?.classList.toggle("hidden", container.children.length > 0);
 }
 
-// -------------------------
-// تنفيذ بعد تحميل DOM
-// -------------------------
+// --- معالجة طلب جديد ---
+function handleNewRequest(req) {
+  // إرسال إشعار دائمًا
+  notify(
+    `🚨 طلب دم جديد`,
+    `فصيلة الدم: ${req.blood_type || "-"}\nالجهة: ${req.hospital || req.full_name || "-"}`
+  );
+  appendNotificationCard(req, "unread");
+}
+
+// --- بعد تحميل الصفحة ---
 document.addEventListener("DOMContentLoaded", async () => {
   if ("Notification" in window) Notification.requestPermission();
 
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  if (sessionError) return console.error(sessionError);
-  if (!session || !session.user) return;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return;
 
   const userId = session.user.id;
 
-  const { data: userData, error } = await supabase
+  const { data: userData } = await supabase
     .from("login")
     .select("*")
-    .eq("id", userId)
-    .single();
+    .eq("user_id", userId)
+    .maybeSingle();
 
-  if (error || !userData) return console.error("خطأ في جلب بيانات المستخدم:", error);
+  const userType = userData?.account_type || "";
 
-  const userType = userData.account_type || "";
+  // جلب الطلبات الحالية
+  const { data: requests } = await supabase
+    .from("emergency_requests")
+    .select("*")
+    .order("created_at", { ascending: false });
 
+  requests?.forEach(req => handleNewRequest(req));
 
-  // الحصول على موقع المستخدم
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+  // الاشتراك في التحديثات الفورية
+  supabase
+    .channel('realtime-emergency')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergency_requests' }, payload => {
+      handleNewRequest(payload.new);
+    })
+    .subscribe();
 
-      // جلب جميع الطلبات الحالية وإرسال إشعارات
-      supabase.from("emergencyRequests").select("*").then(({ data }) => {
-        if (data && data.length) data.forEach(req => handleRequestNotification(req, userLocation, userType));
+  // التحكم في التبويبات
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.getAttribute('data-filter');
+      const items = document.querySelectorAll('.notif');
+      items.forEach(item => {
+        if (filter === 'all') item.style.display = '';
+        if (filter === 'unread') item.style.display = item.classList.contains('unread') ? '' : 'none';
+        if (filter === 'read') item.style.display = item.classList.contains('read') ? '' : 'none';
       });
-
-      // الاشتراك في التحديثات الفورية (Realtime)
-      supabase
-        .channel('realtime-emergency')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergencyRequests' }, payload => {
-          handleRequestNotification(payload.new, userLocation, userType);
-        })
-        .subscribe();
+      const emptyState = document.getElementById("emptyState");
+      emptyState?.classList.toggle("hidden", document.querySelectorAll('.notif:not([style*="display: none"])').length > 0);
     });
-  }
-});
+  });
 
-  // تحديث واجهة Navbar حسب تسجيل الدخول
+  // زر تمييز الكل كمقروء
+  document.getElementById('markAllRead')?.addEventListener('click', () => {
+    document.querySelectorAll('.notif.unread').forEach(item => {
+      item.classList.remove('unread');
+      item.classList.add('read');
+    });
+  });
 
-async function updateAuthUI(session) {
-  const authButtons = document.getElementById("authButtons");
-  const sideAuthButtons = document.getElementById("sideAuthButtons");
-  const profileLink = document.getElementById("profileLink");
-  const profileLinkMobile = document.getElementById("profileLinkMobile");
-  const requestsLinkDesktop = document.getElementById("requestsLinkDesktop");
-  const requestsLinkMobile = document.getElementById("requestsLinkMobile");
-
-  try {
-    if (session && session.user) {
-      const userId = session.user.id;
-
-      if (authButtons) authButtons.style.display = "none";
-      if (sideAuthButtons) sideAuthButtons.style.display = "none";
-      if (profileLink) {
-        profileLink.style.display = "inline-block";
-        profileLink.textContent = "ملفي";
-      }
-      if (profileLinkMobile) {
-        profileLinkMobile.style.display = "inline-block";
-        profileLinkMobile.textContent = "ملفي";
-      }
-
-      // جلب بيانات المستخدم من جدول login
-      const { data: userData, error } = await supabase
-        .from("login")
-        .select("*")
-        .eq("id", userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error("خطأ في جلب بيانات المستخدم:", error);
-        return;
-      }
-
-      if (userData) {
-        console.log("User data loaded:", userData);
-        const userType = userData.account_type || "";
-        console.log("User type:", userType);
-        
-        const linkText =
-          (userType === "hospital" || userType === "bloodbank")
-            ? "طلبات المتبرعين"
-            : "الطلبات العاجلة";
-        const linkHref =
-          (userType === "hospital" || userType === "bloodbank")
-            ? "donate_card.html"
-            : "emergency_card.html";
-
-        console.log("Setting link:", linkText, "->", linkHref);
-
-        if (requestsLinkDesktop) {
-          requestsLinkDesktop.innerHTML = `<a href="${linkHref}">${linkText}</a>`;
-          console.log("Updated desktop link");
-        }
-        if (requestsLinkMobile) {
-          requestsLinkMobile.innerHTML = `<a href="${linkHref}">${linkText}</a>`;
-          console.log("Updated mobile link");
-        }
-      } else {
-        console.log("No user data found");
-      }
-
-    } else {
-      // المستخدم غير مسجل
-      if (authButtons) authButtons.style.display = "flex";
-      if (sideAuthButtons) sideAuthButtons.style.display = "flex";
-      if (profileLink) profileLink.style.display = "none";
-      if (profileLinkMobile) profileLinkMobile.style.display = "none";
-
-      if (requestsLinkDesktop) requestsLinkDesktop.innerHTML = "";
-      if (requestsLinkMobile) requestsLinkMobile.innerHTML = "";
-    }
-  } catch (err) {
-    console.error("حدث خطأ أثناء تحديث واجهة المستخدم:", err.message);
-    if (authButtons) authButtons.style.display = "flex";
-    if (sideAuthButtons) sideAuthButtons.style.display = "flex";
-  }
-}
-
-// تغيير صفحة الطلبات علي نوع المستخدم
-document.addEventListener("DOMContentLoaded", () => {
-  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
-
-  const linkText = (userType === "hospital" || userType === "bloodbank")
-    ? "طلبات المتبرعين"
-    : "الطلبات العاجلة";
-
-  const linkHref = (userType === "hospital" || userType === "bloodbank")
-    ? "donate_card.html"
-    : "emergency_card.html";
-
-  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
-
-  // تعويض أماكن الروابط
-  const placeholders = [
-    document.getElementById("requestsLinkPlaceholder"),
-    document.getElementById("requestsLinkDesktop"),
-    document.getElementById("requestsLinkMobile")
-  ];
-
-  placeholders.forEach(placeholder => {
-    if (placeholder) {
-      placeholder.outerHTML = linkHTML;
-    }
+  // تفعيل إشعارات المتصفح
+  document.getElementById('enableBrowserNotifications')?.addEventListener('click', async () => {
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm === 'granted') alert('تم تفعيل إشعارات المتصفح');
+    } catch {}
   });
 });
