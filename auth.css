@@ -1,0 +1,92 @@
+body {
+  font-family: "Cairo", sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.form-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  border-color: #e63946;
+  outline: none;
+}
+
+.btn {
+  background: #e63946;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #c62839;
+}
+
+.forgot-password, .back-home {
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+  margin-top: 5px;
+}
+
+.forgot-password:hover, .back-home:hover {
+  color: #e63946;
+}
+
+.error-message {
+  font-size: 14px;
+  color: red;
+  display: none;
+}
+
+.switch-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.switch-link a {
+  color: #e63946;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
