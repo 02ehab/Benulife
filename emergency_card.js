@@ -55,32 +55,35 @@ function renderRequests(requests) {
     const helpBtn = card.querySelector(".help-btn");
 
     helpBtn.addEventListener("click", async () => {
-      // 👇 إرسال إشعار في جدول جديد
-      const { error } = await supabase
-        .from("notifications")
-        .insert([
-          {
-            request_id: req.id, // ربط الإشعار بالطلب
-            receiver_id: req.user_id, // صاحب الطلب
-            message: `قام شخص بعرض المساعدة لطلبك (${req.blood_type})`,
-            created_at: new Date()
-          }
-        ]);
+      try {
+        const { error } = await supabase
+          .from("notifications")
+          .insert([
+            {
+              user_id: req.user_id, // صاحب الطلب
+              title: `تم عرض المساعدة`,
+              body: `قام شخص بعرض المساعدة لطلبك (${req.blood_type})`,
+              related_request: req.id,
+              is_read: false,
+              created_at: new Date().toISOString()
+            }
+          ]);
 
-      if (error) {
-        console.error("❌ خطأ أثناء إرسال الإشعار:", error);
-        alert("حدث خطأ أثناء إرسال الإشعار.");
-      } else {
-        alert("✅ تم إرسال إشعار لصاحب الطلب بأنه تمت المساعدة.");
-        helpBtn.disabled = true;
-        helpBtn.textContent = "تم الإرسال ✅";
+        if (error) throw error;
+
+       alert("✅ تم إرسال إشعار لصاحب الطلب بأنه تمت المساعدة.");
+card.remove(); // ← هذا يحذف الكارد نهائيًا من الصفحة
+
+
+      } catch (err) {
+        console.error("❌ خطأ أثناء إرسال الإشعار:", JSON.stringify(err));
+        alert(`حدث خطأ أثناء إرسال الإشعار: ${err.message || JSON.stringify(err)}`);
       }
     });
 
     container.appendChild(card);
   });
 }
-
 
 // فلترة الطلبات حسب الفصيلة والمدينة
 async function filterRequests() {
