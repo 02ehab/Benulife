@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>الإشعارات - Haya</title>
+  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="notifications.css" />
   <link rel="stylesheet" href="chatbot.css" />
 </head>
@@ -18,9 +19,10 @@
         <a href="index.html">الرئيسية</a>
         <a href="about.html">من نحن </a>
         <span id="requestsLinkDesktop"></span>
-        <a href="notifications.html">الإشعارات</a>
-        <a href="donation_fund.html" class="active">تبرع مالي</a>
-        <a href="profile.html" class="auth-link">ملفي</a>
+        <a href="notifications.html" class="active">الإشعارات</a>
+        <a href="donation_fund.html">تبرع مالي</a>
+        <a href="profile.html" id="profileLink" class="auth-link" style="display:none">ملفي</a>
+        <span id="authButtons" class="auth-buttons"><a href="login.html">تسجيل الدخول</a></span>
       </nav>
     </div>
     <div id="sideMenu" class="side-menu">
@@ -29,35 +31,42 @@
         <a href="index.html">الرئيسية</a>
         <a href="about.html">من نحن </a>
         <span id="requestsLinkMobile"></span>
-        <a href="notifications.html">الإشعارات</a>
-        <a href="donation_fund.html" class="active">تبرع مالي</a>
-        <a href="profile.html">ملفي</a>
+        <a href="notifications.html" class="active">الإشعارات</a>
+        <a href="donation_fund.html">تبرع مالي</a>
+        <a href="profile.html" id="profileLinkMobile" style="display:none">ملفي</a>
+        <span id="sideAuthButtons" class="auth-buttons"><a href="login.html">تسجيل الدخول</a></span>
       </nav>
     </div>
   </header>
   <div class="wrapper">
 
   <!-- محتوى الصفحة -->
-   <div class="wrapper">
-  <main class="notifications-container">
-    <h2>الإشعارات</h2>
+  <div class="wrapper">
+    <main class="notifications-container" aria-labelledby="pageTitle">
+      <h1 id="pageTitle">الإشعارات</h1>
 
-    <ul class="notifications-list">
-      <li class="notification-item">
-        <strong>طلب دم جديد:</strong> فصيلة A+ مطلوبة في مستشفى السلام - الرياض.
-        <span class="date">قبل 2 ساعة</span>
-      </li>
-      <li class="notification-item">
-        <strong>شكراً لتبرعك:</strong> تم استلام دمك في بنك الدم المركزي.
-        <span class="date">أمس</span>
-      </li>
-      <li class="notification-item">
-        <strong>تحديث الطلب:</strong> مستشفى التعاون - جدة بحاجة لفصيلة O- بشكل عاجل.
-        <span class="date">قبل 3 أيام</span>
-      </li>
-    </ul>
-  </main>
-  </div>
+      <div class="notif-toolbar" role="toolbar" aria-label="خيارات الإشعارات">
+        <div class="tabs" role="tablist" aria-label="تصفية الإشعارات">
+          <button class="tab active" role="tab" aria-selected="true" data-filter="all">الكل</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="unread">غير مقروء</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="read">مقروء</button>
+        </div>
+        <div class="actions">
+          <button id="enableBrowserNotifications" class="btn btn-secondary" type="button">تفعيل إشعارات المتصفح</button>
+          <button id="markAllRead" class="btn btn-primary" type="button">وضع الكل كمقروء</button>
+        </div>
+      </div>
+
+      <!-- حالة عدم وجود إشعارات -->
+      <div id="emptyState" class="empty-state hidden" aria-live="polite">
+        لا توجد إشعارات حالياً.
+      </div>
+
+      <!-- حاوية الإشعارات الديناميكية -->
+      <div id="notificationsContainer" class="notifications-list" aria-live="polite" aria-busy="false">
+        <!-- إشعارات Supabase ستُضاف هنا تلقائياً -->
+      </div>
+    </main>
   </div>
   
 <div id="chatbot-container">
