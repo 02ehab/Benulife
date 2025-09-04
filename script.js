@@ -96,30 +96,74 @@ function setupContactForm() {
 }
 
 
-// السلايدر للطلبات العاجلة
 
-function setupEmergencySlider() {
+// --- السلايدر للطلبات العاجلة (Realtime + Supabase) ---
+async function setupEmergencySlider() {
   const slider = document.getElementById("emergencySlider");
   if (!slider) return;
 
-  const requests = JSON.parse(localStorage.getItem("emergencyRequests") || "[]");
+  // جلب الطلبات من Supabase
+  const { data: requests, error } = await supabase
+    .from("emergency_requests")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  if (!requests.length) {
+  if (error) {
+    slider.innerHTML = "<p>حدث خطأ أثناء تحميل الطلبات.</p>";
+    console.error(error);
+    return;
+  }
+
+  if (!requests || requests.length === 0) {
     slider.innerHTML = "<p>لا توجد طلبات حالياً</p>";
     return;
   }
 
-  slider.innerHTML = ""; // مسح أي محتوى سابق
+  slider.innerHTML = "";
+
   requests.forEach(req => {
     const card = document.createElement("div");
     card.className = "request-card";
     card.innerHTML = `
-      <div class="blood-type">${req.bloodType}</div>
-      <div class="request-info"><strong>الاسم:</strong> ${req.fullName}</div>
+      <div class="blood-type">${req.blood_type}</div>
+      <div class="request-info"><strong>الاسم:</strong> ${req.full_name}</div>
       <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
-      <div class="timer">⏳ ${req.timeLeftText}</div>
-      <button onclick="alert('سيتم التواصل مع ${req.fullName}')">ساعد الآن</button>
+      <div class="timer">⏳ ${
+        req.urgency === 1 ? "خلال ساعة واحدة" :
+        req.urgency === 2 ? "خلال ساعتين" :
+        req.urgency >= 3 && req.urgency <= 10 ? `خلال ${req.urgency} ساعات` :
+        `خلال ${req.urgency} ساعة`
+      }</div>
+      <button class="help-btn">ساعد الآن</button>
     `;
+
+    const helpBtn = card.querySelector(".help-btn");
+    helpBtn.addEventListener("click", async () => {
+      if (!req.user_id) {
+        alert("لا يمكن إرسال الإشعار، معرف صاحب الطلب غير موجود.");
+        return;
+      }
+
+      try {
+        const { error } = await supabase.from("notifications").insert([{
+          user_id: req.user_id,                      // المستلم
+          title: `تمت المساعدة على طلبك`,            // عنوان الإشعار
+          body: `قام شخص بعرض المساعدة لطلبك (${req.blood_type || "-"})`, // نص الإشعار
+          related_request: req.id,                   // ربط بالطلب
+          is_read: false,                             // افتراضي: غير مقروء
+          created_at: new Date()
+        }]);
+
+        if (error) throw error;
+
+        alert("✅ تم إرسال إشعار لصاحب الطلب بأنه تمت المساعدة.");
+        card.remove();
+      } catch (err) {
+        console.error("❌ خطأ أثناء إرسال الإشعار:", err.message);
+        alert("حدث خطأ أثناء إرسال الإشعار. تحقق من console.");
+      }
+    });
+
     slider.appendChild(card);
   });
 
@@ -128,7 +172,42 @@ function setupEmergencySlider() {
   const rightBtn = document.getElementById("rightBtn");
   if (leftBtn) leftBtn.onclick = () => slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
   if (rightBtn) rightBtn.onclick = () => slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+  // الاشتراك في التحديثات الفورية
+  supabase
+    .channel('realtime-emergency')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emergency_requests' }, payload => {
+      const req = payload.new;
+      const card = document.createElement("div");
+      card.className = "request-card";
+      card.innerHTML = `
+        <div class="blood-type">${req.blood_type}</div>
+        <div class="request-info"><strong>الاسم:</strong> ${req.full_name}</div>
+        <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
+        <div class="timer">⏳ ${req.urgency} ساعات</div>
+        <button class="help-btn">ساعد الآن</button>
+      `;
+      const helpBtn = card.querySelector(".help-btn");
+      helpBtn.addEventListener("click", async () => {
+        const { error } = await supabase.from("notifications").insert([
+          {
+            request_id: req.id,
+            receiver_id: req.user_id,
+            message: `قام شخص بعرض المساعدة لطلبك (${req.blood_type})`,
+            created_at: new Date()
+          }
+        ]);
+        if (!error) {
+          alert("✅ تم إرسال إشعار لصاحب الطلب بأنه تمت المساعدة.");
+          card.remove();
+        }
+      });
+      slider.prepend(card);
+    })
+    .subscribe();
 }
+
+
 
 
 // تحديث واجهة Navbar حسب تسجيل الدخول
@@ -213,7 +292,33 @@ async function updateAuthUI(session) {
   }
 }
 
+// تغيير صفحة الطلبات علي نوع المستخدم
+document.addEventListener("DOMContentLoaded", () => {
+  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
 
+  const linkText = (userType === "hospital" || userType === "bloodbank")
+    ? "طلبات المتبرعين"
+    : "الطلبات العاجلة";
+
+  const linkHref = (userType === "hospital" || userType === "bloodbank")
+    ? "donate_card.html"
+    : "emergency_card.html";
+
+  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
+
+  // تعويض أماكن الروابط
+  const placeholders = [
+    document.getElementById("requestsLinkPlaceholder"),
+    document.getElementById("requestsLinkDesktop"),
+    document.getElementById("requestsLinkMobile")
+  ];
+
+  placeholders.forEach(placeholder => {
+    if (placeholder) {
+      placeholder.outerHTML = linkHTML;
+    }
+  });
+});
 // تحميل الهيدر
 
 async function loadHeader() {
@@ -244,17 +349,15 @@ async function loadHeader() {
 }
 
 
-// تنفيذ كل الوظائف بعد تحميل DOM
-
-document.addEventListener("DOMContentLoaded", () => {
+// --- تنفيذ كل الوظائف بعد تحميل DOM ---
+document.addEventListener("DOMContentLoaded", async () => {
   showUserLocation();
   setupContactForm();
-  setupEmergencySlider();
-  loadHeader();
-
+  await setupEmergencySlider();
   supabase.auth.getSession().then(({ data: { session } }) => updateAuthUI(session));
   supabase.auth.onAuthStateChange((event, session) => updateAuthUI(session));
 });
+
   // 🔹 تحقق من تسجيل الدخول عبر Supabase وعرض الملف الشخصي
 document.addEventListener("DOMContentLoaded", async () => {
   const { data: { session } } = await supabase.auth.getSession();
@@ -290,34 +393,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-     // تغيير صفحة الطلبات علي نوع المستخدم
-document.addEventListener("DOMContentLoaded", () => {
-  const userType = localStorage.getItem("userType"); // "donor", "hospital", "bloodbank"
-
-  const linkText = (userType === "hospital" || userType === "bloodbank")
-    ? "طلبات المتبرعين"
-    : "الطلبات العاجلة";
-
-  const linkHref = (userType === "hospital" || userType === "bloodbank")
-    ? "donate_card.html"
-    : "emergency_card.html";
-
-  const linkHTML = `<a href="${linkHref}">${linkText}</a>`;
-
-  // تعويض أماكن الروابط
-  const placeholders = [
-    document.getElementById("requestsLinkPlaceholder"),
-    document.getElementById("requestsLinkDesktop"),
-    document.getElementById("requestsLinkMobile")
-  ];
-
-  placeholders.forEach(placeholder => {
-    if (placeholder) {
-      placeholder.outerHTML = linkHTML;
-    }
-  });
-});
-
 //stats
 async function loadStats() {
   const { data, error } = await supabase
@@ -333,13 +408,31 @@ async function loadStats() {
 
   if (data && data.length > 0) {
     const stats = data[0];
-    document.getElementById("activeDonors").textContent = `+${stats.active_donors}`;
-    document.getElementById("hospitals").textContent = `+${stats.hospitals}`;
-    document.getElementById("unitsProvided").textContent = `+${stats.units_provided}`;
+    animateCounter(document.getElementById("activeDonors"), stats.active_donors);
+    animateCounter(document.getElementById("hospitals"), stats.hospitals);
+    animateCounter(document.getElementById("unitsProvided"), stats.units_provided);
   }
 }
 
 document.addEventListener("DOMContentLoaded", loadStats);
+
+// تحريك العدادات عند الظهور
+function animateCounter(el, target) {
+  if (!el) return;
+  const start = 0;
+  const duration = 1000;
+  const startTime = performance.now();
+
+  function tick(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const value = Math.floor(progress * (target - start) + start);
+    el.textContent = `+${value}`;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ملاحظة: يمكننا لاحقاً استخدام IntersectionObserver لتفعيل العد فقط عند ظهور القسم
 
 //realtime updates
 supabase
@@ -352,3 +445,26 @@ supabase
   })
   .subscribe();
 
+//المشاركة  
+/*   
+document.getElementById("shareBtn").addEventListener("click", async () => {
+  const pageUrl = window.location.href;
+  const pageTitle = document.title;
+
+  if (navigator.share) {
+    // ✅ لو الجهاز بيدعم Web Share API (موبايل مثلا)
+    try {
+      await navigator.share({
+        title: pageTitle,
+        url: pageUrl
+      });
+    } catch (err) {
+      console.log("تم إلغاء المشاركة");
+    }
+  } else {
+    // ❌ لو المتصفح مش بيدعمها → ينسخ الرابط تلقائي
+    navigator.clipboard.writeText(pageUrl);
+    alert("تم نسخ رابط الصفحة! 📋");
+  }
+});
+*/
