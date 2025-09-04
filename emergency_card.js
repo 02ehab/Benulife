@@ -49,18 +49,32 @@ function renderRequests(requests) {
       <div class="request-info"><strong>المدينة:</strong> ${req.city}</div>
       <div class="timer">⏳ ${timeText}</div>
       <button class="help-btn">ساعد الآن</button>
-      <div class="contact-options" style="display: none; margin-top:10px;">
-        <a href="tel:${req.phone}" class="contact-btn">📞 اتصال</a>
-        <a href="https://wa.me/${req.whatsapp || req.phone}" target="_blank" class="contact-btn">💬 واتساب</a>
-      </div>
     `;
 
-    // لما يضغط على الزر يفتح خيارات التواصل
+    // زر ساعد الآن
     const helpBtn = card.querySelector(".help-btn");
-    const contactBox = card.querySelector(".contact-options");
 
-    helpBtn.addEventListener("click", () => {
-      contactBox.style.display = contactBox.style.display === "none" ? "block" : "none";
+    helpBtn.addEventListener("click", async () => {
+      // 👇 إرسال إشعار في جدول جديد
+      const { error } = await supabase
+        .from("notifications")
+        .insert([
+          {
+            request_id: req.id, // ربط الإشعار بالطلب
+            receiver_id: req.user_id, // صاحب الطلب
+            message: `قام شخص بعرض المساعدة لطلبك (${req.blood_type})`,
+            created_at: new Date()
+          }
+        ]);
+
+      if (error) {
+        console.error("❌ خطأ أثناء إرسال الإشعار:", error);
+        alert("حدث خطأ أثناء إرسال الإشعار.");
+      } else {
+        alert("✅ تم إرسال إشعار لصاحب الطلب بأنه تمت المساعدة.");
+        helpBtn.disabled = true;
+        helpBtn.textContent = "تم الإرسال ✅";
+      }
     });
 
     container.appendChild(card);
@@ -131,4 +145,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
-
