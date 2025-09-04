@@ -4,7 +4,7 @@ import { supabase } from './supabase.js';
 window.openMenu = () => document.getElementById("sideMenu")?.classList.add("open");
 window.closeMenu = () => document.getElementById("sideMenu")?.classList.remove("open");
 
-// --- إنشاء إشعار ---
+// --- إنشاء إشعار متصفح ---
 function notify(title, body) {
   if (Notification.permission === "granted") {
     new Notification(title, { body });
@@ -39,7 +39,7 @@ function appendNotificationCard(req, state = "unread") {
 
 // --- معالجة طلب جديد ---
 function handleNewRequest(req) {
-  // إرسال إشعار دائمًا
+  // إرسال إشعار متصفح
   notify(
     `🚨 طلب دم جديد`,
     `فصيلة الدم: ${req.blood_type || "-"}\nالجهة: ${req.hospital || req.full_name || "-"}`
@@ -47,8 +47,20 @@ function handleNewRequest(req) {
   appendNotificationCard(req, "unread");
 }
 
-// تغيير روابط الصفحة حسب نوع المستخدم
-  const userType = localStorage.getItem("userType");
+// --- تنفيذ بعد تحميل DOM ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // طلب إذن الإشعارات
+  if ("Notification" in window) Notification.requestPermission();
+
+  const { data: { session } } = await supabase.auth.getSession();
+  const authButtons = document.getElementById("authButtons");
+  const sideAuthButtons = document.getElementById("sideAuthButtons");
+  const profileLink = document.getElementById("profileLink");
+  const profileLinkMobile = document.getElementById("profileLinkMobile");
+
+  let userType = localStorage.getItem("userType") || "";
+
+  // تغيير روابط الصفحة حسب نوع المستخدم
   const linkText = (userType === "hospital" || userType === "bloodbank")
     ? "طلبات المتبرعين"
     : "الطلبات العاجلة";
@@ -67,13 +79,7 @@ function handleNewRequest(req) {
   });
 
   // عرض كلمة "ملفي" إذا المستخدم مسجل دخول
-  const { data: { session } } = await supabase.auth.getSession();
-  const authButtons = document.getElementById("authButtons");
-  const sideAuthButtons = document.getElementById("sideAuthButtons");
-  const profileLink = document.getElementById("profileLink");
-  const profileLinkMobile = document.getElementById("profileLinkMobile");
-
-  if (session) {
+  if (session?.user) {
     if (authButtons) authButtons.style.display = "none";
     if (sideAuthButtons) sideAuthButtons.style.display = "none";
     if (profileLink) {
@@ -84,24 +90,17 @@ function handleNewRequest(req) {
       profileLinkMobile.style.display = "inline-block";
       profileLinkMobile.textContent = "ملفي";
     }
+
+    // جلب بيانات المستخدم لتحديث userType من قاعدة البيانات
+    const userId = session.user.id;
+    const { data: userData } = await supabase
+      .from("login")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (userData) userType = userData.account_type || "";
   }
-
-// --- بعد تحميل الصفحة ---
-document.addEventListener("DOMContentLoaded", async () => {
-  if ("Notification" in window) Notification.requestPermission();
-
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) return;
-
-  const userId = session.user.id;
-
-  const { data: userData } = await supabase
-    .from("login")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  const userType = userData?.account_type || "";
 
   // جلب الطلبات الحالية
   const { data: requests } = await supabase
