@@ -150,7 +150,7 @@ body {
 .side-menu nav {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0rem;
 }
 
 .side-menu a {
@@ -332,3 +332,4 @@ main.notifications-container h1 {
 .footer-links a:hover {
   color: #fff;
 }
+
