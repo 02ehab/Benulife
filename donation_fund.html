@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <!-- الهيدر -->
+  <!-- الهيدر (نفس الموجود عندك) -->
   <header class="header">
     <div class="container header-container">
       <div class="logo">🩸 حياه</div>
@@ -35,35 +35,56 @@
       </nav>
     </div>
   </header>
-
   <div class="wrapper">
   <!-- المحتوى -->
   <main class="donate-container">
-    <section class="intro">
-      <h1>كن جزءًا من قصة نجاة ❤️</h1>
-      <p>كل يوم، هناك من ينتظر نقطة دم، وهناك من يحتاج دعماً لتغطية نفقات العلاج أو نقل الدم.</p>
-      <p>تبرعك المالي اليوم قد يُنقذ حياة، يُخفف ألم، أو يُمكّن حملة توعوية تصل لأبعد الناس.</p>
-    </section>
+    <!-- قسم التبرع -->
+<section class="donation-intro">
+  <div class="container">
+    <h2>كن سببًا في رسم البسمة</h2>
+    <p>
+      تبرعك هو أمل جديد لطفل محتاج أو أسرة تعاني.  
+      بمساهمتك البسيطة، تقدر تفرق في حياة ناس كتير في مصر.  
+      شارك بالخير، وخلي حياتهم أجمل ❤
+    </p>
+  </div>
+</section>
 
-    <section class="donation-form">
-      <h2>أدخل مبلغ التبرع</h2>
-      <form id="moneyDonationForm">
-        <input type="number" name="amount" placeholder="المبلغ" required min="1" />
-        <input type="text" name="name" placeholder="الاسم " />
-        <input type="email" name="email" placeholder="البريد الإلكتروني " />
-        <textarea name="message" placeholder="رسالة دعمك "></textarea>
-        <button type="submit">تبرع الآن</button>
-      </form>
-    </section>
+<section class="donation-cards">
+  <div class="container cards-container">
+    
+    <!-- كارت 1 -->
+    <div class="donation-card">
+      <img src="meal.jpg" alt="تبرع بوجبة طعام">
+      <div class="card-body">
+        <h3>تبرع بوجبة طعام</h3>
+        <p class="amount">100 جنيه</p>
+        <button class="donate-btn">تبرع الآن</button>
+      </div>
+    </div>
+    
+    <!-- كارت 2 -->
+    <div class="donation-card">
+      <img src="dress.jpg" alt="تبرع بزي مدرسي">
+      <div class="card-body">
+        <h3>تبرع بزي مدرسي</h3>
+        <p class="amount">100 جنيه</p>
+        <button class="donate-btn">تبرع الآن</button>
+      </div>
+    </div>
 
-    <section class="impact">
-      <h3>ماذا يدعم تبرعك؟</h3>
-      <ul>
-        <li>🚑 تغطية تكاليف نقل دم عاجل لحالات طارئة</li>
-        <li>📦 دعم الحالات الإنسانية التي لا تستطيع تحمل تكلفة الفحوصات</li>
-        <li>📣 تمويل حملات التوعية المجتمعية حول أهمية التبرع</li>
-      </ul>
-    </section>
+    <!-- كارت 3 -->
+    <div class="donation-card">
+      <img src="tree.jpg" alt="تبرع  زراعة شرجة">
+      <div class="card-body">
+        <h3>تبرع زراعة شجرة</h3>
+        <p class="amount">10 جنيه</p>
+        <button class="donate-btn">تبرع الآن</button>
+      </div>
+    </div>
+  </div>
+</section>
+
   </main>
 </div>
 
@@ -90,13 +111,18 @@
     <button onclick="sendChatMessage()">إرسال</button>
   </div>
   
+  <!-- الفوتر -->
   <footer class="footer">
-    جميع الحقوق محفوظة © 2025 حياة
-  </footer>
+  <div class="container footer-container">
+    <div class="footer-links">
+      <a href="privacy.html">سياسة الخصوصية</a>
+      <a href="faq.html">الأسئلة الشائعة</a>
+    </div>
+    <p>© 2025 منصة حياه - جميع الحقوق محفوظة</p>
+  </div>
+</footer>
 
   <script type="module" src="donation_fund.js"></script>
   <script src="chatbot.js"></script>
 </body>
 </html>
-
-
