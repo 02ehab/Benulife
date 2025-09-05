@@ -8,19 +8,15 @@ window.openMenu = function () {
 window.closeMenu = function () {
   document.getElementById("sideMenu").classList.remove("open");
 }
-  const { jsPDF } = window.jspdf;
-
-  // زر تحميل الشهادة
-  document.getElementById("downloadCert").addEventListener("click", () => {
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("شهادة شكر وتقدير", 60, 40);
-    doc.setFontSize(14);
-    doc.text("تتقدم منصة حياة بخالص الشكر والتقدير", 20, 70);
-    doc.text("للمتبرع الكريم على دعمه ومساهمته في الخير.", 20, 85);
-    doc.text("تبرعك يساعد أطفال وأسر محتاجة في مصر.", 20, 105);
-    doc.text("مع تحيات منصة حياة ❤", 20, 130);
-    doc.save("donation_certificate.pdf");
+ document.getElementById("downloadCert").addEventListener("click", () => {
+    // حفظ اسم المستخدم في sessionStorage أو localStorage لو مش موجود
+    const currentUser = localStorage.getItem("currentUser") || "المتبرع الكريم";
+    
+    // تخزين الاسم لتظهر في صفحة certificate.html
+    localStorage.setItem("donorName", currentUser);
+    
+    // تحويل المستخدم لصفحة الشهادة
+    window.location.href = "certificate.html";
   });
 
   // زر متابعة التتبع
@@ -66,3 +62,4 @@ window.closeMenu = function () {
       profileLinkMobile.textContent = "ملفي";
     }
   }
+
