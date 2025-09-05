@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تبرع مالي - حياة</title>
+  <link rel="stylesheet" href="payment.css" />
+   <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- الهيدر (نفس الموجود عندك) -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">🩸 حياه</div>
+      <button class="menu-toggle" onclick="openMenu()">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkDesktop"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html" class="auth-link">ملفي</a>
+      </nav>
+    </div>
+    <div id="sideMenu" class="side-menu">
+      <button class="close-btn" onclick="closeMenu()">✖</button>
+      <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">من نحن </a>
+        <span id="requestsLinkMobile"></span>
+        <a href="notifications.html">الإشعارات</a>
+        <a href="donation_fund.html" class="active">تبرع مالي</a>
+        <a href="profile.html">ملفي</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- المحتوى -->
+ <main class="main-wrapper">
+   <div class="payment-container">
+    <h1>إتمام عملية الدفع</h1>
+    <p class="subtitle">يرجى إدخال بياناتك لإكمال التبرع</p>
+
+    <form id="paymentForm">
+      <div class="form-group">
+        <label for="name">الاسم الكامل</label>
+        <input type="text" id="name" placeholder="أدخل اسمك" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" placeholder="example@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="card">رقم البطاقة</label>
+        <input type="text" id="card" placeholder="xxxx xxxx xxxx xxxx" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expiry">تاريخ الانتهاء</label>
+          <input type="text" id="expiry" placeholder="MM/YY" required>
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV</label>
+          <input type="password" id="cvv" placeholder="***" required>
+        </div>
+      </div>
+
+      <button type="submit" class="pay-btn">إتمام الدفع</button>
+    </form>
+
+    <p class="note">🔒 جميع المعاملات آمنة ومشفرة</p>
+  </div>
+
+</main>
+
+<div id="chatbot-container">
+<!-- أيقونة الشات -->
+ <div class="chatbot-icon" onclick="toggleChatbox()">💬</div>
+
+ <!-- نافذة الشات -->
+  <div id="chatPopup" class="chatbot-popup hidden">
+    <div class="chatbot-header">
+      <span>مساعد حياة 🤖</span>
+      <button onclick="toggleChatbox()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <p>👋 مرحبًا بك! كيف يمكنني مساعدتك؟</p>
+    </div>
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="اكتب رسالتك..."
+      onkeydown="if(event.key==='Enter') sendChatMessage()"
+    />
+    <button onclick="sendChatMessage()">إرسال</button>
+  </div>
+  
+  <!-- الفوتر -->
+  <footer class="footer">
+  <div class="container footer-container">
+    <div class="footer-links">
+      <a href="privacy.html">سياسة الخصوصية</a>
+      <a href="faq.html">الأسئلة الشائعة</a>
+    </div>
+    <p>© 2025 منصة حياه - جميع الحقوق محفوظة</p>
+  </div>
+</footer>
+
+<script type="module" src="payment.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
