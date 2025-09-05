@@ -184,75 +184,94 @@ body {
 }
 
 
+
 /*صفحة التبرع*/
 
-.donate-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
 
-.intro h1 {
-  color: #d90429;
-  font-size: 28px;
-  margin-bottom: 10px;
-}
 
-.donation-form {
-  margin-top: 30px;
+.donation-intro {
+  text-align: center;
+  padding: 50px 20px;
   background: #f9f9f9;
-  padding: 25px;
-  border-radius: 10px;
 }
 
-.donation-form h2 {
+.donation-intro h2 {
+  font-size: 28px;
   margin-bottom: 15px;
-  color: #444;
+  color: #222;
 }
 
-form input, form textarea {
+.donation-intro p {
+  font-size: 18px;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* كروت التبرعات */
+.donation-cards {
+  padding: 40px 20px;
+  background: #fff;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.donation-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.donation-card:hover {
+  transform: translateY(-5px);
+}
+
+.donation-card img {
   width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
+  height: 200px;
+  object-fit: cover;
 }
 
-form button {
-  background-color: #d90429;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
+.card-body {
+  padding: 20px;
+}
+
+.card-body h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.amount {
+  font-size: 18px;
+  color: #00796b;
+  margin-bottom: 15px;
   font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease;
 }
 
-form button:hover {
-  background-color: #a6001c;
-}
-
-.impact {
-  margin-top: 40px;
-}
-
-.impact h3 {
-  color: #d90429;
-  margin-bottom: 10px;
-}
-
-.impact ul {
-  list-style: none;
-  padding: 0;
-}
-
-.impact li {
-  margin-bottom: 10px;
+.donate-btn {
+  background: #00796b;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
+
+.donate-btn:hover {
+  background: #005f4f;
+}
+
 
 /* الفوتر */
 .footer {
@@ -291,4 +310,3 @@ form button:hover {
 .footer-links a:hover {
   color: #fff;
 }
-
