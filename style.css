@@ -575,6 +575,60 @@ body {
     height: 250px; /* تخفيض الارتفاع في الموبايل */
   }
 }
+/* Volunteer Section */
+.volunteer-section {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+  border-radius: 16px;
+  margin: 60px auto;
+  max-width: 1000px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.volunteer-container h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.volunteer-container p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.volunteer-btn {
+  display: inline-block;
+  background: #fff;
+  color: #f43f5e;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.volunteer-btn:hover {
+  background: #f43f5e;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* قسم اتصل بنا */
 .cta-contact-wrapper {
   display: flex;
@@ -927,3 +981,4 @@ textarea:focus {
   text-align: center;
   margin-top: 16px;
 }
+
