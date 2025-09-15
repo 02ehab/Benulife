@@ -14,7 +14,41 @@
    <!-- Header -->
 <header class="header">
   <div class="container header-container">
-    <div class="logo">🩸 Benu</div>
+    <!-- Logo (inline, accessible) -->
+  <a class="logo" href="/" aria-label="Benu — منصة التبرع بالدم" title="Benu — كل حياة تبدأ بنبضة">
+    <!-- SVG icon: stylized phoenix + heart -->
+    <svg class="icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <!-- background circle subtle (optional) -->
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#E63946"/>
+          <stop offset="1" stop-color="#F4A261"/>
+        </linearGradient>
+      </defs>
+
+      <circle cx="60" cy="60" r="58" fill="transparent"/>
+      <!-- stylized bird body -->
+      <path d="M34 74c6-18 28-28 44-22 0 0-6-8-10-12-4-4-14-6-22 0-8 6-12 18-12 18s2 6 0 16z"
+            fill="url(#g1)" opacity="1"/>
+      <!-- wing feathers -->
+      <path d="M44 46c8-10 24-14 38-8l-6 6c-10-6-22-2-32 6z"
+            fill="#E63946" opacity="0.95"/>
+      <!-- tail -->
+      <path d="M46 78c6 10 20 18 38 6-6 2-18 0-28-8-10-8-8-6-10 2z" fill="#F4A261" opacity="0.95"/>
+      <!-- heart at center -->
+      <g transform="translate(48,48) scale(0.9)">
+        <path d="M12 3.6C9.7 3.6 8 5.2 7 6.6 6 5.2 4.3 3.6 2 3.6 0 3.6-0.9 5.8 0.5 7.3 2 8.9 6 12 9 15.2 12 12 16 8.9 17.5 7.3 19 5.8 18.1 3.6 16 3.6c-2.3 0-3.9 1.6-4.9 3 1-1.4 2.6-3 4.9-3z"
+              fill="#ffffff"/>
+      </g>
+    </svg>
+
+    <!-- Brand text -->
+    <span class="brand">
+      <span class="name">Benu</span>
+      <span class="tag">كل حياة تبدأ بنبضة</span>
+    </span>
+  </a>
+
     <button class="menu-toggle" onclick="openMenu()">☰</button>
 
     <nav class="main-nav">
@@ -130,6 +164,7 @@
   
 </body>
 </html>
+
 
 
 
