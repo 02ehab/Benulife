@@ -48,12 +48,82 @@ body {
   margin-top: 20px;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1a1a1a;
-  margin-top: 10px;
-}
+:root{
+      --red:#E63946;
+      --gold:#F4A261;
+      --bg:#F5F5F5;
+      --text:#2b2b2b;
+    }
+
+    /* Logo wrapper (single-line) */
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 12px;
+      user-select: none;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+      will-change: transform;
+    }
+
+    .logo:focus,
+    .logo:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      outline: none;
+    }
+
+    /* SVG icon sizing */
+    .logo .icon {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 56px;
+      display: inline-grid;
+      place-items: center;
+    }
+
+    /* Brand name */
+    .brand {
+      display: inline-flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand .name {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 28px;
+      letter-spacing: .6px;
+    }
+
+    .brand .tag {
+      font-size: 12px;
+      color: #6b6b6b;
+      margin-top: 2px;
+    }
+
+    /* accessible-hidden for visually hidden text if needed */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* small screens tweak */
+    @media (max-width:420px){
+      .logo .icon { width:46px; height:46px; flex:0 0 46px; }
+      .brand .name { font-size:22px; }
+    }
 
 .main-nav {
   display: flex;
@@ -326,4 +396,5 @@ h1 {
 
 .footer-links a:hover {
   color: #fff;
+
 }
